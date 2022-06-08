@@ -1,28 +1,21 @@
 <template>
-  <v-app id="inspire">
+  <v-app >
 
     <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-toolbar-title>Application</v-toolbar-title>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      temporary
-    >
-      <!--  -->
-    </v-navigation-drawer>
+    
 
     <v-main>
       <v-container>
         <v-row>
           <v-col
-            v-for="n in 24"
-            :key="n"
-            cols="4"
+            
           >
+          
             <v-card height="200"></v-card>
           </v-col>
         </v-row>
@@ -33,9 +26,18 @@
 
 <script>
 
+import { db } from '../src/firebase/firebase-config'
+import { collection, getDocs} from 'firebase/firestore'
 
 export default {
   name: 'App',
+  //setup(){
+  mounted(){
+    this.recuperarDocumentos(this.colRef)
+  },
+
+  
+  //},
 
   components: {
    
@@ -43,6 +45,31 @@ export default {
 
   data: () => ({
     //
+    podcasts: null,
+    colRef: collection(db, 'publicacao'),
+    
   }),
+
+  methods: {
+    recuperarDocumentos(colRef){
+     getDocs(colRef)
+      .then(snapshot => {
+        console.log(snapshot.docs)
+        let podcasts = []
+        snapshot.docs.forEach(doc => {
+          podcasts.push({ ...doc.data(), id: doc.id })
+     })
+     console.log(podcasts)
+     this.podcasts.value = podcasts
+   })
+   .catch(err =>{
+     console.log(err.message)
+   })
+   
+    console.log('Chamou a função, que retornou: ', this.podcasts)
+    return this.podcasts
+    }
+
+    }
 };
 </script>
