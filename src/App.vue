@@ -13,10 +13,12 @@
       <v-container>
         <v-row>
           <v-col
-            
+            v-for="podcast in podcasts"
+            :key="podcast.id"
+            cols="4"
           >
           
-            <v-card height="200"></v-card>
+            <v-card height="200">{{podcast.titulo}}</v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -33,7 +35,7 @@ export default {
   name: 'App',
   //setup(){
   mounted(){
-    this.recuperarDocumentos(this.colRef)
+   this.podcasts = this.recuperarDocumentos(this.colRef)
   },
 
   
@@ -59,11 +61,13 @@ export default {
         snapshot.docs.forEach(doc => {
           podcasts.push({ ...doc.data(), id: doc.id })
      })
-     console.log(podcasts)
-     this.podcasts.value = podcasts
+     console.log('Tem podcast: ', podcasts)
+     this.podcasts = podcasts
+
+     console.log('Tem podcast dentro da variável local: ', this.podcasts)
    })
    .catch(err =>{
-     console.log(err.message)
+     console.log('Retornou erro:' , err.message)
    })
    
     console.log('Chamou a função, que retornou: ', this.podcasts)
