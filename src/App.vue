@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <router-view></router-view>
 
     <v-app-bar color="purple" hide-on-scroll accent-4 dark shaped app >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -13,12 +14,14 @@
 
       <template v-slot:extension>
         <v-tabs class="text-center" align-with-title>
-          <v-tab to="/podcasts">Podcasts</v-tab>
-          <v-tab>Sites</v-tab>
-          <v-tab>Vídeos</v-tab>
-          <v-tab>Artigos</v-tab>
-          <v-tab>Livros</v-tab>
+          <v-tab to="/podcast">Podcasts</v-tab>
+          <v-tab to="/site">Sites</v-tab>
+          <v-tab to="/video">Vídeos</v-tab>
+          <v-tab to="/artigo">Artigos</v-tab>
+          <v-tab to="/livro">Livros</v-tab>
+          
         </v-tabs>
+        
       </template>
     </v-app-bar>
 
@@ -56,20 +59,7 @@
 
     
 
-    <v-main>
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="podcast in podcasts"
-            :key="podcast.id"
-            cols="4"
-          >
-          
-            <v-card flat  class="text-xs-center" height="200">{{podcast.titulo}}</v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
+  
   </v-app>
 </template>
 
@@ -96,7 +86,7 @@ export default {
     drawer: false,
     group: null,
     podcasts: null,
-    colRef: collection(db, 'publicacao'),
+    colRef: collection(db, 'podcasts'),
     
   }),
 
