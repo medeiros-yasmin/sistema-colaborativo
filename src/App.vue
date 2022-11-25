@@ -14,11 +14,12 @@
 
       <template v-slot:extension>
         <v-tabs class="text-center" align-with-title>
+          <v-tab to="/artigo">Artigos</v-tab>
+          <v-tab to="/auxilio">Auxílios</v-tab>
           <v-tab to="/podcast">Podcasts</v-tab>
           <v-tab to="/site">Sites</v-tab>
           <v-tab to="/video">Vídeos</v-tab>
-          <v-tab to="/artigo">Artigos</v-tab>
-          <v-tab to="/livro">Livros</v-tab>
+          <v-tab to="/livro">Livros e Revistas</v-tab>
           
         </v-tabs>
         
