@@ -1,4 +1,5 @@
 <template>
+
   <v-app>
     <router-view></router-view>
 
@@ -62,26 +63,9 @@
 
   
   </v-app>
+
 </template>
 
-<script>
-
-import { db } from '../src/firebase/firebase-config'
-import { collection, getDocs} from 'firebase/firestore'
-
-export default {
-  name: 'App',
-  //setup(){
-  mounted(){
-   this.podcasts = this.recuperarDocumentos(this.colRef)
-  },
-
-  
-  //},
-
-  components: {
-   
-  },
 
   data: () => ({
     drawer: false,
@@ -113,6 +97,3 @@ export default {
     return this.podcasts
     }
 
-    }
-};
-</script>

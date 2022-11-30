@@ -6,6 +6,7 @@ import VideoView from '../views/VideoView.vue'
 import ArtigoView from '../views/ArtigoView.vue'
 import AuxilioView from '../views/AuxilioView.vue'
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -45,6 +46,7 @@ const routes = [
     path: '/auxilio',
     name: 'auxilio',
     component: AuxilioView
+
   }
 ]
 
