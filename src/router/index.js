@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import PodcastView from '../views/PodcastView.vue'
+import VideoView from '../views/VideoView.vue'
+import ArtigoView from '../views/ArtigoView.vue'
+import AuxilioView from '../views/AuxilioView.vue'
+
 
 Vue.use(VueRouter)
 
@@ -17,6 +22,31 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  }, 
+
+  {
+    path: '/podcast',
+    name: 'podcast',
+    component: PodcastView
+  },
+
+  {
+    path: '/artigo',
+    name: 'artigo',
+    component: ArtigoView
+  },
+
+  {
+    path: '/video',
+    name: 'video',
+    component: VideoView
+  },
+
+  {
+    path: '/auxilio',
+    name: 'auxilio',
+    component: AuxilioView
+
   }
 ]
 
