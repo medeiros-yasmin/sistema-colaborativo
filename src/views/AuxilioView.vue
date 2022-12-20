@@ -1,18 +1,18 @@
 <template>
-    <v-app>
+    <v-app style="background-color:#44075e;">
         <v-main>
             <v-container>
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="4">
 
-                        <v-card  color="purple" :elevation="podcast - 1" class="mx-auto white--text" height="200" width="500">
+                        <v-card style="margin-top:18px"  color="purple" :elevation="podcast - 1" class="mx-auto white--text" height="200" width="500">
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div>
                                     <v-card-title class="text-h5" v-text="podcast.titulo"></v-card-title>
                                     <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
                                     <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
                                     
-                                    <v-row text-align="bottom" >
+                                    <v-row style="padding-left:18px; padding-top:8px" text-align="bottom" >
                                     <v-card-actions>
                                         <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                             Visualizar
@@ -23,14 +23,33 @@
                                             Deletar
                                         </v-btn>
                                     </v-card-actions>
-                                </v-row>
+                                    </v-row>
                                     
                                 </div>
                             </div>
                         </v-card>
+                        
                     </v-col>
                 </v-row>
+
+                
             </v-container>
+
+            <v-card-text style="height: 100px;">
+            <v-fab-transition>
+              <v-btn
+                color="orange"
+                dark
+                bottom
+                right
+                fab
+                fixed
+                
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-fab-transition>
+          </v-card-text>
         </v-main>
 
     </v-app>
@@ -108,3 +127,7 @@ export default {
     }
 };
 </script>
+
+<style>
+  
+</style>
