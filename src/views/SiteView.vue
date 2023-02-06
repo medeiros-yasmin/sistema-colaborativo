@@ -14,7 +14,10 @@
                                     
                                     <v-row style="padding-left:18px; padding-top:8px" text-align="bottom" >
                                     <v-card-actions>
-                                        <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+                                        <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+                                            Visualizar
+                                        </v-btn> -->
+                                        <v-btn class="white--text" rounded color="cyan" @click="visualizarPubli(podcast.id)">
                                             Visualizar
                                         </v-btn>
                                     </v-card-actions>
@@ -84,9 +87,10 @@
 
 import { db } from '../firebase/firebase-config'
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+import router from '@/router';
 
 export default {
-    name: 'AuxilioView',
+    name: 'SiteView',
     //setup(){
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
@@ -106,10 +110,10 @@ export default {
         podcasts: null,
         novaPublicacao: {
             titulo: "Teste",
-            descricao: "Dinossauro doido",
-            autor: "Dinossauro"
+            descricao: "Dinossauro descrição",
+            autor: "Coiso"
         },
-        colRef: collection(db, 'auxilio'),
+        colRef: collection(db, 'sites'),
 
     }),
 
@@ -148,13 +152,17 @@ export default {
 
         deletarPublicacao(id){
             console.log('Verificando deleção...')
-            const docRef = doc(db, 'auxilio', id)
+            const docRef = doc(db, 'sites', id)
 
             deleteDoc(docRef)
                 .then(() => {
                     console.log('Documento deletado com sucesso!')
                     location.reload()
                 })
+        },
+
+        visualizarPubli(id){
+            router.push('/visualizar:id')
         }
 
     }

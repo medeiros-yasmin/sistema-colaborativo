@@ -5,6 +5,7 @@ import PodcastView from '../views/PodcastView.vue'
 import VideoView from '../views/VideoView.vue'
 import ArtigoView from '../views/ArtigoView.vue'
 import AuxilioView from '../views/AuxilioView.vue'
+import SiteView from '../views/SiteView.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,12 @@ const routes = [
     path: '/auxilio',
     name: 'auxilio',
     component: AuxilioView
+  },
+
+  {
+    path: '/site',
+    name: 'site',
+    component: SiteView
   }
 ]
 
