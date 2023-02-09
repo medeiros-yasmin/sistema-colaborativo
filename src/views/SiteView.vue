@@ -17,7 +17,7 @@
                                         <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                             Visualizar
                                         </v-btn> -->
-                                        <v-btn class="white--text" rounded color="cyan" @click="visualizarPubli(podcast.id)">
+                                        <v-btn class="white--text" rounded color="cyan" :to = "{name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'sites'}}">
                                             Visualizar
                                         </v-btn>
                                     </v-card-actions>
@@ -87,7 +87,7 @@
 
 import { db } from '../firebase/firebase-config'
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
-import router from '@/router';
+
 
 export default {
     name: 'SiteView',
@@ -161,9 +161,6 @@ export default {
                 })
         },
 
-        visualizarPubli(id){
-            router.push('/visualizar:id')
-        }
 
     }
 };

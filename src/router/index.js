@@ -6,6 +6,8 @@ import VideoView from '../views/VideoView.vue'
 import ArtigoView from '../views/ArtigoView.vue'
 import AuxilioView from '../views/AuxilioView.vue'
 import SiteView from '../views/SiteView.vue'
+import Publicacao from '../views/Publicacao.vue'
+import CriarPublicacaoView from '../views/CriarPublicacaoView.vue'
 
 Vue.use(VueRouter)
 
@@ -13,7 +15,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    props: true,
   },
   {
     path: '/about',
@@ -52,6 +55,19 @@ const routes = [
     path: '/site',
     name: 'site',
     component: SiteView
+  },
+
+  {
+    path: '/criar',
+    name: 'criarPublicacao',
+    component: CriarPublicacaoView
+  },
+
+  {
+    path: '/publicacao/:id',
+    name: 'publicacao',
+    component: Publicacao,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   }
 ]
 
