@@ -4,11 +4,17 @@
             <v-container>
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="4">
+                        <v-btn color="red" icon="mdi-dots-vertical"></v-btn>
 
                         <v-card style="margin-top:18px"  color="purple" :elevation="podcast - 1" class="mx-auto white--text" height="200" width="500">
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div>
                                     <v-card-title class="text-h5" v-text="podcast.titulo"></v-card-title>
+                                    
+              
+            
+
+            
                                     <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
                                     <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
                                     
@@ -87,6 +93,7 @@
 
 import { db } from '../firebase/firebase-config'
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+//updateDoc
 
 
 export default {

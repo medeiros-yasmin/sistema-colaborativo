@@ -8,6 +8,8 @@ import AuxilioView from '../views/AuxilioView.vue'
 import SiteView from '../views/SiteView.vue'
 import Publicacao from '../views/Publicacao.vue'
 import CriarPublicacaoView from '../views/CriarPublicacaoView.vue'
+import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
+
 
 Vue.use(VueRouter)
 
@@ -61,6 +63,13 @@ const routes = [
     path: '/criar',
     name: 'criarPublicacao',
     component: CriarPublicacaoView
+  },
+
+  {
+    path: '/editar/:id',
+    name: 'editarPublicacao',
+    component: EditarPublicacaoView,
+    props: route => ({id: route.params.id}),
   },
 
   {
