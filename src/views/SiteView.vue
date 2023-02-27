@@ -47,7 +47,7 @@
                 right
                 fab
                 fixed
-                @click="dialog = !dialog"
+                :to = "{name: 'criarPublicacao'}"
               >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
