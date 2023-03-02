@@ -4,86 +4,81 @@
             <v-container>
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="4">
-                        <v-btn color="red" icon="mdi-dots-vertical"></v-btn>
 
-                        <v-card style="margin-top:18px"  color="purple" :elevation="podcast - 1" class="mx-auto white--text" height="200" width="500">
+                        <v-card style="margin-top:18px" color="purple" :elevation="podcast - 1" class="mx-auto white--text"
+                            height="200" width="500">
+                            <template v-slot:activator="{ props }">
+                                <v-list-item class="topright">
+                                    <v-btn variant="outlined" icon v-bind="props"> <v-icon
+                                            color="white">mdi-dots-vertical</v-icon></v-btn>
+                                </v-list-item>
+                            </template>
+
+                            <v-list>
+                                <v-list-item v-for="(item, i) in items" :key="i">
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div>
-                                    <v-card-title class="text-h5" v-text="podcast.titulo"></v-card-title>
-                                    
-              
-            
-
-            
+                                    <v-card-title class="text-h5" v-text="podcast.titulo">
+                                    </v-card-title>
                                     <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
                                     <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
-                                    
-                                    <v-row style="padding-left:18px; padding-top:8px" text-align="bottom" >
-                                    <v-card-actions>
-                                        <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+
+                                    <v-row style="padding-left:18px; padding-top:8px" text-align="bottom">
+                                        <v-card-actions>
+                                            <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                             Visualizar
                                         </v-btn> -->
-                                        <v-btn class="white--text" rounded color="cyan" :to = "{name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'sites'}}">
-                                            Visualizar
-                                        </v-btn>
-                                    </v-card-actions>
-                                    <v-card-actions>
-                                        <v-btn class="white--text" rounded color="cyan" @click="deletarPublicacao(podcast.id)">
-                                            Deletar
-                                        </v-btn>
-                                    </v-card-actions>
+                                            <v-btn class="white--text" rounded color="cyan"
+                                                :to="{ name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'sites' } }">
+                                                Visualizar
+                                            </v-btn>
+                                        </v-card-actions>
+                                        <v-card-actions>
+                                            <v-btn class="white--text" rounded color="cyan"
+                                                @click="deletarPublicacao(podcast.id)">
+                                                Deletar
+                                            </v-btn>
+                                        </v-card-actions>
                                     </v-row>
-                                    
+
                                 </div>
                             </div>
                         </v-card>
-                        
+
                     </v-col>
                 </v-row>
 
-                
+
             </v-container>
 
             <v-card-text style="height: 100px;">
-            <v-fab-transition>
-              <v-btn
-                color="orange"
-                dark
-                bottom
-                right
-                fab
-                fixed
-                :to = "{name: 'criarPublicacao'}"
-              >
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </v-fab-transition>
-          </v-card-text>
-
-          <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <v-card>
-            <v-card-text>
-              <v-text-field label="File name"></v-text-field>
-
-              <small class="grey--text">* This doesn't actually save.</small>
+                <v-fab-transition>
+                    <v-btn color="orange" dark bottom right fab fixed :to="{ name: 'criarPublicacao' }">
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                </v-fab-transition>
             </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
+            <v-dialog v-model="dialog" max-width="500px">
+                <v-card>
+                    <v-card-text>
+                        <v-text-field label="File name"></v-text-field>
 
-              <v-btn
-                text
-                color="primary"
-                @click="dialog = false"
-              >
-                Submit
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+                        <small class="grey--text">* This doesn't actually save.</small>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn text color="primary" @click="dialog = false">
+                            Submit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-main>
 
     </v-app>
@@ -121,6 +116,12 @@ export default {
             autor: "Coiso"
         },
         colRef: collection(db, 'sites'),
+        items: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' },
+      ],
 
     }),
 
@@ -146,18 +147,18 @@ export default {
             return this.podcasts
         },
 
-        adicionarPublicacao(colRef){
+        adicionarPublicacao(colRef) {
             addDoc(colRef, {
                 titulo: this.novaPublicacao.titulo,
                 autor: this.novaPublicacao.autor,
                 descricao: this.novaPublicacao.descricao,
             })
-            .then(() => {
-                console.log('Inserção de novos dados finalizada')
-            })
+                .then(() => {
+                    console.log('Inserção de novos dados finalizada')
+                })
         },
 
-        deletarPublicacao(id){
+        deletarPublicacao(id) {
             console.log('Verificando deleção...')
             const docRef = doc(db, 'sites', id)
 
@@ -174,5 +175,11 @@ export default {
 </script>
 
 <style>
-  
+.topright {
+    position: absolute;
+    top: 5px;
+    right: 1px;
+    font-size: 12px;
+    margin-left: 8px;
+}
 </style>
