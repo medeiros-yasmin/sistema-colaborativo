@@ -3,22 +3,25 @@
         <v-main>
             <v-container>
                 <v-row>
-                    <v-col v-for="podcast in podcasts" :key="podcast.id" cols="4">
+                    <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
                         <v-card style="margin-top:18px" color="purple" :elevation="podcast - 1" class="mx-auto white--text"
-                            height="200" width="500">
-                            <template v-slot:activator="{ props }">
-                                <v-list-item class="topright">
-                                    <v-btn variant="outlined" icon v-bind="props"> <v-icon
-                                            color="white">mdi-dots-vertical</v-icon></v-btn>
-                                </v-list-item>
-                            </template>
+                            height="330" width="1000">
+                            <v-menu bottom left>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-list-item class="topright">
+                                        <v-btn variant="outlined" icon v-bind="attrs" v-on="on">
+                                            <v-icon color="white">mdi-dots-vertical</v-icon>
+                                        </v-btn>
+                                    </v-list-item>
+                                </template>
 
-                            <v-list>
-                                <v-list-item v-for="(item, i) in items" :key="i">
-                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
+                                <v-list>
+                                    <v-list-item v-for="(item, i) in items" :key="i" @click="() => { }">
+                                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div>
                                     <v-card-title class="text-h5" v-text="podcast.titulo">
@@ -26,7 +29,8 @@
                                     <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
                                     <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
 
-                                    <v-row style="padding-left:18px; padding-top:8px" text-align="bottom">
+                                    <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
+                                        text-align="bottom">
                                         <v-card-actions>
                                             <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                             Visualizar
@@ -117,11 +121,13 @@ export default {
         },
         colRef: collection(db, 'sites'),
         items: [
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me 2' },
-      ],
+            { title: 'Spam' },
+            { title: 'Publicação ofensiva' },
+            { title: 'Publicação duplicada' },
+            { title: 'Não é uma publicação' },
+            { title: 'Publicação ofensiva' },
+            { title: 'Cancelar' },
+        ],
 
     }),
 
@@ -181,5 +187,12 @@ export default {
     right: 1px;
     font-size: 12px;
     margin-left: 8px;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 30px;
+    left: 16px;
+    font-size: 18px;
 }
 </style>

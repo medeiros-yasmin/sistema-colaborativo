@@ -7,7 +7,27 @@ import { container } from 'webpack';
                 <v-row>
                     <v-col cols="12">
 
+                      <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text" class="white--text" text>
+                        
+                        <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
+                    </v-btn>
+
                         <v-card style="margin-top:18px"  color="purple" :elevation="publicacaoSelecionada - 1" class="mx-auto white--text" height="800" width="1200">
+                          <v-menu bottom left>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-list-item class="topright">
+                                        <v-btn variant="outlined" icon v-bind="attrs" v-on="on">
+                                            <v-icon color="white">mdi-dots-vertical</v-icon>
+                                        </v-btn>
+                                    </v-list-item>
+                                </template>
+
+                                <v-list>
+                                    <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+                                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div>
                                     <v-card-title class="text-h5" v-text="publicacaoSelecionada.titulo"></v-card-title>
@@ -55,14 +75,10 @@ export default {
 
   mounted() {
         this.publicacaoId = this.$route.params.id
-        console.log("No mounted, com o id pego do router")
         console.log("Do router: ", this.publicacaoId)
-        console.log("Mounted: ")
         this.docRef = doc(db, String(this.$route.params.tipoPublicacao), this.publicacaoId)
         this.recuperarPublicacaoSelecionada()
-       // this.publicacaoSelecionada = this.recuperarPublicacaoSelecionada()
-        //console.log(this.publicacaoSelecionada)
-        console.log("Depois da atribuçção no mounted")
+       
   },
 
   /* computed: {
@@ -82,6 +98,7 @@ export default {
         console.log("Chegou")
         console.log(doc.data(), doc.id)
         this.publicacaoSelecionada = (doc.data())
+        console.log("publicacaoSelecionada: ", this.publicacaoSelecionada)
       })
     }
 
@@ -91,7 +108,14 @@ export default {
         podcast: null,
         publicacaoId: null,
         publicacaoSelecionada: null,
-        docRef: null
+        docRef: null,
+        items: [
+            { title: 'Editar', to: {name: 'editarPublicacao' }},
+            { title: 'Excluir' },
+            { title: 'Publicação duplicada' },
+            { title: 'Não é uma publicação' },
+            { title: 'Cancelar' },
+        ],
 
     }),
 }

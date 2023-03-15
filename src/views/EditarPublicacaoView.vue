@@ -4,8 +4,9 @@
         <v-container>
             <v-row>
                 <v-col cols="12">
-                    <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text" class="white--text" text>
-                        
+                    <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text" class="white--text"
+                        text>
+
                         <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
                     </v-btn>
 
@@ -17,26 +18,27 @@
 
                         <v-form ref="form" lazy-validation>
                             <v-col cols="28" sm="14" md="7">
-                                <v-text-field type="text" v-model="titulo" class="custom-label-color"
+                                <v-text-field type="text" v-model="publicacaoSelecionada.titulo" class="custom-label-color"
                                     background-color="#44075e" color="white" light shaped filled :counter="40"
                                     label="Título" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
-                                <v-text-field type="text" v-model="autor" class="custom-label-color"
+                                <v-text-field type="text" v-model="publicacaoSelecionada.autor" class="custom-label-color"
                                     background-color="#44075e" color="white" light shaped filled :counter="40"
                                     label="Autor(a)" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
-                                <v-text-field v-model="link" class="custom-label-color" background-color="#44075e"
-                                    color="white" light shaped filled :counter="40" label="Link da Publicação"
-                                    required></v-text-field>
+                                <v-text-field v-model="publicacaoSelecionada.link" class="custom-label-color"
+                                    background-color="#44075e" color="white" light shaped filled :counter="40"
+                                    label="Link da Publicação" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
-                                <v-textarea v-model="descricao" class="custom-textarea-color" background-color="#44075e"
-                                    shaped dark :counter="200" color="white" input-color clearable filled>
+                                <v-textarea v-model="publicacaoSelecionada.descricao" class="custom-textarea-color"
+                                    background-color="#44075e" shaped dark :counter="200" color="white" input-color
+                                    clearable filled>
                                     <template v-slot:label>
                                         <div>
                                             Descrição
@@ -45,8 +47,9 @@
                                 </v-textarea>
                             </v-col>
                             <v-col cols="28" sm="14" md="7">
-                                <v-text-field v-model="categoria" class="custom-label-color" background-color="#44075e"
-                                    color="white" shaped filled :counter="40" label="Categoria" required></v-text-field>
+                                <v-text-field v-model="publicacaoSelecionada.categoria" class="custom-label-color"
+                                    background-color="#44075e" color="white" shaped filled :counter="40" label="Categoria"
+                                    required></v-text-field>
                             </v-col>
                             <v-col cols="28" sm="14" md="7">
                                 <v-select class="custom-textarea-color" label="Categoria" theme="dark"
@@ -54,8 +57,8 @@
                                 </v-select>
                             </v-col>
                             <v-col cols="28" sm="14" md="7">
-                                <v-btn rounded color="#14C1D7" class="white--text" @click="adicionarPublicacao()">
-                                    Publicar
+                                <v-btn rounded color="#14C1D7" class="white--text" @click="atualizarPublicacao()">
+                                    Salvar edição
                                 </v-btn>
                             </v-col>
                         </v-form>
@@ -73,7 +76,7 @@
 </template>
 
 <script>
-import { doc, addDoc, collection } from 'firebase/firestore'
+import { doc, getDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
 
 export default {
@@ -88,47 +91,40 @@ export default {
 
     mounted() {
         this.publicacaoId = this.$route.params.id
-        console.log("No mounted, com o id pego do router")
         console.log("Do router: ", this.publicacaoId)
-        console.log("Mounted: ")
-        this.docRef = doc(db, String(this.$route.params.tipoPublicacao), this.publicacaoId)
+        this.docRef = doc(db, 'sites', this.publicacaoId)
         this.recuperarPublicacaoSelecionada()
-        // this.publicacaoSelecionada = this.recuperarPublicacaoSelecionada()
-        //console.log(this.publicacaoSelecionada)
-        console.log("Depois da atribuçção no mounted")
-    },
 
-    /* computed: {
-      publicacaoSelecionadaDupe() {
-        //const docRef = doc(db, 'sites', this.id)
-        //this.publicacaoSelecionada = getDoc(db, 'sites', this.publicacaoId)
-        
-        console.log("REF")
-        console.log("docRef")
-        return this.publicacaoSelecionada
-      }
-    }, */
+    },
 
     methods: {
 
-        adicionarPublicacao() {
-            console.log('Titulo: ', this.titulo)
-            addDoc(this.colRef, {
-                titulo: this.titulo,
-                autor: this.autor,
-                descricao: this.descricao,
-            })
-                .then(() => {
-                    console.log('Inserção de novos dados finalizada')
-                })
+        //Retirar, pois aqui se trata de EDIÇÃO de publiacações
+        atualizarPublicacao() {
+            console.log('Função de atualização a ser implementada ')
         },
+        recuperarPublicacaoSelecionada() {
+            getDoc(this.docRef).then((doc) => {
+                this.publicacaoSelecionada = (doc.data())
+                console.log("PUBLI: ", doc.data())
+                console.log("PUBLI: ", this.publicacaoSelecionada)
+            })
+        }
+
+
 
     },
 
     data: () => ({
         podcast: null,
         publicacaoId: null,
-        publicacaoSelecionada: null,
+        publicacaoSelecionada: {
+            titulo: "null",
+            descricao: null,
+            link: null,
+            autor: null,
+            categoria: "",
+        },
         docRef: null,
         colRef: collection(db, 'sites'),
         titulo: "",
