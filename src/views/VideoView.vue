@@ -1,72 +1,198 @@
 <template>
-    <v-app>
-        <v-main>
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="podcast in podcasts"
-            :key="podcast.id"
-            cols="4"
-          >
-          
-            <v-card flat  class="text-xs-center" height="200">{{podcast.titulo}}</v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
+  <v-app style="background-color:#44075e;">
+      <v-main>
+          <v-container>
+              <v-row>
+                  <v-col v-for="video in videos" :key="video.id" cols="112">
 
-    </v-app>
+                      <v-card style="margin-top:18px" color="purple" :elevation="video - 1" class="mx-auto white--text"
+                          height="330" width="1000">
+                          <v-menu bottom left>
+                              <template v-slot:activator="{ on, attrs }">
+                                  <v-list-item class="topright">
+                                      <v-btn variant="outlined" icon v-bind="attrs" v-on="on">
+                                          <v-icon color="white">mdi-dots-vertical</v-icon>
+                                      </v-btn>
+                                  </v-list-item>
+                              </template>
+
+                              <v-list>
+                                  <v-list-item v-for="(item, i) in items" :key="i" @click="() => { }">
+                                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                  </v-list-item>
+                              </v-list>
+                          </v-menu>
+                          <div class="d-flex flex-no-wrap justify-space-between">
+                              <div>
+                                  <v-card-title class="text-h5" v-text="video.titulo">
+                                  </v-card-title>
+                                  <v-card-subtitle v-text="video.autor"></v-card-subtitle>
+                                  <v-card-text class="text-h7 font-weight-bold" v-text="video.descricao"></v-card-text>
+
+                                  <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
+                                      text-align="bottom">
+                                      <v-card-actions>
+                                          <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+                                          Visualizar
+                                      </v-btn> -->
+                                          <v-btn class="white--text" rounded color="cyan"
+                                              :to="{ name: 'videos', params: { id: videos.id, tipoPublicacao: 'videos' } }">
+                                              Visualizar
+                                          </v-btn>
+                                      </v-card-actions>
+                                      <v-card-actions>
+                                          <v-btn class="white--text" rounded color="cyan"
+                                              @click="deletarPublicacao(videos.id)">
+                                              Deletar
+                                          </v-btn>
+                                      </v-card-actions>
+                                  </v-row>
+
+                              </div>
+                          </div>
+                      </v-card>
+
+                  </v-col>
+              </v-row>
+
+
+          </v-container>
+
+          <v-card-text style="height: 100px;">
+              <v-fab-transition>
+                  <v-btn color="orange" dark bottom right fab fixed :to="{ name: 'criarPublicacao' }">
+                      <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+              </v-fab-transition>
+          </v-card-text>
+
+          <v-dialog v-model="dialog" max-width="500px">
+              <v-card>
+                  <v-card-text>
+                      <v-text-field label="File name"></v-text-field>
+
+                      <small class="grey--text">* This doesn't actually save.</small>
+                  </v-card-text>
+
+                  <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn text color="primary" @click="dialog = false">
+                          Submit
+                      </v-btn>
+                  </v-card-actions>
+              </v-card>
+          </v-dialog>
+      </v-main>
+
+  </v-app>
 </template>
 
 <script>
 
 import { db } from '../firebase/firebase-config'
-import { collection, getDocs} from 'firebase/firestore'
+import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+//updateDoc
+
 
 export default {
   name: 'VideoView',
   //setup(){
-  mounted(){
-   this.podcasts = this.recuperarDocumentos(this.colRef)
+  mounted() {
+      this.videos = this.recuperarDocumentos(this.colRef)
   },
 
-  
+
   //},
 
   components: {
-   
+
   },
 
   data: () => ({
-    drawer: false,
-    group: null,
-    podcasts: null,
-    colRef: collection(db, 'publicacao'),
-    
+      dialog: false,
+      drawer: false,
+      group: null,
+      videos: null,
+      novaPublicacao: {
+          titulo: "Teste",
+          descricao: "Dinossauro descrição",
+          autor: "Coiso"
+      },
+      colRef: collection(db, 'videos'),
+      items: [
+          { title: 'Spam' },
+          { title: 'Publicação ofensiva' },
+          { title: 'Publicação duplicada' },
+          { title: 'Não é uma publicação' },
+          { title: 'Publicação ofensiva' },
+          { title: 'Cancelar' },
+      ],
+
   }),
 
   methods: {
-    recuperarDocumentos(colRef){
-     getDocs(colRef)
-      .then(snapshot => {
-        console.log(snapshot.docs)
-        let podcasts = []
-        snapshot.docs.forEach(doc => {
-          podcasts.push({ ...doc.data(), id: doc.id })
-     })
-     console.log('Tem podcast: ', podcasts)
-     this.podcasts = podcasts
+      recuperarDocumentos(colRef) {
+          getDocs(colRef)
+              .then(snapshot => {
+                  console.log(snapshot.docs)
+                  let videos = []
+                  snapshot.docs.forEach(doc => {
+                    videos.push({ ...doc.data(), id: doc.id })
+                  })
+                  console.log('Tem podcast: ', videos)
+                  this.videos = videos
 
-     console.log('Tem podcast dentro da variável local: ', this.podcasts)
-   })
-   .catch(err =>{
-     console.log('Retornou erro:' , err.message)
-   })
-   
-    console.log('Chamou a função, que retornou: ', this.podcasts)
-    return this.podcasts
-    }
+                  console.log('Tem videos dentro da variável local: ', this.videos)
+              })
+              .catch(err => {
+                  console.log('Retornou erro:', err.message)
+              })
 
-    }
+          console.log('Chamou a função, que retornou: ', this.videos)
+          return this.videos
+      },
+
+      adicionarPublicacao(colRef) {
+          addDoc(colRef, {
+              titulo: this.novaPublicacao.titulo,
+              autor: this.novaPublicacao.autor,
+              descricao: this.novaPublicacao.descricao,
+          })
+              .then(() => {
+                  console.log('Inserção de novos dados finalizada')
+              })
+      },
+
+      deletarPublicacao(id) {
+          console.log('Verificando deleção...')
+          const docRef = doc(db, 'videos', id)
+
+          deleteDoc(docRef)
+              .then(() => {
+                  console.log('Documento deletado com sucesso!')
+                  location.reload()
+              })
+      },
+
+
+  }
 };
 </script>
+
+<style>
+.topright {
+  position: absolute;
+  top: 5px;
+  right: 1px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.bottom-left {
+  position: absolute;
+  bottom: 30px;
+  left: 16px;
+  font-size: 18px;
+}
+</style>

@@ -19,25 +19,25 @@
                         <v-form ref="form" lazy-validation>
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field type="text" v-model="publicacaoSelecionada.titulo" class="custom-label-color"
-                                    background-color="#44075e" color="white" light shaped filled :counter="40"
+                                    background-color="#44075e" color="white" light shaped filled :counter="100"
                                     label="Título" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field type="text" v-model="publicacaoSelecionada.autor" class="custom-label-color"
-                                    background-color="#44075e" color="white" light shaped filled :counter="40"
+                                    background-color="#44075e" color="white" light shaped filled :counter="100"
                                     label="Autor(a)" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field v-model="publicacaoSelecionada.link" class="custom-label-color"
-                                    background-color="#44075e" color="white" light shaped filled :counter="40"
+                                    background-color="#44075e" color="white" light shaped filled :counter="500"
                                     label="Link da Publicação" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-textarea v-model="publicacaoSelecionada.descricao" class="custom-textarea-color"
-                                    background-color="#44075e" shaped dark :counter="200" color="white" input-color
+                                    background-color="#44075e" shaped dark :counter="1000" color="white" input-color
                                     clearable filled>
                                     <template v-slot:label>
                                         <div>
@@ -46,21 +46,26 @@
                                     </template>
                                 </v-textarea>
                             </v-col>
-                            <v-col cols="28" sm="14" md="7">
-                                <v-text-field v-model="publicacaoSelecionada.categoria" class="custom-label-color"
-                                    background-color="#44075e" color="white" shaped filled :counter="40" label="Categoria"
-                                    required></v-text-field>
-                            </v-col>
+                           
                             <v-col cols="28" sm="14" md="7">
                                 <v-select class="custom-textarea-color" label="Categoria" theme="dark"
                                     :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']">
                                 </v-select>
                             </v-col>
-                            <v-col cols="28" sm="14" md="7">
-                                <v-btn rounded color="#14C1D7" class="white--text" @click="atualizarPublicacao()">
-                                    Salvar edição
+                            
+                                
+                            <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
+                                        text-align="bottom">
+
+                                    
+                                <v-btn rounded color="error" class="white--text" @click="atualizarPublicacao()">
+                                    Cancelar
                                 </v-btn>
-                            </v-col>
+                                <v-btn style="margin-left:25px" rounded color="#14C1D7" class="white--text" @click="atualizarPublicacao()">
+                                    Salvar
+                                </v-btn>
+                            
+                            </v-row>
                         </v-form>
 
 
@@ -76,7 +81,7 @@
 </template>
 
 <script>
-import { doc, getDoc, collection } from 'firebase/firestore'
+import { doc, getDoc, collection, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
 
 export default {
@@ -97,11 +102,19 @@ export default {
 
     },
 
-    methods: {
+   methods: {
 
         //Retirar, pois aqui se trata de EDIÇÃO de publiacações
         atualizarPublicacao() {
-            console.log('Função de atualização a ser implementada ')
+            console.log('Chamada da função de atualizar: ')
+            updateDoc(this.docRef, {
+                autor: this.publicacaoSelecionada.autor,
+                descricao: this.publicacaoSelecionada.descricao,
+                link: this.publicacaoSelecionada.link,
+                titulo: this.publicacaoSelecionada.titulo
+            }).then(()=>{
+                console.log('Atualização concluída!')
+            })
         },
         recuperarPublicacaoSelecionada() {
             getDoc(this.docRef).then((doc) => {
