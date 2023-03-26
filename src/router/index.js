@@ -5,6 +5,7 @@ import PodcastView from '../views/PodcastView.vue'
 import VideoView from '../views/VideoView.vue'
 import ArtigoView from '../views/ArtigoView.vue'
 import AuxilioView from '../views/AuxilioView.vue'
+import LivroView from '../views/LivroView.vue'
 import SiteView from '../views/SiteView.vue'
 import Publicacao from '../views/Publicacao.vue'
 import CriarPublicacaoView from '../views/CriarPublicacaoView.vue'
@@ -32,31 +33,43 @@ const routes = [
   {
     path: '/podcast',
     name: 'podcast',
-    component: PodcastView
+    component: PodcastView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   },
 
   {
     path: '/artigo',
     name: 'artigo',
-    component: ArtigoView
+    component: ArtigoView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+  },
+
+  {
+    path: '/livro',
+    name: 'livro',
+    component: LivroView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   },
 
   {
     path: '/video',
     name: 'video',
-    component: VideoView
+    component: VideoView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   },
 
   {
     path: '/auxilio',
     name: 'auxilio',
-    component: AuxilioView
+    component: AuxilioView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   },
 
   {
     path: '/site',
     name: 'site',
-    component: SiteView
+    component: SiteView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   },
 
   {

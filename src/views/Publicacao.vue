@@ -2,7 +2,7 @@
 import { container } from 'webpack';
 
 <template>
-    <v-main style="background-color:#44075e;">
+    <v-main style="background-color:#391D41;">
       <v-container>
                 <v-row>
                     <v-col cols="12">
@@ -12,7 +12,7 @@ import { container } from 'webpack';
                         <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
                     </v-btn>
 
-                        <v-card style="margin-top:18px"  color="purple" :elevation="publicacaoSelecionada - 1" class="mx-auto white--text" height="800" width="1200">
+                        <v-card style="margin-top:18px"  color="#5C3C6C" :elevation="5" class="mx-auto white--text" height="800" width="1200">
                           <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-list-item class="topright">

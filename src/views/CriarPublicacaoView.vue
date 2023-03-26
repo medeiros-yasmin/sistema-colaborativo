@@ -10,7 +10,7 @@
                     </v-btn>
 
 
-                    <v-card style="margin-top:18px" color="purple" :elevation="publicacaoSelecionada - 1"
+                    <v-card style="margin-top:18px" color="purple"
                         class="mx-auto white--text" height="850" width="1200">
 
 
@@ -73,50 +73,18 @@
 </template>
 
 <script>
-import { doc, addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
 
 export default {
     name: 'PublicacaoNova',
-    props: {
-        id: {
-            Number: String,
-            required: true,
-        },
-        tipoPublicacao: {
-            type: String,
-            required: true,
-        }
-    },
-
 
     mounted() {
-        this.publicacaoId = this.$route.params.id
-        console.log("No mounted, com o id pego do router")
-        console.log("Do router: ", this.publicacaoId)
-        console.log("Mounted: ")
-        this.docRef = doc(db, String(this.$route.params.tipoPublicacao), this.publicacaoId)
-        this.recuperarPublicacaoSelecionada()
-        // this.publicacaoSelecionada = this.recuperarPublicacaoSelecionada()
-        //console.log(this.publicacaoSelecionada)
-        console.log("Depois da atribuçção no mounted")
+        
     },
 
-    /* computed: {
-      publicacaoSelecionadaDupe() {
-        //const docRef = doc(db, 'sites', this.id)
-        //this.publicacaoSelecionada = getDoc(db, 'sites', this.publicacaoId)
-        
-        console.log("REF")
-        console.log("docRef")
-        return this.publicacaoSelecionada
-      }
-    }, */
-
     methods: {
-
         adicionarPublicacao() {
-            console.log('Titulo: ', this.titulo)
             addDoc(this.colRef, {
                 titulo: this.titulo,
                 autor: this.autor,
@@ -140,8 +108,6 @@ export default {
         link: "",
         autor: "",
         categoria: "",
-
-
 
     }),
 }

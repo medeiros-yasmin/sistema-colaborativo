@@ -1,11 +1,11 @@
 <template>
-  <v-app style="background-color:#44075e;">
+  <v-app style="background-color:#391D41;">
       <v-main>
           <v-container>
               <v-row>
                   <v-col v-for="video in videos" :key="video.id" cols="112">
 
-                      <v-card style="margin-top:18px" color="purple" :elevation="video - 1" class="mx-auto white--text"
+                      <v-card style="margin-top:18px" color="#5C3C6C" :elevation="video - 1" class="mx-auto white--text"
                           height="330" width="1000">
                           <v-menu bottom left>
                               <template v-slot:activator="{ on, attrs }">
@@ -35,14 +35,14 @@
                                           <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                           Visualizar
                                       </v-btn> -->
-                                          <v-btn class="white--text" rounded color="cyan"
-                                              :to="{ name: 'videos', params: { id: videos.id, tipoPublicacao: 'videos' } }">
+                                          <BotaoVisualizar
+                                              :to="{ name: 'publicacao', params: { id: video.id, tipoPublicacao: 'videos' } }">
                                               Visualizar
-                                          </v-btn>
+                                          </BotaoVisualizar>
                                       </v-card-actions>
                                       <v-card-actions>
                                           <v-btn class="white--text" rounded color="cyan"
-                                              @click="deletarPublicacao(videos.id)">
+                                              @click="deletarPublicacao(video.id)">
                                               Deletar
                                           </v-btn>
                                       </v-card-actions>
@@ -60,29 +60,13 @@
 
           <v-card-text style="height: 100px;">
               <v-fab-transition>
-                  <v-btn color="orange" dark bottom right fab fixed :to="{ name: 'criarPublicacao' }">
-                      <v-icon>mdi-plus</v-icon>
-                  </v-btn>
+                  <BotaoAdicionarPubli>
+                      
+                  </BotaoAdicionarPubli>
               </v-fab-transition>
           </v-card-text>
 
-          <v-dialog v-model="dialog" max-width="500px">
-              <v-card>
-                  <v-card-text>
-                      <v-text-field label="File name"></v-text-field>
-
-                      <small class="grey--text">* This doesn't actually save.</small>
-                  </v-card-text>
-
-                  <v-card-actions>
-                      <v-spacer></v-spacer>
-
-                      <v-btn text color="primary" @click="dialog = false">
-                          Submit
-                      </v-btn>
-                  </v-card-actions>
-              </v-card>
-          </v-dialog>
+        
       </v-main>
 
   </v-app>
@@ -106,7 +90,8 @@ export default {
   //},
 
   components: {
-
+  BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
+  BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
   },
 
   data: () => ({

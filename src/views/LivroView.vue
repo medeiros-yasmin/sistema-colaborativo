@@ -3,9 +3,9 @@
         <v-main>
             <v-container>
                 <v-row>
-                    <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
+                    <v-col v-for="livro in livros" :key="livro.id" cols="112">
 
-                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="podcast - 1" class="mx-auto white--text"
+                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="livro - 1" class="mx-auto white--text"
                             height="330" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
@@ -24,23 +24,25 @@
                             </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div>
-                                    <v-card-title class="text-h5" v-text="podcast.titulo">
+                                    <v-card-title class="text-h5" v-text="livro.titulo">
                                     </v-card-title>
-                                    <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
-                                    <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
+                                    <v-card-subtitle v-text="livro.autor"></v-card-subtitle>
+                                    <v-card-text class="text-h7 font-weight-bold" v-text="livro.descricao"></v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
                                         <v-card-actions>
-                                        
-                                            <v-btn class="white--text" rounded color="#C198C4"
-                                                :to="{ name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'sites' } }">
+                                            <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+                                            Visualizar
+                                        </v-btn> -->
+                                            <BotaoVisualizar
+                                                :to="{ name: 'publicacao', params: { id: livro.id, tipoPublicacao: 'livros' } }">
                                                 Visualizar
-                                            </v-btn>
+                                            </BotaoVisualizar>
                                         </v-card-actions>
                                         <v-card-actions>
                                             <v-btn class="white--text" rounded color="cyan"
-                                                @click="deletarPublicacao(podcast.id)">
+                                                @click="deletarPublicacao(livro.id)">
                                                 Deletar
                                             </v-btn>
                                         </v-card-actions>
@@ -64,7 +66,23 @@
                 </v-fab-transition>
             </v-card-text>
 
-        
+            <v-dialog v-model="dialog" max-width="500px">
+                <v-card>
+                    <v-card-text>
+                        <v-text-field label="File name"></v-text-field>
+
+                        <small class="grey--text">* This doesn't actually save.</small>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn text color="primary" @click="dialog = false">
+                            Submit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-main>
 
     </v-app>
@@ -78,17 +96,17 @@ import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
 
 
 export default {
-    name: 'SiteView',
+    name: 'LivroView',
     //setup(){
     mounted() {
-        this.podcasts = this.recuperarDocumentos(this.colRef)
+        this.livros = this.recuperarDocumentos(this.colRef)
     },
 
 
     //},
 
     components: {
-        //BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
+        BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
         BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
     },
 
@@ -96,13 +114,13 @@ export default {
         dialog: false,
         drawer: false,
         group: null,
-        podcasts: null,
+        livros: null,
         novaPublicacao: {
             titulo: "Teste",
             descricao: "Dinossauro descrição",
             autor: "Coiso"
         },
-        colRef: collection(db, 'sites'),
+        colRef: collection(db, 'livros'),
         items: [
             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
@@ -119,21 +137,21 @@ export default {
             getDocs(colRef)
                 .then(snapshot => {
                     console.log(snapshot.docs)
-                    let podcasts = []
+                    let livros = []
                     snapshot.docs.forEach(doc => {
-                        podcasts.push({ ...doc.data(), id: doc.id })
+                        livros.push({ ...doc.data(), id: doc.id })
                     })
-                    console.log('Tem podcast: ', podcasts)
-                    this.podcasts = podcasts
+                    console.log('Tem podcast: ', livros)
+                    this.livros = livros
 
-                    console.log('Tem podcast dentro da variável local: ', this.podcasts)
+                    console.log('Tem podcast dentro da variável local: ', this.livros)
                 })
                 .catch(err => {
                     console.log('Retornou erro:', err.message)
                 })
 
-            console.log('Chamou a função, que retornou: ', this.podcasts)
-            return this.podcasts
+            console.log('Chamou a função, que retornou: ', this.livros)
+            return this.livros
         },
 
         adicionarPublicacao(colRef) {
@@ -149,7 +167,7 @@ export default {
 
         deletarPublicacao(id) {
             console.log('Verificando deleção...')
-            const docRef = doc(db, 'sites', id)
+            const docRef = doc(db, 'livros', id)
 
             deleteDoc(docRef)
                 .then(() => {

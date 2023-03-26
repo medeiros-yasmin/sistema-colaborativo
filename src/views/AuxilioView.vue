@@ -14,7 +14,7 @@
                                     
                                     <v-row style="padding-left:18px; padding-top:8px" text-align="bottom" >
                                     <v-card-actions>
-                                        <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+                                        <v-btn class="white--text" rounded color="cyan" :to="{ name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'auxilio' } }">
                                             Visualizar
                                         </v-btn>
                                     </v-card-actions>
@@ -38,7 +38,7 @@
             <v-card-text style="height: 100px;">
             <v-fab-transition>
               <v-btn
-                color="orange"
+                color="#f5a751"
                 dark
                 bottom
                 right
@@ -51,30 +51,7 @@
             </v-fab-transition>
           </v-card-text>
 
-          <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <v-card>
-            <v-card-text>
-              <v-text-field label="File name"></v-text-field>
-
-              <small class="grey--text">* This doesn't actually save.</small>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn
-                text
-                color="primary"
-                @click="dialog = false"
-              >
-                Submit
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+          
         </v-main>
 
     </v-app>
