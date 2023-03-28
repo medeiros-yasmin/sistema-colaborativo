@@ -23,11 +23,11 @@
                               </v-list>
                           </v-menu>
                           <div class="d-flex flex-no-wrap justify-space-between">
-                              <div>
+                              <div style="margin-top:18px; margin-left: 18px; margin-right: 320px">
                                   <v-card-title class="text-h5" v-text="artigo.titulo">
                                   </v-card-title>
                                   <v-card-subtitle v-text="artigo.autor"></v-card-subtitle>
-                                  <v-card-text class="text-h7 font-weight-bold" v-text="artigo.descricao"></v-card-text>
+                                  <v-card-text class="text-justify text-h7 font-weight-bold" v-text="artigo.descricao"></v-card-text>
 
                                   <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                       text-align="bottom">
@@ -35,10 +35,10 @@
                                           <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                           Visualizar
                                       </v-btn> -->
-                                          <BotaoVisualizar
-                                              :to="{ name: 'artigo', params: { id: artigo.id, tipoPublicacao: 'artigos' } }">
-                                              Visualizar
-                                          </BotaoVisualizar>
+                                      <v-btn class="white--text" rounded color="#C198C4"
+                                                :to="{ name: 'publicacao', params: { id: artigo.id, tipoPublicacao: 'artigos' } }">
+                                                Visualizar
+                                            </v-btn>
                                       </v-card-actions>
                                       <v-card-actions>
                                           <v-btn class="white--text" rounded color="cyan"
@@ -90,7 +90,7 @@ export default {
   //},
 
   components: {
-  BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
+
   BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
   },
 
@@ -125,10 +125,10 @@ export default {
                   snapshot.docs.forEach(doc => {
                     artigos.push({ ...doc.data(), id: doc.id })
                   })
-                  console.log('Tem podcast: ', artigos)
+                  
                   this.artigos = artigos
 
-                  console.log('Tem artigos dentro da variável local: ', this.artigos)
+                  
               })
               .catch(err => {
                   console.log('Retornou erro:', err.message)

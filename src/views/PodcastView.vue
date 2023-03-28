@@ -23,20 +23,20 @@
                               </v-list>
                           </v-menu>
                           <div class="d-flex flex-no-wrap justify-space-between">
-                              <div>
+                              <div style="margin-top:18px; margin-left: 18px; margin-right: 320px">
                                   <v-card-title class="text-h5" v-text="podcast.titulo">
                                   </v-card-title>
                                   <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
-                                  <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
+                                  <v-card-text class="text-justify text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
 
                                   <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                       text-align="bottom">
                                       <v-card-actions>
                                       
-                                          <BotaoVisualizar
-                                              :to="{ name: 'podcast', params: { id: podcast.id, tipoPublicacao: 'podcasts' } }">
-                                              Visualizar
-                                          </BotaoVisualizar>
+                                        <v-btn class="white--text" rounded color="#C198C4"
+                                                :to="{ name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'podcasts' } }">
+                                                Visualizar
+                                            </v-btn>
                                       </v-card-actions>
                                       <v-card-actions>
                                           <v-btn class="white--text" rounded color="cyan"
@@ -103,7 +103,6 @@ export default {
   //},
 
   components: {
-      BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
       BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
   },
 

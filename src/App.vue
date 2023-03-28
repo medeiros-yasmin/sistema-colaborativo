@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    
     <router-view></router-view>
 
     <v-app-bar color="#7B447B" hide-on-scroll accent-4 dark shaped app >

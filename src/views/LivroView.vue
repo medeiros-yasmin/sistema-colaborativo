@@ -23,11 +23,11 @@
                                 </v-list>
                             </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
-                                <div>
+                                <div style="margin-top:18px; margin-left: 18px; margin-right: 320px">
                                     <v-card-title class="text-h5" v-text="livro.titulo">
                                     </v-card-title>
                                     <v-card-subtitle v-text="livro.autor"></v-card-subtitle>
-                                    <v-card-text class="text-h7 font-weight-bold" v-text="livro.descricao"></v-card-text>
+                                    <v-card-text class="text-justify text-h7 font-weight-bold" v-text="livro.descricao"></v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
@@ -35,10 +35,10 @@
                                             <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
                                             Visualizar
                                         </v-btn> -->
-                                            <BotaoVisualizar
+                                        <v-btn class="white--text" rounded color="#C198C4"
                                                 :to="{ name: 'publicacao', params: { id: livro.id, tipoPublicacao: 'livros' } }">
                                                 Visualizar
-                                            </BotaoVisualizar>
+                                            </v-btn>
                                         </v-card-actions>
                                         <v-card-actions>
                                             <v-btn class="white--text" rounded color="cyan"
@@ -106,7 +106,6 @@ export default {
     //},
 
     components: {
-        BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
         BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
     },
 
@@ -141,10 +140,7 @@ export default {
                     snapshot.docs.forEach(doc => {
                         livros.push({ ...doc.data(), id: doc.id })
                     })
-                    console.log('Tem podcast: ', livros)
                     this.livros = livros
-
-                    console.log('Tem podcast dentro da variável local: ', this.livros)
                 })
                 .catch(err => {
                     console.log('Retornou erro:', err.message)

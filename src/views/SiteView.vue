@@ -23,16 +23,17 @@
                                 </v-list>
                             </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
-                                <div>
+                                <div style="margin-top:18px; margin-left: 18px; margin-right: 320px">
                                     <v-card-title class="text-h5" v-text="podcast.titulo">
                                     </v-card-title>
                                     <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
-                                    <v-card-text class="text-h7 font-weight-bold" v-text="podcast.descricao"></v-card-text>
+                                    <v-card-text class="text-justify text-h7 font-weight-bold"
+                                        v-text="podcast.descricao"></v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
                                         <v-card-actions>
-                                        
+
                                             <v-btn class="white--text" rounded color="#C198C4"
                                                 :to="{ name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'sites' } }">
                                                 Visualizar
@@ -44,7 +45,21 @@
                                                 Deletar
                                             </v-btn>
                                         </v-card-actions>
+
                                     </v-row>
+                                    <v-card-actions>
+                                        <v-row class="bottom-right" align="center" justify="end" style="padding-right:18px; padding-top:8px">
+                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                                handshake
+                                            </v-icon>
+                                            <span style="margin-left: 6px;" class="subheading mr-2">256</span>
+                                            <span class="mr-1">·</span>
+                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                                share
+                                            </v-icon>
+                                            <span style="margin-left: 6px;" class="subheading">45</span>
+                                        </v-row>
+                                    </v-card-actions>
 
                                 </div>
                             </div>
@@ -59,12 +74,12 @@
             <v-card-text style="height: 100px;">
                 <v-fab-transition>
                     <BotaoAdicionarPubli>
-                        
+
                     </BotaoAdicionarPubli>
                 </v-fab-transition>
             </v-card-text>
 
-        
+
         </v-main>
 
     </v-app>
@@ -176,6 +191,13 @@ export default {
     position: absolute;
     bottom: 30px;
     left: 16px;
+    font-size: 18px;
+}
+
+.bottom-right{
+    
+    
+    right: 16px;
     font-size: 18px;
 }
 </style>
