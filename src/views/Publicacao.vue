@@ -12,7 +12,7 @@ import { container } from 'webpack';
             <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
           </v-btn>
 
-          <v-card style="margin-top:18px" color="#5C3C6C" :elevation="5" class="mx-auto white--text" height="800"
+          <v-card style="margin-top:18px" color="#5C3C6C" :elevation="5" class="mx-auto white--text" height="500"
             width="1200">
             <v-menu bottom left>
               <template v-slot:activator="{ on, attrs }">
@@ -30,14 +30,14 @@ import { container } from 'webpack';
               </v-list>
             </v-menu>
             <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-title class="text-h5" v-text="publicacaoSelecionada.titulo"></v-card-title>
+              <div style="margin-top:18px; margin-left: 18px; margin-right: 70px;">
+                <v-card-title class="text-justify text-h5" v-text="publicacaoSelecionada.titulo"></v-card-title>
                 <v-card-subtitle v-text="publicacaoSelecionada.autor"></v-card-subtitle>
-                <v-card-text class="text-h7 font-weight-bold" v-text="publicacaoSelecionada.descricao"></v-card-text>
+                <v-card-text class="text-justify text-h7 font-weight-bold" v-text="publicacaoSelecionada.descricao"></v-card-text>
 
                 <v-row style="padding-left:18px; padding-top:8px" text-align="bottom">
                   <v-card-actions>
-                    <v-btn :href="publicacaoSelecionada.link" target="_blank" rel="noreferrer" class="white--text" rounded color="#C198C4">
+                    <v-btn :href="publicacaoSelecionada.link" target="_blank" rel="noreferrer" class="bottomleft white--text" rounded color="#C198C4">
                       Acessar fonte
                     </v-btn>
                   </v-card-actions>
@@ -79,18 +79,6 @@ export default {
     this.recuperarPublicacaoSelecionada()
 
   },
-
-  /* computed: {
-    publicacaoSelecionadaDupe() {
-      //const docRef = doc(db, 'sites', this.id)
-      //this.publicacaoSelecionada = getDoc(db, 'sites', this.publicacaoId)
-      
-      console.log("REF")
-      console.log("docRef")
-      return this.publicacaoSelecionada
-    }
-  }, */
-
   methods: {
     recuperarPublicacaoSelecionada() {
       getDoc(this.docRef).then((doc) => {
@@ -121,3 +109,12 @@ export default {
 
 
 </script>
+
+<style>
+.bottomleft {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  font-size: 18px;
+}
+</style>
