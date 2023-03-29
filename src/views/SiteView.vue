@@ -94,13 +94,9 @@ import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
 
 export default {
     name: 'SiteView',
-    //setup(){
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
     },
-
-
-    //},
 
     components: {
         //BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
