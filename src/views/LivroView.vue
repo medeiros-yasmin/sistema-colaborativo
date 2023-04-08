@@ -5,7 +5,7 @@
                 <v-row>
                     <v-col v-for="livro in livros" :key="livro.id" cols="112">
 
-                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="livro - 1" class="mx-auto white--text"
+                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="livro - 1" class="overflow-hidden mx-auto white--text"
                             height="330" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
@@ -27,7 +27,7 @@
                                     <v-card-title class="text-h5" v-text="livro.titulo">
                                     </v-card-title>
                                     <v-card-subtitle v-text="livro.autor"></v-card-subtitle>
-                                    <v-card-text class="text-justify text-h7 font-weight-bold" v-text="livro.descricao"></v-card-text>
+                                    <v-card-text class="overflow-hidden text-justify text-h7 font-weight-bold" v-text="livro.descricao"></v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
