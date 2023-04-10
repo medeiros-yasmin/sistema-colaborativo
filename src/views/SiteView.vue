@@ -4,9 +4,9 @@
             <v-container>
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
-                        
-                        <v-card  style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1" class="overflow-hidden my-auto  mx-auto white--text"
-                            height="330" width="1000">
+
+                        <v-card style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
+                            class="overflow-hidden my-auto  mx-auto white--text" height="330" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-list-item class="topright">
@@ -27,8 +27,9 @@
                                     <v-card-title class="text-h5" v-text="podcast.titulo">
                                     </v-card-title>
                                     <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
-                                    <v-card-text class="limite-linhas text-justify text-h7 font-weight-bold"
-                                        > <p class="three-lines mt-5"> {{ podcast.descricao }} </p></v-card-text>
+                                    <v-card-text class="limite-linhas text-justify text-h7 font-weight-bold">
+                                        <p class="three-lines mt-5"> {{ podcast.descricao }} </p>
+                                    </v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
@@ -43,7 +44,8 @@
                                                 @click="deletarPublicacao(podcast.id)">
                                                 Deletar
                                             </v-btn>
-
+                                        </v-card-actions>
+                                            <v-card-actions>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
                                                 handshake
                                             </v-icon>
@@ -56,21 +58,19 @@
                                         </v-card-actions>
                                         
 
+
                                     </v-row>
                                     <v-card-actions>
-                                        <v-row class="bottom-right" align="center" justify="end" style="padding-right:18px; padding-top:8px">
-                                            
+                                        <v-row class="bottom-right" align="center" justify="end"
+                                            style="padding-right:18px; padding-top:8px">
+
                                         </v-row>
                                     </v-card-actions>
 
                                 </div>
-                                <v-avatar
-                  class="ma-3"
-                  size="125"
-                  tile
-                >
-                  <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"></v-img>
-                </v-avatar>
+                                <v-avatar class="ma-3" size="125" tile>
+                                    <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"></v-img>
+                                </v-avatar>
                             </div>
                         </v-card>
 
@@ -199,24 +199,23 @@ export default {
     font-size: 18px;
 }
 
-.bottom-right{
-    
-    
+.bottom-right {
+
+
     right: 16px;
     font-size: 18px;
 }
 
-.limite-linhas{
+.limite-linhas {
     line-clamp: 5 "… (continued on next page)";
 }
 
 .three-lines {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    white-space: normal;
 }
-
 </style>

@@ -32,9 +32,7 @@
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
                                         <v-card-actions>
-                                            <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
-                                          Visualizar
-                                      </v-btn> -->
+                                           
                                             <v-btn class="white--text" rounded color="#C198C4"
                                                 :to="{ name: 'publicacao', params: { id: video.id, tipoPublicacao: 'videos' } }">
                                                 Visualizar
@@ -45,6 +43,17 @@
                                                 @click="deletarPublicacao(video.id)">
                                                 Deletar
                                             </v-btn>
+                                        </v-card-actions>
+                                        <v-card-actions>
+                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                                handshake
+                                            </v-icon>
+                                            <span style="margin-left: 6px;" class="subheading mr-2">256</span>
+                                            <span class="mr-1">·</span>
+                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                                share
+                                            </v-icon>
+                                            <span style="margin-left: 6px;" class="subheading">45</span>
                                         </v-card-actions>
                                     </v-row>
 
