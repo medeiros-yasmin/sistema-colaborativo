@@ -23,11 +23,13 @@
                               </v-list>
                           </v-menu>
                           <div class="d-flex flex-no-wrap justify-space-between">
-                              <div style="margin-top:18px; margin-left: 18px; margin-right: 320px">
+                              <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
                                   <v-card-title class="text-h5" v-text="artigo.titulo">
                                   </v-card-title>
                                   <v-card-subtitle v-text="artigo.autor"></v-card-subtitle>
-                                  <v-card-text class="text-justify text-h7 font-weight-bold" v-text="artigo.descricao"></v-card-text>
+                                  <v-card-text class="limite-linhas text-justify text-h7 font-weight-bold">
+                                    <p class="three-lines mt-5">{{ artigo.descricao }}</p>
+                                  </v-card-text>
 
                                   <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                       text-align="bottom">
@@ -191,5 +193,18 @@ export default {
   bottom: 30px;
   left: 16px;
   font-size: 18px;
+}
+
+.limite-linhas {
+    line-clamp: 5 "… (continued on next page)";
+}
+
+.three-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    white-space: normal;
 }
 </style>

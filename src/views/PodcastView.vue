@@ -23,7 +23,7 @@
                               </v-list>
                           </v-menu>
                           <div class="d-flex flex-no-wrap justify-space-between">
-                              <div style="margin-top:18px; margin-left: 18px; margin-right: 320px">
+                              <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
                                   <v-card-title class="text-h5" v-text="podcast.titulo">
                                   </v-card-title>
                                   <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
