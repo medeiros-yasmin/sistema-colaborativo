@@ -5,8 +5,8 @@
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
-                        <v-card style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
-                            class="overflow-hidden my-auto  mx-auto white--text" height="330" width="1000">
+                        <v-card shaped style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
+                            class="overflow-hidden my-auto  mx-auto white--text" height="300" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-list-item class="topright">
@@ -45,7 +45,7 @@
                                                 Deletar
                                             </v-btn>
                                         </v-card-actions>
-                                            <v-card-actions>
+                                        <v-card-actions>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
                                                 handshake
                                             </v-icon>
@@ -56,20 +56,14 @@
                                             </v-icon>
                                             <span style="margin-left: 6px;" class="subheading">45</span>
                                         </v-card-actions>
-                                        
+
 
 
                                     </v-row>
-                                    <v-card-actions>
-                                        <v-row class="bottom-right" align="center" justify="end"
-                                            style="padding-right:18px; padding-top:8px">
-
-                                        </v-row>
-                                    </v-card-actions>
 
                                 </div>
-                                <v-avatar class="ma-3" size="125" tile>
-                                    <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"></v-img>
+                                <v-avatar rounded align="center" class="mt-16 mr-5" size="170">
+                                    <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg" alt="Sem imagem"></v-img>
                                 </v-avatar>
                             </div>
                         </v-card>
@@ -113,6 +107,7 @@ export default {
     },
 
     data: () => ({
+        ultimoDocumento: null,
         dialog: false,
         drawer: false,
         group: null,
@@ -135,6 +130,30 @@ export default {
     }),
 
     methods: {
+
+        async recuperarNovosDocumentos(doc) {
+            loading.classList.add('active');
+
+            const ref = db.collection('reviews')
+                .orderBy('createdAt')
+                .startAfter(doc || 0)
+                .limit(6);
+
+            const data = await ref.get();
+
+            // output docs
+            let template = '';
+            data.docs.forEach(doc => {
+                const review = doc.data();
+                template += `
+    <div class="card">
+      <h2>${review.name}</h2>
+      <p>Written by ${review.author}</p>
+      <p>Rating - ${review.rating} / 5</p>
+    </div>
+  `
+            })
+        },
         recuperarDocumentos(colRef) {
             getDocs(colRef)
                 .then(snapshot => {
@@ -215,7 +234,7 @@ export default {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 3;
     white-space: normal;
 }
 </style>
