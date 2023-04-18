@@ -1,4 +1,5 @@
 <template>
+
   <v-app>
     <v-slide-x-transition mode="out-in" origin="left right">
     <router-view/>
@@ -73,26 +74,9 @@
 
   
   </v-app>
+
 </template>
 
-<script>
-
-import { db } from '../src/firebase/firebase-config'
-import { collection, getDocs} from 'firebase/firestore'
-
-export default {
-  name: 'App',
-  //setup(){
-  mounted(){
-   this.podcasts = this.recuperarDocumentos(this.colRef)
-  },
-
-  
-  //},
-
-  components: {
-   
-  },
 
   data: () => ({
     drawer: false,
@@ -137,3 +121,4 @@ export default {
 }
 
 </style>
+

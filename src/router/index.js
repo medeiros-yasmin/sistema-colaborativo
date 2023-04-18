@@ -13,6 +13,7 @@ import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
 import LoginView from '../views/LoginView.vue'
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -97,6 +98,9 @@ const routes = [
     name: 'publicacao',
     component: Publicacao,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+
+    component: AuxilioView
+
   }
 ]
 
