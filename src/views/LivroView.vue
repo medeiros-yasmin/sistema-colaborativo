@@ -3,9 +3,9 @@
         <v-main>
             <v-container>
                 <v-row>
-                    <v-col v-for="video in videos" :key="video.id" cols="112">
+                    <v-col v-for="livro in livros" :key="livro.id" cols="112">
 
-                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="video - 1" class="mx-auto white--text"
+                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="livro - 1" class="overflow-hidden mx-auto white--text"
                             height="330" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
@@ -24,26 +24,29 @@
                             </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
-                                    <v-card-title class="text-h5" v-text="video.titulo">
+                                    <v-card-title class="text-h5" v-text="livro.titulo">
                                     </v-card-title>
-                                    <v-card-subtitle v-text="video.autor"></v-card-subtitle>
-                                    <v-card-text class="text-justify text-h7 font-weight-bold" v-text="video.descricao"></v-card-text>
+                                    <v-card-subtitle v-text="livro.autor"></v-card-subtitle>
+                                    <v-card-text class="overflow-hidden text-justify text-h7 font-weight-bold" v-text="livro.descricao"></v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
                                         <v-card-actions>
-                                           
-                                            <v-btn class="white--text" rounded color="#C198C4"
-                                                :to="{ name: 'publicacao', params: { id: video.id, tipoPublicacao: 'videos' } }">
+                                            <!-- <v-btn class="white--text" rounded color="cyan" @click="adicionarPublicacao(colRef)">
+                                            Visualizar
+                                        </v-btn> -->
+                                        <v-btn class="white--text" rounded color="#C198C4"
+                                                :to="{ name: 'publicacao', params: { id: livro.id, tipoPublicacao: 'livros' } }">
                                                 Visualizar
                                             </v-btn>
                                         </v-card-actions>
                                         <v-card-actions>
                                             <v-btn class="white--text" rounded color="cyan"
-                                                @click="deletarPublicacao(video.id)">
+                                                @click="deletarPublicacao(livro.id)">
                                                 Deletar
                                             </v-btn>
                                         </v-card-actions>
+
                                         <v-card-actions>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
                                                 handshake
@@ -70,12 +73,28 @@
             <v-card-text style="height: 100px;">
                 <v-fab-transition>
                     <BotaoAdicionarPubli>
-
+                        
                     </BotaoAdicionarPubli>
                 </v-fab-transition>
             </v-card-text>
 
+            <v-dialog v-model="dialog" max-width="500px">
+                <v-card>
+                    <v-card-text>
+                        <v-text-field label="File name"></v-text-field>
 
+                        <small class="grey--text">* This doesn't actually save.</small>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn text color="primary" @click="dialog = false">
+                            Submit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-main>
 
     </v-app>
@@ -89,10 +108,10 @@ import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
 
 
 export default {
-    name: 'VideoView',
+    name: 'LivroView',
     //setup(){
     mounted() {
-        this.videos = this.recuperarDocumentos(this.colRef)
+        this.livros = this.recuperarDocumentos(this.colRef)
     },
 
 
@@ -106,13 +125,13 @@ export default {
         dialog: false,
         drawer: false,
         group: null,
-        videos: null,
+        livros: null,
         novaPublicacao: {
             titulo: "Teste",
             descricao: "Dinossauro descrição",
             autor: "Coiso"
         },
-        colRef: collection(db, 'videos'),
+        colRef: collection(db, 'livros'),
         items: [
             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
@@ -129,21 +148,18 @@ export default {
             getDocs(colRef)
                 .then(snapshot => {
                     console.log(snapshot.docs)
-                    let videos = []
+                    let livros = []
                     snapshot.docs.forEach(doc => {
-                        videos.push({ ...doc.data(), id: doc.id })
+                        livros.push({ ...doc.data(), id: doc.id })
                     })
-                    console.log('Tem podcast: ', videos)
-                    this.videos = videos
-
-                    console.log('Tem videos dentro da variável local: ', this.videos)
+                    this.livros = livros
                 })
                 .catch(err => {
                     console.log('Retornou erro:', err.message)
                 })
 
-            console.log('Chamou a função, que retornou: ', this.videos)
-            return this.videos
+            console.log('Chamou a função, que retornou: ', this.livros)
+            return this.livros
         },
 
         adicionarPublicacao(colRef) {
@@ -159,7 +175,7 @@ export default {
 
         deletarPublicacao(id) {
             console.log('Verificando deleção...')
-            const docRef = doc(db, 'videos', id)
+            const docRef = doc(db, 'livros', id)
 
             deleteDoc(docRef)
                 .then(() => {

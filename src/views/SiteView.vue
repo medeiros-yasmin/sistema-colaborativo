@@ -3,10 +3,10 @@
         <v-main>
             <v-container>
                 <v-row>
-                    <v-col v-for="video in videos" :key="video.id" cols="112">
+                    <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
-                        <v-card style="margin-top:18px" color="#5C3C6C" :elevation="video - 1" class="mx-auto white--text"
-                            height="330" width="1000">
+                        <v-card shaped style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
+                            class="overflow-hidden my-auto  mx-auto white--text" height="300" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-list-item class="topright">
@@ -24,23 +24,24 @@
                             </v-menu>
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
-                                    <v-card-title class="text-h5" v-text="video.titulo">
+                                    <v-card-title class="text-h5" v-text="podcast.titulo">
                                     </v-card-title>
-                                    <v-card-subtitle v-text="video.autor"></v-card-subtitle>
-                                    <v-card-text class="text-justify text-h7 font-weight-bold" v-text="video.descricao"></v-card-text>
+                                    <v-card-subtitle v-text="podcast.autor"></v-card-subtitle>
+                                    <v-card-text class="limite-linhas text-justify text-h7 font-weight-bold">
+                                        <p class="three-lines mt-5"> {{ podcast.descricao }} </p>
+                                    </v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                         text-align="bottom">
-                                        <v-card-actions>
-                                           
-                                            <v-btn class="white--text" rounded color="#C198C4"
-                                                :to="{ name: 'publicacao', params: { id: video.id, tipoPublicacao: 'videos' } }">
+                                        <v-card-actions class="d-flex align-end">
+
+                                            <v-btn class=" white--text" rounded color="#C198C4"
+                                                :to="{ name: 'publicacao', params: { id: podcast.id, tipoPublicacao: 'sites' } }">
                                                 Visualizar
                                             </v-btn>
-                                        </v-card-actions>
-                                        <v-card-actions>
+
                                             <v-btn class="white--text" rounded color="cyan"
-                                                @click="deletarPublicacao(video.id)">
+                                                @click="deletarPublicacao(podcast.id)">
                                                 Deletar
                                             </v-btn>
                                         </v-card-actions>
@@ -55,9 +56,15 @@
                                             </v-icon>
                                             <span style="margin-left: 6px;" class="subheading">45</span>
                                         </v-card-actions>
+
+
+
                                     </v-row>
 
                                 </div>
+                                <v-avatar rounded align="center" class="mt-16 mr-5" size="170">
+                                    <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg" alt="Sem imagem"></v-img>
+                                </v-avatar>
                             </div>
                         </v-card>
 
@@ -89,30 +96,28 @@ import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
 
 
 export default {
-    name: 'VideoView',
-    //setup(){
+    name: 'SiteView',
     mounted() {
-        this.videos = this.recuperarDocumentos(this.colRef)
+        this.podcasts = this.recuperarDocumentos(this.colRef)
     },
 
-
-    //},
-
     components: {
+        //BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
         BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
     },
 
     data: () => ({
+        ultimoDocumento: null,
         dialog: false,
         drawer: false,
         group: null,
-        videos: null,
+        podcasts: null,
         novaPublicacao: {
             titulo: "Teste",
             descricao: "Dinossauro descrição",
             autor: "Coiso"
         },
-        colRef: collection(db, 'videos'),
+        colRef: collection(db, 'sites'),
         items: [
             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
@@ -125,25 +130,49 @@ export default {
     }),
 
     methods: {
+
+        /* async recuperarNovosDocumentos(doc) {
+            loading.classList.add('active');
+
+            const ref = db.collection('reviews')
+                .orderBy('createdAt')
+                .startAfter(doc || 0)
+                .limit(6);
+
+            const data = await ref.get();
+
+            // output docs
+            let template = '';
+            data.docs.forEach(doc => {
+                const review = doc.data();
+                template += `
+    <div class="card">
+      <h2>${review.name}</h2>
+      <p>Written by ${review.author}</p>
+      <p>Rating - ${review.rating} / 5</p>
+    </div>
+  `
+            })
+        }, */
         recuperarDocumentos(colRef) {
             getDocs(colRef)
                 .then(snapshot => {
                     console.log(snapshot.docs)
-                    let videos = []
+                    let podcasts = []
                     snapshot.docs.forEach(doc => {
-                        videos.push({ ...doc.data(), id: doc.id })
+                        podcasts.push({ ...doc.data(), id: doc.id })
                     })
-                    console.log('Tem podcast: ', videos)
-                    this.videos = videos
+                    console.log('Tem podcast: ', podcasts)
+                    this.podcasts = podcasts
 
-                    console.log('Tem videos dentro da variável local: ', this.videos)
+                    console.log('Tem podcast dentro da variável local: ', this.podcasts)
                 })
                 .catch(err => {
                     console.log('Retornou erro:', err.message)
                 })
 
-            console.log('Chamou a função, que retornou: ', this.videos)
-            return this.videos
+            console.log('Chamou a função, que retornou: ', this.podcasts)
+            return this.podcasts
         },
 
         adicionarPublicacao(colRef) {
@@ -159,7 +188,7 @@ export default {
 
         deletarPublicacao(id) {
             console.log('Verificando deleção...')
-            const docRef = doc(db, 'videos', id)
+            const docRef = doc(db, 'sites', id)
 
             deleteDoc(docRef)
                 .then(() => {
@@ -187,5 +216,25 @@ export default {
     bottom: 30px;
     left: 16px;
     font-size: 18px;
+}
+
+.bottom-right {
+
+
+    right: 16px;
+    font-size: 18px;
+}
+
+.limite-linhas {
+    line-clamp: 5 "… (continued on next page)";
+}
+
+.three-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    white-space: normal;
 }
 </style>

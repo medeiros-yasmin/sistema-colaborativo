@@ -1,20 +1,31 @@
 <template>
 
   <v-app>
-    <router-view></router-view>
+    <v-slide-x-transition mode="out-in" origin="left right">
+    <router-view/>
+  </v-slide-x-transition>
 
-    <v-app-bar color="purple" hide-on-scroll accent-4 dark shaped app >
+    <v-app-bar transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Sistema Colaborativo</v-toolbar-title>
+      <v-toolbar-title>DELTA</v-toolbar-title>
+      
+      <v-text-field 
+        clearable 
+        prepend-inner-icon="mdi-magnify"
+        class="topright mx-4"
+        flat
+        hide-details
+        label="Pesquisar"
+        solo-inverted
+      ></v-text-field>
+  
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      
 
-      <template v-slot:extension>
-        <v-tabs class="text-center" align-with-title>
+      <template  v-slot:extension>
+        <v-tabs  class="text-center" align-with-title>
           <v-tab to="/artigo">Artigos</v-tab>
           <v-tab to="/auxilio">Auxílios</v-tab>
           <v-tab to="/podcast">Podcasts</v-tab>
@@ -31,7 +42,7 @@
       v-model="drawer"
       absolute
       temporary
-      color="purple"
+      color="#7B447B"
     >
       <v-list
         nav
@@ -96,4 +107,18 @@
     console.log('Chamou a função, que retornou: ', this.podcasts)
     return this.podcasts
     }
+
+    }
+};
+</script>
+
+<style>
+.topright {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  font-size: 40px;
+}
+
+</style>
 
