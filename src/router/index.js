@@ -10,6 +10,7 @@ import SiteView from '../views/SiteView.vue'
 import Publicacao from '../views/Publicacao.vue'
 import CriarPublicacaoView from '../views/CriarPublicacaoView.vue'
 import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
+import LoginView from '../views/LoginView.vue'
 
 
 Vue.use(VueRouter)
@@ -19,6 +20,12 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
+    props: true,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
     props: true,
   },
   {

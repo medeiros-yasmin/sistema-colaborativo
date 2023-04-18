@@ -131,7 +131,7 @@ export default {
 
     methods: {
 
-        async recuperarNovosDocumentos(doc) {
+        /* async recuperarNovosDocumentos(doc) {
             loading.classList.add('active');
 
             const ref = db.collection('reviews')
@@ -153,7 +153,7 @@ export default {
     </div>
   `
             })
-        },
+        }, */
         recuperarDocumentos(colRef) {
             getDocs(colRef)
                 .then(snapshot => {
