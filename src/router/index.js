@@ -10,7 +10,8 @@ import SiteView from '../views/SiteView.vue'
 import Publicacao from '../views/Publicacao.vue'
 import CriarPublicacaoView from '../views/CriarPublicacaoView.vue'
 import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
-import LoginView from '../views/LoginView.vue'
+import CadastroView from '../views/CadastroView.vue'
+import EntrarView from '../views/EntrarView.vue'
 
 
 Vue.use(VueRouter)
@@ -23,9 +24,15 @@ const routes = [
     props: true,
   },
   {
-    path: '/login',
-    name: 'login',
-    component: LoginView,
+    path: '/cadastro',
+    name: 'cadastro',
+    component: CadastroView,
+    props: true,
+  },
+  {
+    path: '/entrar',
+    name: 'entrar',
+    component: EntrarView,
     props: true,
   },
   {

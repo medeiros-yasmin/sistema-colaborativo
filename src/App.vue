@@ -7,7 +7,7 @@
     <v-app-bar transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>DELTA</v-toolbar-title>
+      <v-toolbar-title>NOZ</v-toolbar-title>
       
       <v-text-field 
         clearable 
@@ -25,6 +25,7 @@
 
       <template  v-slot:extension>
         <v-tabs  class="text-center" align-with-title>
+          <v-tab to="/">Início</v-tab>
           <v-tab to="/artigo">Artigos</v-tab>
           <v-tab to="/auxilio">Auxílios</v-tab>
           <v-tab to="/podcast">Podcasts</v-tab>
@@ -64,6 +65,13 @@
               <v-icon color="white">mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Minha Conta</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item class="white--text">
+            <v-list-item-icon>
+              <v-icon color="white">mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Sair</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
