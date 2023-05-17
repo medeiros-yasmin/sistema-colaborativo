@@ -6,7 +6,7 @@
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
                         <v-card shaped style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
-                            class="overflow-hidden my-auto  mx-auto white--text" height="300" width="1000">
+                            class="overflow-hidden mx-auto white--text" height="300" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-list-item class="topright">

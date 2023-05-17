@@ -69,6 +69,13 @@
 
           <v-list-item class="white--text">
             <v-list-item-icon>
+              <v-icon color="white">mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Minhas Publicações</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item class="white--text">
+            <v-list-item-icon>
               <v-icon color="white">mdi-logout</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Sair</v-list-item-title>
