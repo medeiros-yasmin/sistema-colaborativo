@@ -4,7 +4,7 @@
     <router-view/>
   </v-slide-x-transition>
 
-    <v-app-bar transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app >
+    <v-app-bar v-if="showAppBar" transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>NOZ</v-toolbar-title>
@@ -20,9 +20,6 @@
       ></v-text-field>
   
       <v-spacer></v-spacer>
-
-      
-
       <template  v-slot:extension>
         <v-tabs  class="text-center" align-with-title>
           <v-tab to="/">Início</v-tab>
@@ -97,6 +94,12 @@ import { collection, getDocs} from 'firebase/firestore'
 
 export default {
   name: 'App',
+
+  computed: {
+    showAppBar() {
+      return this.$store.state.showAppBar;
+    },
+  },
   //setup(){
   mounted(){
    this.podcasts = this.recuperarDocumentos(this.colRef)
@@ -113,9 +116,10 @@ export default {
     drawer: false,
     group: null,
     podcasts: null,
-    colRef: collection(db, 'podcasts'),
-    
+    colRef: collection(db, 'podcasts')
   }),
+
+  
 
   methods: {
     recuperarDocumentos(colRef){

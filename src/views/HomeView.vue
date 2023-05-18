@@ -87,5 +87,10 @@ export default {
         ],
 
     }),
+
+    created(){
+       this.$store.commit('toggleAppBar', false);
+  },
+
 }
 </script>

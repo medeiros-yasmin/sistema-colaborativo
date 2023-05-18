@@ -52,6 +52,11 @@ export default {
 
     }),
 
+    created(){
+       this.$store.state.commit('toggleAppBar', false);
+  },
+
+
    methods: {
       entrar() {
          signInWithEmailAndPassword(auth, this.email, this.senha)

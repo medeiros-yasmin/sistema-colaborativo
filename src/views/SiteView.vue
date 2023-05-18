@@ -129,6 +129,10 @@ export default {
 
     }),
 
+    created(){
+       this.$store.commit('toggleAppBar', true);
+  },
+
     methods: {
 
         /* async recuperarNovosDocumentos(doc) {
