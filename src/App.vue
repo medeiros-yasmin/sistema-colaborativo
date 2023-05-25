@@ -71,7 +71,7 @@
             <v-list-item-title>Minhas Publicações</v-list-item-title>
           </v-list-item>
 
-          <v-list-item class="white--text">
+          <v-list-item @click="sair()" class="white--text">
             <v-list-item-icon>
               <v-icon color="white">mdi-logout</v-icon>
             </v-list-item-icon>
@@ -89,8 +89,12 @@
 
 <script>
 
+//import router from '@/router';
 import { db } from '../src/firebase/firebase-config'
-import { collection, getDocs} from 'firebase/firestore'
+import { auth } from '../src/firebase/firebase-config'
+import { collection, getDocs } from 'firebase/firestore'
+import { signOut }from 'firebase/auth'
+import router from './router';
 
 export default {
   name: 'App',
@@ -141,7 +145,21 @@ export default {
    
     console.log('Chamou a função, que retornou: ', this.podcasts)
     return this.podcasts
-    }
+    },
+
+    sair() {
+         signOut(auth)
+            .then(() => {
+               // Signed in
+               router.push("/entrar");
+               this.$store.commit('toggleAppBar', false);
+               console.log("Você saiu! :)");
+               
+               
+            }).catch((error) => {
+               console.log("Código de erro: ", error.code);
+});
+      }
 
     }
 };

@@ -39,15 +39,15 @@
 
           </v-container>
 
-          <v-card-text style="height: 100px;">
+          <!-- <v-card-text style="height: 100px;">
               <v-fab-transition>
                   <BotaoAdicionarPubli>
                       
                   </BotaoAdicionarPubli>
               </v-fab-transition>
-          </v-card-text>
+          </v-card-text> -->
 
-          <v-dialog v-model="dialog" max-width="500px">
+          <!-- <v-dialog v-model="dialog" max-width="500px">
               <v-card>
                   <v-card-text>
                       <v-text-field label="File name"></v-text-field>
@@ -63,7 +63,7 @@
                       </v-btn>
                   </v-card-actions>
               </v-card>
-          </v-dialog>
+          </v-dialog> -->
       </v-main>
 
   </v-app>

@@ -53,6 +53,10 @@ export default {
 
     }),
 
+   created(){
+       this.$store.commit('toggleAppBar', false);
+   },
+
    methods: {
       criarUsuario() {
          createUserWithEmailAndPassword(auth, this.email, this.senha)

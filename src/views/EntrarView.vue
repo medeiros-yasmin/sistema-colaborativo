@@ -39,7 +39,7 @@
 <script>
 import router from '@/router';
 import { auth } from '../firebase/firebase-config'
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 export default {
    name: 'EntrarView',
    props: {
@@ -52,8 +52,15 @@ export default {
 
     }),
 
-    created(){
-       this.$store.state.commit('toggleAppBar', false);
+   created(){
+       this.$store.commit('toggleAppBar', false);
+   },
+
+   watch: {
+    // whenever question changes, this function will run
+    usuarioAutenticado: function () {
+      this.verificarAutenticacao();
+    }
   },
 
 
@@ -82,11 +89,20 @@ export default {
                
             }).catch((error) => {
                console.log("Código de erro: ", error.code);
-});
+            });
+      },
+      verificarAutenticacao(){
+         onAuthStateChanged(auth, (user) => {
+            if (user) {
+               console.log('Usuário autenticado: ', user)
+               
+    
+            } else {
+               console.log('Usuário não autenticado.')
+            }
+         });
       }
-
    }
-
 };
 </script>
 
