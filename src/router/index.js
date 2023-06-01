@@ -107,6 +107,17 @@ const routes = [
   }
 ]
 
+router.beforeEach((to, from, next) => {
+  const currentUser = auth.currentUser;
+  
+  if (to.meta.requiresAuth && !currentUser) {
+    // O usuário não está autenticado e a rota requer autenticação
+    next('/entrar'); // Redireciona para a página de login ou outra página adequada
+  } else {
+    next();
+  }
+});
+
 const router = new VueRouter({
   routes
 })
