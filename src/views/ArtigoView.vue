@@ -100,6 +100,10 @@ export default {
       this.artigos = this.recuperarDocumentos(this.colRef)
   },
 
+  created(){
+       this.$store.commit('toggleAppBar', true);
+  },
+
 
   //},
 

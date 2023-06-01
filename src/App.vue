@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-slide-x-transition mode="out-in" origin="left right">
-    <router-view/>
+    <router-view />
   </v-slide-x-transition>
 
     <v-app-bar v-if="showAppBar" transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app >
@@ -93,7 +93,7 @@
 import { db } from '../src/firebase/firebase-config'
 import { auth } from '../src/firebase/firebase-config'
 import { collection, getDocs } from 'firebase/firestore'
-import { signOut }from 'firebase/auth'
+import { signOut, onAuthStateChanged }from 'firebase/auth'
 import router from './router';
 
 export default {
@@ -109,8 +109,12 @@ export default {
    this.podcasts = this.recuperarDocumentos(this.colRef)
   },
 
-  
-  //},
+  created(){
+    // onAuthStateChanged(this.$store.state.auth, (user) => {
+    //   this.currentUser = user;
+    // });
+
+  },
 
   components: {
    
@@ -120,7 +124,8 @@ export default {
     drawer: false,
     group: null,
     podcasts: null,
-    colRef: collection(db, 'podcasts')
+    colRef: collection(db, 'podcasts'), 
+    currentUser: null,
   }),
 
   
@@ -159,6 +164,18 @@ export default {
             }).catch((error) => {
                console.log("Código de erro: ", error.code);
 });
+      },
+
+      verificarAutenticacao(){
+         onAuthStateChanged(auth, (user) => {
+            if (user) {
+               console.log('Usuário autenticado: ', user)
+               
+    
+            } else {
+               console.log('Usuário não autenticado.')
+            }
+         });
       }
 
     }

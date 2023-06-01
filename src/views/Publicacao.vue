@@ -72,6 +72,10 @@ export default {
     }
   },
 
+  created(){
+       this.$store.commit('toggleAppBar', false);
+  },
+
   mounted() {
     this.publicacaoId = this.$route.params.id
     console.log("Do router: ", this.publicacaoId)

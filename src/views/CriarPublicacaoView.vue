@@ -96,6 +96,10 @@ export default {
 
     },
 
+    created(){
+       this.$store.commit('toggleAppBar', false);
+  },
+
     methods: {
         adicionarPublicacao() {
             addDoc(this.colRef, {

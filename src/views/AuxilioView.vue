@@ -77,8 +77,9 @@ export default {
         this.auxilios = this.recuperarDocumentos(this.colRef)
     },
 
-
-    //},
+    created(){
+       this.$store.commit('toggleAppBar', true);
+  },
 
     components: {
 

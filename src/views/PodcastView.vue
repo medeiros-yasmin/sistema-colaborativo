@@ -111,8 +111,9 @@ export default {
       this.podcasts = this.recuperarDocumentos(this.colRef)
   },
 
-
-  //},
+  created(){
+       this.$store.commit('toggleAppBar', true);
+  },
 
   components: {
       BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')

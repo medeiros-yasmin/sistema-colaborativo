@@ -93,6 +93,10 @@ export default {
         },
     },
 
+    created(){
+       this.$store.commit('toggleAppBar', false);
+  },
+
 
     mounted() {
         this.publicacaoId = this.$route.params.id
