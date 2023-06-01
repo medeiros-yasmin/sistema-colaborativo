@@ -11,7 +11,7 @@
                     </v-btn>
 
 
-                    <v-card style="margin-top:18px" color="#5C3C6C" class="mx-auto white--text" height="850" width="1200">
+                    <v-card v-if="currentUser" style="margin-top:18px" color="#5C3C6C" class="mx-auto white--text" height="850" width="1200">
                         <v-card-text class="text-h5 white--text" style="word-spacing: 50px;"> NOVA PUBLICAÇÃO </v-card-text>
 
 
@@ -75,6 +75,7 @@
 
 
                     </v-card>
+                    <div v-else> <h5> Você precisa estar autenticado para criar conteúdo</h5> </div>
 
                 </v-col>
             </v-row>
@@ -88,6 +89,7 @@
 <script>
 import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
+//import { onAuthStateChanged }from 'firebase/auth'
 
 export default {
     name: 'PublicacaoNova',
@@ -98,6 +100,9 @@ export default {
 
     created(){
        this.$store.commit('toggleAppBar', false);
+       /* onAuthStateChanged(auth, (user) => {
+            this.currentUser = user;
+       }); */
   },
 
     methods: {
@@ -125,7 +130,7 @@ export default {
         link: "",
         autor: "",
         categoria: "",
-
+        currentUser: null,
     }),
 }
 

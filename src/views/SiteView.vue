@@ -3,6 +3,16 @@
         <v-main>
             <v-container>
                 <v-row>
+
+                    <v-alert :value="exibirAviso" dismissible color="pink" dark border="top" icon="mdi-home" transition="scale-transition">
+                        Phasellus tempus. Fusce ac felis sit amet ligula pharetra condimentum. In dui magna, posuere eget,
+                        vestibulum et, tempor auctor, justo. Pellentesque posuere. Curabitur ligula sapien, tincidunt non,
+                        euismod vitae, posuere imperdiet, leo.
+
+                        Phasellus nec sem in justo pellentesque facilisis. Phasellus magna. Cras risus ipsum, faucibus ut,
+                        ullamcorper id, varius ac, leo. In hac habitasse platea dictumst. Praesent turpis.
+                    </v-alert>
+
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
                         <v-card shaped style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
@@ -76,9 +86,10 @@
 
             <v-card-text style="height: 100px;">
                 <v-fab-transition>
-                    <BotaoAdicionarPubli>
-
-                    </BotaoAdicionarPubli>
+                    <v-btn @click="verificarSeAutenticado()" color="#889B59" dark bottom right fab fixed
+                        :to="{ name: 'criarPublicacao' }">
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
                 </v-fab-transition>
             </v-card-text>
 
@@ -92,6 +103,7 @@
 
 import { db } from '../firebase/firebase-config'
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+import { mapGetters } from 'vuex';
 //updateDoc
 
 
@@ -103,11 +115,13 @@ export default {
 
     components: {
         //BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
-        BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
+        //BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
     },
 
     data: () => ({
         ultimoDocumento: null,
+        exibirAviso: false,
+        criarClicado: false,
         dialog: false,
         drawer: false,
         group: null,
@@ -129,11 +143,21 @@ export default {
 
     }),
 
-    created(){
-       this.$store.commit('toggleAppBar', true);
-  },
+    created() {
+        this.$store.commit('toggleAppBar', true);
+    },
+    computed: {
+        ...mapGetters(['getCurrentUser']),
+    },
 
     methods: {
+        verificarSeAutenticado() {
+            this.criarClicado = ! this.criarClicado
+            if (this.getCurrentUser && this.criarClicado)
+                this.exibirAviso = false;
+            else
+                this.exibirAviso = true;
+        },
 
         /* async recuperarNovosDocumentos(doc) {
             loading.classList.add('active');

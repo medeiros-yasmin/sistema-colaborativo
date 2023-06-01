@@ -12,6 +12,8 @@ import CriarPublicacaoView from '../views/CriarPublicacaoView.vue'
 import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
 import CadastroView from '../views/CadastroView.vue'
 import EntrarView from '../views/EntrarView.vue'
+import AvisoAutenticacaoView from '../views/AvisoAutenticacaoView'
+import { auth } from '../firebase/firebase-config'
 
 
 Vue.use(VueRouter)
@@ -87,9 +89,18 @@ const routes = [
   },
 
   {
+    path: '/aviso',
+    name: 'aviso',
+    component: AvisoAutenticacaoView
+  },
+
+  {
     path: '/criar',
     name: 'criarPublicacao',
-    component: CriarPublicacaoView
+    component: CriarPublicacaoView,
+    meta: {
+      requiresAuth: true
+    }
   },
 
   {
@@ -97,6 +108,9 @@ const routes = [
     name: 'editarPublicacao',
     component: EditarPublicacaoView,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao }),
+    meta: {
+      requiresAuth: true
+    }
   },
 
   {
@@ -104,22 +118,25 @@ const routes = [
     name: 'publicacao',
     component: Publicacao,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
+
+const router = new VueRouter({
+  routes
+})
 
 router.beforeEach((to, from, next) => {
   const currentUser = auth.currentUser;
   
   if (to.meta.requiresAuth && !currentUser) {
     // O usuário não está autenticado e a rota requer autenticação
-    next('/entrar'); // Redireciona para a página de login ou outra página adequada
+    next(false); // Redireciona para a página de login ou outra página adequada
   } else {
     next();
   }
 });
-
-const router = new VueRouter({
-  routes
-})
 
 export default router

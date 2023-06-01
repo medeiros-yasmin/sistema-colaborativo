@@ -110,9 +110,9 @@ export default {
   },
 
   created(){
-    // onAuthStateChanged(this.$store.state.auth, (user) => {
-    //   this.currentUser = user;
-    // });
+     onAuthStateChanged(this.$store.state.auth, (user) => {
+       this.currentUser = user;
+     });
 
   },
 
@@ -166,17 +166,17 @@ export default {
 });
       },
 
-      verificarAutenticacao(){
-         onAuthStateChanged(auth, (user) => {
-            if (user) {
-               console.log('Usuário autenticado: ', user)
+      // verificarAutenticacao(){
+      //    onAuthStateChanged(auth, (user) => {
+      //       if (user) {
+      //          console.log('Usuário autenticado: ', user)
                
     
-            } else {
-               console.log('Usuário não autenticado.')
-            }
-         });
-      }
+      //       } else {
+      //          console.log('Usuário não autenticado.')
+      //       }
+      //    });
+      // }
 
     }
 };

@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { auth } from '../firebase/firebase-config'
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
         showAppBar: false,
-        auth: false,
+        auth: auth,
+        currentUser: false,
       },
       mutations: {
         toggleAppBar(state, value) {
@@ -20,6 +22,7 @@ const store = new Vuex.Store({
         showAppBar(state) {
           return state.showAppBar;
         },
+        getCurrentUser: (state) => state.currentUser,
       },
 })
 
