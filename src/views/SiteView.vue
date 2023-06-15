@@ -2,16 +2,14 @@
     <v-app style="background-color:#391D41;">
         <v-main>
             <v-container>
+                <v-alert class="text-center" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scale-transition">
+                        Apenas usuários autenticados podem criar uma publicação.
+                    </v-alert>
                 <v-row>
 
-                    <v-alert :value="exibirAviso" dismissible color="pink" dark border="top" icon="mdi-home" transition="scale-transition">
-                        Phasellus tempus. Fusce ac felis sit amet ligula pharetra condimentum. In dui magna, posuere eget,
-                        vestibulum et, tempor auctor, justo. Pellentesque posuere. Curabitur ligula sapien, tincidunt non,
-                        euismod vitae, posuere imperdiet, leo.
-
-                        Phasellus nec sem in justo pellentesque facilisis. Phasellus magna. Cras risus ipsum, faucibus ut,
-                        ullamcorper id, varius ac, leo. In hac habitasse platea dictumst. Praesent turpis.
-                    </v-alert>
+                    
+                    
+                    
 
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
@@ -157,6 +155,19 @@ export default {
                 this.exibirAviso = false;
             else
                 this.exibirAviso = true;
+        },
+
+        dismissAlert() {
+            this.exibirAviso = false;
+        },
+
+        async fecharAvisoAutomaticamente(){
+            await new Promise((resolve)=>{
+                setTimeout(()=>{
+                    resolve();
+                }, 3000);
+            });
+            this.exibirAviso = false;
         },
 
         /* async recuperarNovosDocumentos(doc) {
