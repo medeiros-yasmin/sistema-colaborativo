@@ -11,7 +11,7 @@
                     </v-btn>
 
 
-                    <v-card v-if="currentUser" style="margin-top:18px" color="#5C3C6C" class="mx-auto white--text" height="850" width="1200">
+                    <v-card style="margin-top:18px" color="#5C3C6C" class="mx-auto white--text" height="850" width="1200">
                         <v-card-text class="text-h5 white--text" style="word-spacing: 50px;"> NOVA PUBLICAÇÃO </v-card-text>
 
 
@@ -75,7 +75,7 @@
 
 
                     </v-card>
-                    <div v-else> <h5> Você precisa estar autenticado para criar conteúdo</h5> </div>
+                    
 
                 </v-col>
             </v-row>
@@ -93,6 +93,23 @@ import { db } from '../firebase/firebase-config'
 
 export default {
     name: 'PublicacaoNova',
+    regraNome: [
+        v => !!v || 'O campo autora/ autor é obrigatório',
+        v => (v && v.length <= 20) || 'O nome deve ter menos de 20 caracteres',
+      ],
+
+      regraLink: [
+        v => !!v || 'O link da publicação é obrigatório',
+        v => {
+            const pattern = /^(|http|https):\/\/[^ "]+$/;
+            return pattern.test(v) || 'Invalid link';
+        }
+    ],
+
+    regraEmail: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
 
     mounted() {
 

@@ -2,15 +2,10 @@
     <v-app style="background-color:#391D41;">
         <v-main>
             <v-container>
-                <v-alert class="text-center" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scale-transition">
-                        Apenas usuários autenticados podem criar uma publicação.
+                <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scroll-y-transition">
+                        Apenas usuários autenticados podem criar publicações.
                     </v-alert>
                 <v-row>
-
-                    
-                    
-                    
-
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
                         <v-card shaped style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
@@ -155,6 +150,7 @@ export default {
                 this.exibirAviso = false;
             else
                 this.exibirAviso = true;
+                this.fecharAvisoAutomaticamente();
         },
 
         dismissAlert() {
@@ -165,7 +161,7 @@ export default {
             await new Promise((resolve)=>{
                 setTimeout(()=>{
                     resolve();
-                }, 3000);
+                }, 5000);
             });
             this.exibirAviso = false;
         },
