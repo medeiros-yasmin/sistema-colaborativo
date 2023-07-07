@@ -49,16 +49,25 @@
                                             </v-btn>
                                         </v-card-actions>
                                         <v-card-actions>
-                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                                handshake
-                                            </v-icon>
-                                            <span style="margin-left: 6px;" class="subheading mr-2">256</span>
-                                            <span class="mr-1">·</span>
-                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                                share
-                                            </v-icon>
-                                            <span style="margin-left: 6px;" class="subheading">45</span>
-                                        </v-card-actions>
+                                            <v-btn
+                                            class="botao-agradecer" 
+                                            :class="{ 'selected': publicacaoSelecionada === podcast.id }"
+                                                rounded
+                                                @click="adicionarAgradecimento(podcast.id)"
+                                                
+                                                color="#E6E7E9"
+                                                >
+                                                <v-icon :class="{ 'selected-icon': publicacaoSelecionada === podcast.id }" size="30px" class="material-symbols-rounded" color="#D2A8E7">
+                                                    handshake
+                                                </v-icon>
+                                                <span style="margin-left: 6px;" class="subheading mr-2">256</span>
+                                            </v-btn>
+                                                <span class="mr-1">·</span>
+                                                <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                                    share
+                                                </v-icon>
+                                                <span style="margin-left: 6px;" class="subheading">45</span>
+                                            </v-card-actions>
 
 
 
@@ -116,14 +125,11 @@ export default {
         exibirAviso: false,
         criarClicado: false,
         dialog: false,
+        isLiked: false,
         drawer: false,
         group: null,
         podcasts: null,
-        novaPublicacao: {
-            titulo: "Teste",
-            descricao: "Dinossauro descrição",
-            autor: "Coiso"
-        },
+        publicacaoSelecionada: null,
         colRef: collection(db, 'sites'),
         items: [
             { title: 'Spam' },
@@ -155,6 +161,14 @@ export default {
 
         dismissAlert() {
             this.exibirAviso = false;
+        },
+
+        adicionarAgradecimento(index) {
+            if (this.publicacaoSelecionada === index) {
+                this.publicacaoSelecionada = null;
+            } else {
+                this.publicacaoSelecionada = index;
+            }
         },
 
         async fecharAvisoAutomaticamente(){
@@ -238,6 +252,22 @@ export default {
 </script>
 
 <style>
+.botao-agradecer{
+    outline-width: 1px;
+    outline-style: solid;
+    outline-color: white ;
+    background-color: transparent !important;
+}
+.selected {
+  /* Adicione estilos visuais para indicar o estado de seleção */
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: #D2A8E7;
+}
+
+.selected-icon{
+    color: white !important;
+}
 .topright {
     position: absolute;
     top: 5px;
