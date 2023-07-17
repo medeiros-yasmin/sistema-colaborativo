@@ -4,6 +4,9 @@
          <v-container fluid fill-height>
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
+                  <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scroll-y-transition">
+                        Apenas usuários autenticados podem criar publicações.
+                    </v-alert>
                   <v-card shaped color="#E6E7E9" class="elevation-12">
                      <v-toolbar dark color="#7B447B">
                         <v-toolbar-title>Novo Cadastro</v-toolbar-title>
@@ -18,6 +21,18 @@
                               </template></v-text-field>
                            <v-text-field filled id="password" v-model="senha" prepend-icon="lock" color="#7B447B" name="password" label="Senha"
                               type="password"><template v-slot:prepend>
+                                 <v-icon class="material-symbols-rounded">
+                                    lock
+                                 </v-icon>
+                              </template></v-text-field>
+                              <v-text-field filled v-model="primeiroNome" prepend-icon="lock" color="#7B447B" name="password" label="Nome"
+                              type="text"><template v-slot:prepend>
+                                 <v-icon class="material-symbols-rounded">
+                                    lock
+                                 </v-icon>
+                              </template></v-text-field>
+                              <v-text-field filled v-model="segundoNome" prepend-icon="lock" color="#7B447B" name="password" label="Sobrenome"
+                              type="text"><template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
                                     lock
                                  </v-icon>
@@ -39,8 +54,9 @@
 </template>
 
 <script>
-import { auth } from '../firebase/firebase-config'
+import { auth, db } from '../firebase/firebase-config'
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, setDoc } from 'firebase/firestore';
 export default {
    name: 'CadastroView',
    props: {
@@ -50,6 +66,10 @@ export default {
    data: () => ({
         email: "",
         senha: "",
+        primeiroNome: "",
+        segundoNome: "",
+        alertaErro: false,
+        exibirAviso: false,
 
     }),
 
@@ -58,17 +78,34 @@ export default {
    },
 
    methods: {
+
+      async fecharAvisoAutomaticamente(){
+            await new Promise((resolve)=>{
+                setTimeout(()=>{
+                    resolve();
+                }, 5000);
+            });
+            this.alertaErro = false;
+        },
+      dismissAlert() {
+            this.alertaErro = false;
+        },
       criarUsuario() {
          createUserWithEmailAndPassword(auth, this.email, this.senha)
             .then((userCredential) => {
                // Signed in
                console.log("Usuario: ", userCredential.user);
                console.log("Id criado: ", userCredential.providerId);
-               
+               return setDoc(doc(db, 'usuarios', userCredential.user.uid),  {
+                  nome: this.primeiroNome,
+                  sobrenome: this.segundoNome
+               });
             })
-            .catch((error) => {
-               console.log("Código de erro: ", error.code);
-               console.log("Mensagem de erro: ", error.message);
+            .then(() => {
+               this.exibirAviso = true;
+               this.fecharAvisoAutomaticamente();
+            }).catch((error)=>{
+               console.log("Erro: ", error)
             })
       },
 
