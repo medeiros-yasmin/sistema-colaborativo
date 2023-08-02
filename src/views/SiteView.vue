@@ -2,9 +2,24 @@
     <v-app style="background-color:#391D41;">
         <v-main>
             <v-container>
-                <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scroll-y-transition">
-                        Apenas usuários autenticados podem criar publicações.
-                    </v-alert>
+                <v-row align="center" justify="space-around">
+                    <v-text-field ref="address" v-model="address" :rules="[
+                        () => !!address || 'This field is required',
+                        () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
+                        addressCheck
+                    ]" label="Address Line" placeholder="Snowy Rock Pl" counter="25" required></v-text-field>
+                    <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" class="center-align" justify="center"
+                        color="#889B59" @click="incluirComoAdministrador()" style="margin-top:18px; align-items: center"
+                        dark right depressed>
+                        <v-icon size="23px" class="material-symbols-rounded" left>
+                            handshake
+                        </v-icon>TORNAR ADMINISTRADOR
+                    </v-btn>
+                </v-row>
+                <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible
+                    @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scroll-y-transition">
+                    Apenas usuários autenticados podem criar publicações.
+                </v-alert>
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
@@ -49,25 +64,21 @@
                                             </v-btn>
                                         </v-card-actions>
                                         <v-card-actions>
-                                            <v-btn
-                                            class="botao-agradecer" 
-                                            :class="{ 'selected': publicacaoSelecionada === podcast.id }"
-                                                rounded
-                                                @click="adicionarAgradecimento(podcast.id)"
-                                                
-                                                color="#E6E7E9"
-                                                >
-                                                <v-icon :class="{ 'selected-icon': publicacaoSelecionada === podcast.id }" size="30px" class="material-symbols-rounded" color="#D2A8E7">
+                                            <v-btn class="botao-agradecer"
+                                                :class="{ 'selected': publicacaoSelecionada === podcast.id }" rounded
+                                                @click="adicionarAgradecimento(podcast.id)" color="#E6E7E9">
+                                                <v-icon :class="{ 'selected-icon': publicacaoSelecionada === podcast.id }"
+                                                    size="30px" class="material-symbols-rounded" color="#D2A8E7">
                                                     handshake
                                                 </v-icon>
                                                 <span style="margin-left: 6px;" class="subheading mr-2">256</span>
                                             </v-btn>
-                                                <span class="mr-1">·</span>
-                                                <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                                    share
-                                                </v-icon>
-                                                <span style="margin-left: 6px;" class="subheading">45</span>
-                                            </v-card-actions>
+                                            <span class="mr-1">·</span>
+                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                                share
+                                            </v-icon>
+                                            <span style="margin-left: 6px;" class="subheading">45</span>
+                                        </v-card-actions>
 
 
 
@@ -82,6 +93,8 @@
 
                     </v-col>
                 </v-row>
+
+
 
 
             </v-container>
@@ -105,7 +118,10 @@
 
 import { db } from '../firebase/firebase-config'
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+import { getFunctions, httpsCallable } from "firebase/functions";
+//import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
+//import { functions } from '../../functions/index'
 //updateDoc
 
 
@@ -113,6 +129,7 @@ export default {
     name: 'SiteView',
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
+
     },
 
     components: {
@@ -129,6 +146,7 @@ export default {
         drawer: false,
         group: null,
         podcasts: null,
+        loadingAdmin: false,
         publicacaoSelecionada: null,
         colRef: collection(db, 'sites'),
         items: [
@@ -144,19 +162,33 @@ export default {
 
     created() {
         this.$store.commit('toggleAppBar', true);
+
+
     },
     computed: {
         ...mapGetters(['getCurrentUser']),
     },
 
     methods: {
+        incluirComoAdministrador() {
+            const functions = getFunctions();
+            this.loadingAdmin = true
+            const addAdminRole = httpsCallable(functions, 'addAdminRole');
+            addAdminRole({ email: 'yasmin.linguas@gmail.com' })
+                .then((result) => {
+                    console.log('Resposta da Cloud Function:', result.data.message)
+                    this.loadingAdmin = false
+                }).catch((error) => {
+                    console.error('Erro ao chamar a Cloud Function:', error);
+                })
+        },
         verificarSeAutenticado() {
-            this.criarClicado = ! this.criarClicado
+            this.criarClicado = !this.criarClicado
             if (this.getCurrentUser && this.criarClicado)
                 this.exibirAviso = false;
             else
                 this.exibirAviso = true;
-                this.fecharAvisoAutomaticamente();
+            this.fecharAvisoAutomaticamente();
         },
 
         dismissAlert() {
@@ -171,9 +203,9 @@ export default {
             }
         },
 
-        async fecharAvisoAutomaticamente(){
-            await new Promise((resolve)=>{
-                setTimeout(()=>{
+        async fecharAvisoAutomaticamente() {
+            await new Promise((resolve) => {
+                setTimeout(() => {
                     resolve();
                 }, 5000);
             });
@@ -252,22 +284,24 @@ export default {
 </script>
 
 <style>
-.botao-agradecer{
+.botao-agradecer {
     outline-width: 1px;
     outline-style: solid;
-    outline-color: white ;
+    outline-color: white;
     background-color: transparent !important;
 }
+
 .selected {
-  /* Adicione estilos visuais para indicar o estado de seleção */
-  outline-width: 2px;
-  outline-style: solid;
-  outline-color: #D2A8E7;
+    /* Adicione estilos visuais para indicar o estado de seleção */
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: #D2A8E7;
 }
 
-.selected-icon{
+.selected-icon {
     color: white !important;
 }
+
 .topright {
     position: absolute;
     top: 5px;
