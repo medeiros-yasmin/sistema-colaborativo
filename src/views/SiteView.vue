@@ -2,19 +2,20 @@
     <v-app style="background-color:#391D41;">
         <v-main>
             <v-container>
-                <v-row align="center" justify="space-around">
-                    <v-text-field ref="address" v-model="address" :rules="[
-                        () => !!address || 'This field is required',
-                        () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
-                        addressCheck
-                    ]" label="Address Line" placeholder="Snowy Rock Pl" counter="25" required></v-text-field>
-                    <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" class="center-align" justify="center"
-                        color="#889B59" @click="incluirComoAdministrador()" style="margin-top:18px; align-items: center"
-                        dark right depressed>
-                        <v-icon size="23px" class="material-symbols-rounded" left>
-                            handshake
-                        </v-icon>TORNAR ADMINISTRADOR
-                    </v-btn>
+                <v-row align="center" justify="space-around" >
+                    <v-col  cols="5">
+                    <v-form ref="form" v-model="valid" lazy-validation>
+                        <v-text-field v-model="email" :rules="emailRules" label="E-mail"
+                            placeholder="fulanodetal@preencha-aqui.com" counter="35" required dark></v-text-field>
+                        <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" class="center-align" justify="center"
+                            color="#889B59" @click="incluirComoAdministrador(email)"
+                            style="margin-top:18px; align-items: center" dark right depressed>
+                            <v-icon size="23px" class="material-symbols-rounded" left>
+                                handshake
+                            </v-icon>TORNAR ADMINISTRADOR
+                        </v-btn>
+                    </v-form>
+                </v-col>
                 </v-row>
                 <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible
                     @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scroll-y-transition">
@@ -71,7 +72,7 @@
                                                     size="30px" class="material-symbols-rounded" color="#D2A8E7">
                                                     handshake
                                                 </v-icon>
-                                                <span style="margin-left: 6px;" class="subheading mr-2">256</span>
+                                                <span style="margin-left: 6px;" class="subheading mr-2">{{ podcast.agradecimentos }}</span>
                                             </v-btn>
                                             <span class="mr-1">·</span>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
@@ -138,6 +139,7 @@ export default {
     },
 
     data: () => ({
+        valid: true,
         ultimoDocumento: null,
         exibirAviso: false,
         criarClicado: false,
@@ -157,6 +159,11 @@ export default {
             { title: 'Publicação ofensiva' },
             { title: 'Cancelar' },
         ],
+        email: '',
+        emailRules: [
+            v => !!v || 'E-mail obrigatório',
+            v => /.+@.+\..+/.test(v) || 'Insira um e-mail válido',
+        ],
 
     }),
 
@@ -170,11 +177,11 @@ export default {
     },
 
     methods: {
-        incluirComoAdministrador() {
+        incluirComoAdministrador(address) {
             const functions = getFunctions();
             this.loadingAdmin = true
             const addAdminRole = httpsCallable(functions, 'addAdminRole');
-            addAdminRole({ email: 'yasmin.linguas@gmail.com' })
+            addAdminRole({ email: address })
                 .then((result) => {
                     console.log('Resposta da Cloud Function:', result.data.message)
                     this.loadingAdmin = false
@@ -194,11 +201,13 @@ export default {
         dismissAlert() {
             this.exibirAviso = false;
         },
-
+        //DOING
         adicionarAgradecimento(index) {
             if (this.publicacaoSelecionada === index) {
                 this.publicacaoSelecionada = null;
+                console.log("Id da publicação: ", index)
             } else {
+                console.log("Id da publicação quando curtida: ", index)
                 this.publicacaoSelecionada = index;
             }
         },
@@ -238,21 +247,20 @@ export default {
         recuperarDocumentos(colRef) {
             getDocs(colRef)
                 .then(snapshot => {
-                    console.log(snapshot.docs)
+                    
                     let podcasts = []
                     snapshot.docs.forEach(doc => {
                         podcasts.push({ ...doc.data(), id: doc.id })
                     })
-                    console.log('Tem podcast: ', podcasts)
                     this.podcasts = podcasts
 
-                    console.log('Tem podcast dentro da variável local: ', this.podcasts)
+                    
                 })
                 .catch(err => {
                     console.log('Retornou erro:', err.message)
                 })
 
-            console.log('Chamou a função, que retornou: ', this.podcasts)
+            
             return this.podcasts
         },
 

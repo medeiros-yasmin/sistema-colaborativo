@@ -50,7 +50,7 @@
                                 </v-textarea>
                             </v-col>
                             <v-col cols="28" sm="14" md="7">
-                                <v-select :rules="[v => !!v || 'A categoria é obrigatória']" class="custom-textarea-color"
+                                <v-select v-model="categoriaEscolhida" :rules="[v => !!v || 'A categoria é obrigatória']" class="custom-textarea-color"
                                     label="Categoria" dark theme="dark" :items="categorias" required>
                                 </v-select>
                             </v-col>
@@ -113,12 +113,16 @@ export default {
 
     methods: {
         adicionarPublicacao() {
+            this.indiceCategoria = this.categorias.indexOf(this.categoriaEscolhida)
+            console.log("TELA: ", this.categoriasBanco[this.indiceCategoria]);
+            //No momento da criação, seus agradecimentos se iniciam com 0
             if (this.$refs.form.validate()) {
-                addDoc(this.colRef, {
+            addDoc(collection(db, this.categoriasBanco[this.indiceCategoria]), {
                     titulo: this.titulo,
                     autor: this.autor,
                     descricao: this.descricao,
-                    link: this.link
+                    link: this.link,
+                    agradecimentos: 0
                 })
                     .then(() => {
                         console.log('Inserção de novos dados finalizada')
@@ -161,6 +165,9 @@ export default {
         categoria: "",
         currentUser: null,
         categorias: ['Artigo', 'Auxílio', 'Podcast', 'Site', 'Vídeo', 'Livros/ Revistas'],
+        categoriaEscolhida: '',
+        indiceCategoria: 0,
+        categoriasBanco: ['artigos', 'auxilios', 'podcasts', 'sites', 'videos', 'livros'],
         regraNome: [
             v => !!v || 'O campo autora/ autor é obrigatório',
             v => (v && v.length <= 20) || 'O nome deve ter menos de 20 caracteres',

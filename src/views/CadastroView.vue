@@ -98,7 +98,8 @@ export default {
                console.log("Id criado: ", userCredential.providerId);
                return setDoc(doc(db, 'usuarios', userCredential.user.uid),  {
                   nome: this.primeiroNome,
-                  sobrenome: this.segundoNome
+                  sobrenome: this.segundoNome,
+                  agradeceuEm: []
                });
             })
             .then(() => {
