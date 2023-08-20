@@ -4,8 +4,8 @@
          <v-container fluid fill-height>
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
-                  <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home" transition="scroll-y-transition">
-                        Apenas usuários autenticados podem criar publicações.
+                  <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" color="blue" dark border="top" icon="mdi-home" transition="scroll-y-transition">
+                        Usuário criado com sucesso.
                     </v-alert>
                   <v-card shaped color="#E6E7E9" class="elevation-12">
                      <v-toolbar dark color="#7B447B">

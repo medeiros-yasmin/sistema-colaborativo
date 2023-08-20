@@ -32,7 +32,7 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
 
 exports.agradecerPubli = functions.https.onCall((data, context) => {
 
-    if (!context.auth()) {
+    if (!context.auth) {
         throw new functions.https.HttpsError(
             'unauthenticated',
             'Somente usuários autenticados podem agradecer!'
@@ -42,8 +42,8 @@ exports.agradecerPubli = functions.https.onCall((data, context) => {
     const usuario = admin.firestore().collection('usuarios').doc(context.auth.uid)
     const requisicao = admin.firestore().collection('sites').doc(data.id)
 
-    usuario.get().then(doc => {
-        if (doc.data().agradeceuEm.includes(requisicao.id)) {
+    return usuario.get().then(doc => {
+        if (doc.data().agradeceuEm.includes(data.id)) {
             throw new functions.https.HttpsError(
                 'failed-precondition',
                 'O agradecimento é permitido somente uma vez!'
@@ -54,7 +54,7 @@ exports.agradecerPubli = functions.https.onCall((data, context) => {
             agradeceuEm: [...doc.data().agradeceuEm, data.id]
         })
             .then(() => {
-                requisicao.update({
+                return requisicao.update({
                     agradecimentos: admin.firestore.FieldValue.increment(1)
                 })
             })

@@ -202,13 +202,19 @@ export default {
             this.exibirAviso = false;
         },
         //DOING
-        adicionarAgradecimento(index) {
-            if (this.publicacaoSelecionada === index) {
+        adicionarAgradecimento(id) {
+            if (this.publicacaoSelecionada === id) {
                 this.publicacaoSelecionada = null;
-                console.log("Id da publicação: ", index)
+                console.log("Id da publicação: ", id)
             } else {
-                console.log("Id da publicação quando curtida: ", index)
-                this.publicacaoSelecionada = index;
+                console.log("Id da publicação quando curtida: ", id)
+                this.publicacaoSelecionada = id;
+                const functions = getFunctions();
+                const agradecer =  httpsCallable(functions, 'agradecerPubli');
+                agradecer({ id: id })
+                .catch( error => {
+                    console.log("Erro: ", error)
+                })
             }
         },
 
