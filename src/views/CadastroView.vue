@@ -95,7 +95,7 @@ export default {
             .then((userCredential) => {
                // Signed in
                console.log("Usuario: ", userCredential.user);
-               console.log("Id criado: ", userCredential.providerId);
+               console.log("Id criado: ", userCredential.user.uid);
                return setDoc(doc(db, 'usuarios', userCredential.user.uid),  {
                   nome: this.primeiroNome,
                   sobrenome: this.segundoNome,

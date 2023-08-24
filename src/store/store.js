@@ -31,14 +31,18 @@ const store = new Vuex.Store({
         showAppBar(state) {
           return state.showAppBar;
         },
-        getCurrentUser: (state) => state.currentUser,
-      },
-      dadosUsuarioAutenticado(state){
-        return { 
-          currentUserName: state.currentUserName,
-          currentUserEmail: state.currentUserEMail
+        getCurrentUser: (state) => {state.currentUser},
+        dadosUsuarioAutenticado(state){
+          return { 
+            currentUserName: state.currentUserName,
+            currentUserEmail: state.currentUserEMail
+          }
         }
+      },
+      actions: {
+        
       }
+      
 })
 
 export default store;

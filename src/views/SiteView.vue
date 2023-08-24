@@ -201,7 +201,7 @@ export default {
         dismissAlert() {
             this.exibirAviso = false;
         },
-        //DOING
+        
         adicionarAgradecimento(id) {
             if (this.publicacaoSelecionada === id) {
                 this.publicacaoSelecionada = null;

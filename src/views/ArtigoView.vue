@@ -145,8 +145,6 @@ export default {
                   })
                   
                   this.artigos = artigos
-
-                  
               })
               .catch(err => {
                   console.log('Retornou erro:', err.message)

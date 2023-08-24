@@ -51,7 +51,7 @@
         </v-list>
 
         <v-list>
-        <v-list-item v-if="!usuarioAutenticado">
+          <v-list-item v-if="!usuarioAutenticado">
             <v-list-item class="px-2">
               <v-list-item-avatar>
                 <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
@@ -92,36 +92,36 @@
             <v-list-item-title>Minhas Publicações</v-list-item-title>
           </v-list-item>
           <v-list-item>
-          <div v-if="usuarioAutenticado" class="pa-1">
-            <v-list-item @click="sair()">
-              <v-btn block>
-                <v-list-item-icon>
+            <div v-if="usuarioAutenticado" class="pa-1">
+              <v-list-item @click="sair()">
+                <v-btn block>
+                  <v-list-item-icon>
 
-                  <v-icon>mdi-logout</v-icon>
+                    <v-icon>mdi-logout</v-icon>
 
-                </v-list-item-icon>
+                  </v-list-item-icon>
 
-                <v-list-item-title>Sair</v-list-item-title>
-              </v-btn>
-            </v-list-item>
-          </div>
-        </v-list-item>
+                  <v-list-item-title>Sair</v-list-item-title>
+                </v-btn>
+              </v-list-item>
+            </div>
+          </v-list-item>
 
-        <v-list-item>
-          <div v-if="!usuarioAutenticado" class="pa-1">
-            <v-list-item @click="entrar()">
-              <v-btn block>
-                <v-list-item-icon>
+          <v-list-item>
+            <div v-if="!usuarioAutenticado" class="pa-1">
+              <v-list-item @click="entrar()">
+                <v-btn block>
+                  <v-list-item-icon>
 
-                  <v-icon>mdi-login</v-icon>
+                    <v-icon>mdi-login</v-icon>
 
-                </v-list-item-icon>
+                  </v-list-item-icon>
 
-                <v-list-item-title>Fazer login</v-list-item-title>
-              </v-btn>
-            </v-list-item>
-          </div>
-        </v-list-item>
+                  <v-list-item-title>Fazer login</v-list-item-title>
+                </v-btn>
+              </v-list-item>
+            </div>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -139,7 +139,9 @@ import { db } from '../src/firebase/firebase-config'
 import { auth } from '../src/firebase/firebase-config'
 import { collection, getDocs } from 'firebase/firestore'
 import { signOut, onAuthStateChanged } from 'firebase/auth'
+import { getFunctions } from "firebase/functions";
 import router from './router';
+import { httpsCallable } from 'firebase/functions';
 
 export default {
   name: 'App',
@@ -148,6 +150,7 @@ export default {
     showAppBar() {
       return this.$store.state.showAppBar;
     },
+    //Serve também para verificar se existe um usuário autenticado ou não, usando como variável usuarioAutenticado
     usuarioAutenticado() {
       return this.$store.getters.dadosUsuarioAutenticado;
     }
@@ -159,7 +162,8 @@ export default {
 
   created() {
     onAuthStateChanged(this.$store.state.auth, (user) => {
-      this.currentUser = user;
+      this.currentUser = { id: user.uid, email: user.email};
+      console.log("Usuário autenticado APP: ", this.currentUser.id)
     });
 
   },
@@ -173,7 +177,11 @@ export default {
     group: null,
     podcasts: null,
     colRef: collection(db, 'podcasts'),
-    currentUser: null,
+    currentUser: {
+      nome: '',
+      id: ''
+    },
+    id: null
   }),
 
 
@@ -200,6 +208,20 @@ export default {
       return this.podcasts
     },
 
+    carregarDadosUsuario(id) {
+      const functions = getFunctions();
+      const usuario = httpsCallable(functions, 'exibirDadosUsuario');
+      usuario({ id: id })
+        .then((result) => {
+          console.log("Dá pra imprimir (APP)?", result.data);
+          console.log('Resposta da Cloud Function para buscar dados:', result.data.message)
+          
+        })
+        .catch(error => {
+          console.log("Erro ao buscar o usuário: ", error)
+        })
+    },
+
     sair() {
       signOut(auth)
         .then(() => {
@@ -214,21 +236,21 @@ export default {
         });
     },
 
-    entrar(){
+    entrar() {
       router.push("/entrar")
-    }
+    },
 
-    // verificarAutenticacao(){
-    //    onAuthStateChanged(auth, (user) => {
-    //       if (user) {
-    //          console.log('Usuário autenticado: ', user)
+     verificarAutenticacao(){
+        onAuthStateChanged(auth, (user) => {
+           if (user) {
+              console.log('Usuário autenticado DE APP: ', user)
 
 
-    //       } else {
-    //          console.log('Usuário não autenticado.')
-    //       }
-    //    });
-    // }
+           } else {
+              console.log('Usuário não autenticado.')
+           }
+        });
+     }
 
   }
 };
@@ -243,7 +265,7 @@ export default {
 }
 
 .v-application {
-  color:blueviolet !important;
+  color: blueviolet !important;
   caret-color: coral !important;
 }
 </style>

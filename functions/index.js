@@ -61,6 +61,33 @@ exports.agradecerPubli = functions.https.onCall((data, context) => {
     })
 })
 
+exports.exibirDadosUsuario = functions.https.onCall((data, context)=>{
+    if (!context.auth) {
+        throw new functions.https.HttpsError(
+            'unauthenticated',
+            'Sem dados para carregar!'
+        );
+    }
+    const usuario = admin.firestore().collection('usuarios').doc(context.auth.uid)
+
+    return usuario.get().then((documentSnapShot) =>{
+        if(documentSnapShot.exists){
+            const dadosUsuario = documentSnapShot.data();
+            return dadosUsuario;
+        } else{
+            throw new functions.https.HttpsError(
+                'not-found',
+                'Usuário não encontrado!'
+            );
+        }
+    }).catch(error => {
+        throw new functions.https.HttpsError(
+            'internal',
+            'Erro ao tentar buscar os dados do usuário fornecido: ' + error.message
+        )
+    })
+});
+
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
