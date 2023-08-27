@@ -106,7 +106,6 @@ import router from '@/router';
 
 export default {
     name: 'PublicacaoNova',
-    publiCriada: false,
     mounted() {
 
     },
@@ -175,6 +174,7 @@ export default {
 
     data: () => ({
         alertaErro: false,
+        publiCriada: false,
         podcast: null,
         publicacaoId: null,
         publicacaoSelecionada: null,
