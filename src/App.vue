@@ -7,7 +7,7 @@
     <v-app-bar v-if="showAppBar" transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>NOZ</v-toolbar-title>
+      <v-toolbar-title class="d-flex align-center" style="font-size: 32px;">NOZ <v-icon size="50px" style="margin-left: 10px; margin-bottom: 14px;" class="material-symbols-rounded"> nature_people </v-icon></v-toolbar-title>
 
       <v-text-field clearable prepend-inner-icon="mdi-magnify" class="topright mx-4" flat hide-details label="Pesquisar"
         solo-inverted></v-text-field>
@@ -267,5 +267,12 @@ export default {
 .v-application {
   color: blueviolet !important;
   caret-color: coral !important;
+}
+
+.align-center {
+  align-items: center;
+}
+.d-flex {
+  display: flex;
 }
 </style>

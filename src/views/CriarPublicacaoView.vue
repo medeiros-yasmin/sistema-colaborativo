@@ -4,6 +4,11 @@
         <v-container>
             <v-row>
                 <v-col cols="12">
+                    <v-alert class="center-align" :value="publiCriada" style="margin-top:18px; align-items: center"
+                        dismissible @input="dismissAlertPubliCriada" color="blue" dark border="top" icon="mdi-home"
+                        transition="scroll-y-transition">
+                        Publicação criada com sucesso.
+                    </v-alert>
                     <v-alert :value="alertaErro" dismissible @input="dismissAlert" type="error">
                         Preencha os campos adequadamente para criar uma publicação
                     </v-alert>
@@ -12,7 +17,7 @@
 
                         <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
                     </v-btn>
-                    
+
 
 
                     <v-card style="margin-top:18px" color="#5C3C6C" class="mx-auto white--text" height="850" width="1200">
@@ -50,8 +55,9 @@
                                 </v-textarea>
                             </v-col>
                             <v-col cols="28" sm="14" md="7">
-                                <v-select v-model="categoriaEscolhida" :rules="[v => !!v || 'A categoria é obrigatória']" class="custom-textarea-color"
-                                    label="Categoria" dark theme="dark" :items="categorias" required>
+                                <v-select v-model="categoriaEscolhida" :rules="[v => !!v || 'A categoria é obrigatória']"
+                                    class="custom-textarea-color" label="Categoria" dark theme="dark" :items="categorias"
+                                    required>
                                 </v-select>
                             </v-col>
 
@@ -95,11 +101,12 @@
 <script>
 import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
+import router from '@/router';
 //import { onAuthStateChanged }from 'firebase/auth'
 
 export default {
     name: 'PublicacaoNova',
-
+    publiCriada: false,
     mounted() {
 
     },
@@ -117,7 +124,7 @@ export default {
             console.log("TELA: ", this.categoriasBanco[this.indiceCategoria]);
             //No momento da criação, seus agradecimentos se iniciam com 0
             if (this.$refs.form.validate()) {
-            addDoc(collection(db, this.categoriasBanco[this.indiceCategoria]), {
+                addDoc(collection(db, this.categoriasBanco[this.indiceCategoria]), {
                     titulo: this.titulo,
                     autor: this.autor,
                     descricao: this.descricao,
@@ -126,6 +133,8 @@ export default {
                 })
                     .then(() => {
                         console.log('Inserção de novos dados finalizada')
+                        this.publiCriada = true;
+                        this.fecharAvisoPubliCriadaERedirecionar();
                     })
             }
             else {
@@ -139,13 +148,27 @@ export default {
             this.alertaErro = false;
         },
 
-        async fecharAvisoAutomaticamente(){
-            await new Promise((resolve)=>{
-                setTimeout(()=>{
+        dismissAlertPubliCriada() {
+            this.publiCriada = false;
+        },
+
+        async fecharAvisoAutomaticamente() {
+            await new Promise((resolve) => {
+                setTimeout(() => {
                     resolve();
                 }, 5000);
             });
             this.alertaErro = false;
+        },
+
+        async fecharAvisoPubliCriadaERedirecionar() {
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 3000);
+            });
+            this.publiCriada = false;
+            router.go(-1);
         },
 
     },
