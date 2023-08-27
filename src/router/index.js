@@ -13,6 +13,7 @@ import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
 import CadastroView from '../views/CadastroView.vue'
 import EntrarView from '../views/EntrarView.vue'
 import AvisoAutenticacaoView from '../views/AvisoAutenticacaoView'
+import Teste from '../views/Teste'
 import { auth } from '../firebase/firebase-config'
 
 
@@ -20,7 +21,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView,
     props: true,
@@ -36,6 +37,12 @@ const routes = [
     name: 'entrar',
     component: EntrarView,
     props: true,
+  },
+
+  {
+    path: '/teste',
+    name: 'teste',
+    component: Teste,
   },
   {
     path: '/about',

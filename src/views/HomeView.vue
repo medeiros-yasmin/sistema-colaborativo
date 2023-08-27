@@ -14,7 +14,7 @@
                     </v-card-text>
 
                     <v-card-text>
-                        <v-chip-group style="padding-bottom: 12px;" v-model="selection" active-class="deep-purple accent-4 white--text" column>
+                        <v-chip-group style="padding-bottom: 12px;" active-class="deep-purple accent-4 white--text" column>
                             <v-chip>Artigos</v-chip>
 
                             <v-chip>Auxílios</v-chip>

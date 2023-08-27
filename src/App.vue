@@ -15,7 +15,7 @@
       <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs class="text-center" align-with-title>
-          <v-tab to="/">Início</v-tab>
+          <v-tab to="/home">Início</v-tab>
           <v-tab to="/artigo">Artigos</v-tab>
           <v-tab to="/auxilio">Auxílios</v-tab>
           <v-tab to="/podcast">Podcasts</v-tab>
@@ -71,26 +71,31 @@
 
         <v-divider></v-divider>
         <v-list-item-group v-model="group" active-class="cyan--text text--accent-4">
+          <router-link to="/home" class="white--text no-underline">
           <v-list-item class="white--text">
+            
             <v-list-item-icon>
               <v-icon color="white">mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Início</v-list-item-title>
           </v-list-item>
-
+        </router-link>
+        <router-link to="/teste" class="white--text no-underline"> 
           <v-list-item class="white--text">
             <v-list-item-icon>
               <v-icon color="white">mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Minha Conta</v-list-item-title>
           </v-list-item>
-
+        </router-link>
+        <router-link to="/teste"  class="white--text no-underline"> 
           <v-list-item class="white--text">
             <v-list-item-icon>
               <v-icon color="white">mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Minhas Publicações</v-list-item-title>
           </v-list-item>
+        </router-link>
           <v-list-item>
             <div v-if="usuarioAutenticado" class="pa-1">
               <v-list-item @click="sair()">
@@ -274,5 +279,9 @@ export default {
 }
 .d-flex {
   display: flex;
+}
+
+.no-underline{
+  text-decoration: none !important; /* Para retirar o sublinhado do componente de router*/
 }
 </style>
