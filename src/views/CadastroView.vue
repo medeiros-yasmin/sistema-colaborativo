@@ -16,7 +16,7 @@
                            <v-text-field filled name="login" v-model="email" label="E-mail" type="text" color="#7B447B"> <template
                                  v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
-                                    person
+                                    mail
                                  </v-icon>
                               </template></v-text-field>
                            <v-text-field filled id="password" v-model="senha" prepend-icon="lock" color="#7B447B" name="password" label="Senha"
@@ -25,25 +25,35 @@
                                     lock
                                  </v-icon>
                               </template></v-text-field>
-                              <v-text-field filled v-model="primeiroNome" prepend-icon="lock" color="#7B447B" name="password" label="Nome"
+                              <v-text-field filled v-model="primeiroNome" prepend-icon="lock" color="#7B447B" name="primeiroNome" label="Nome"
                               type="text"><template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
-                                    lock
+                                    person
                                  </v-icon>
                               </template></v-text-field>
-                              <v-text-field filled v-model="segundoNome" prepend-icon="lock" color="#7B447B" name="password" label="Sobrenome"
+                              <v-text-field filled v-model="segundoNome" prepend-icon="lock" color="#7B447B" name="segundoNome" label="Sobrenome"
                               type="text"><template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
-                                    lock
+                                    person
                                  </v-icon>
                               </template></v-text-field>
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
+                        
+                        <v-btn class="white--text mb-4 ml-5" color="#91A366" @click="criarUsuario()">
+                           <template>
+                                 <v-icon class="material-symbols-rounded">
+                                    done_outline
+                                 </v-icon>
+                              </template>Cadastrar</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn class="white--text" color="#91A366" @click="criarUsuario()">Cadastrar</v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn class="white--text" color="#91A366" @click="sair()">Sair</v-btn>
+                        <v-btn class="white--text mb-4 mr-8" color="#91A366" @click="sair()">
+                           <template>
+                                 <v-icon class="material-symbols-rounded">
+                                    close
+                                 </v-icon>
+                              </template>Sair</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -96,6 +106,7 @@ export default {
                // Signed in
                console.log("Usuario: ", userCredential.user);
                console.log("Id criado: ", userCredential.user.uid);
+               console.log("Nome do Usuário: ", userCredential.user.displayName);
                return setDoc(doc(db, 'usuarios', userCredential.user.uid),  {
                   nome: this.primeiroNome,
                   sobrenome: this.segundoNome,

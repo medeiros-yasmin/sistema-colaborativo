@@ -9,8 +9,8 @@ const store = new Vuex.Store({
         showAppBar: false,
         auth: auth,
         currentUser: false,
-        currentUserName: "Usuário não autenticado",
-        currentUserEMail: "Sem e-mail"
+        currentUserName: "Convidado",
+        currentUserEMail: "Sem cadastro"
       },
       mutations: {
         toggleAppBar(state, value) {

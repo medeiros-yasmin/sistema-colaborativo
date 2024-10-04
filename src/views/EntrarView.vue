@@ -31,6 +31,10 @@
                         <v-spacer></v-spacer>
                         <v-btn class="white--text" color="#91A366" @click="entrar()">Entrar</v-btn>
                      </v-card-actions>
+                     <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn class="white--text" color="#91A366" @click="entrarGoogle()">Entrar com google</v-btn>
+                     </v-card-actions>
                   </v-card>
                </v-flex>
             </v-layout>
@@ -41,8 +45,8 @@
 
 <script>
 import router from '@/router';
-import { auth } from '../firebase/firebase-config'
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { auth, provider } from '../firebase/firebase-config'
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { mapGetters } from 'vuex';
 import { getFunctions, httpsCallable } from "firebase/functions";
 export default {
@@ -56,7 +60,7 @@ export default {
       senha: "",
       exibirAvisoLogin: false,
       nomeUsuario: '',
-
+      
    }),
 
    created() {
@@ -109,7 +113,7 @@ export default {
             this.nomeUsuario = this.dadosUsuarioAutenticado;
             this.exibirAvisoLogin = true;
 
-            router.push("/");
+            router.push("/home");
 
          } catch (error) {
             console.log("Código de erro: ", error.code);
@@ -128,6 +132,37 @@ export default {
                console.log("Código de erro: ", error.code);
             });
       },
+
+      //Entrar via Google
+
+entrarGoogle(){
+signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = provider.credentialFromResult(result);
+      console.log("Credenciais do usuário", credential)
+      
+    //const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    console.log("Usuário: ", user.displayName)
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+    router.push("/home");
+  }).catch((error) => {
+    // Handle Errors here.
+    
+    console.log("Código de erro: ", error.code);
+    
+    console.log("Mensagem de erro: ", error.message);
+    // The email of the user's account used.
+    
+    // The AuthCredential type that was used.
+    //console.log("Tipo de autenticação usada: ", provider.credentialFromError(error));
+    // ...
+  })
+},
+
       verificarAutenticacao() {
          onAuthStateChanged(auth, (user) => {
             if (user) {

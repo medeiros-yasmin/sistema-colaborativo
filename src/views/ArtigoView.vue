@@ -50,15 +50,15 @@
                                       </v-card-actions>
 
                                       <v-card-actions>
-                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
+                                            <v-icon size="30px" class="material-symbols-rounded mr-1" color="#E6E7E9">
                                                 handshake
                                             </v-icon>
-                                            <span style="margin-left: 6px;" class="subheading mr-2">256</span>
-                                            <span class="mr-1">·</span>
+                                            <span style="margin-left: 6px;" class="subheading mr-3 ">256</span>
+                                            <span class="mr-5 ml-2">·</span>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
                                                 share
                                             </v-icon>
-                                            <span style="margin-left: 6px;" class="subheading">45</span>
+                                            
                                         </v-card-actions>
                                   </v-row>
 
@@ -128,7 +128,6 @@ export default {
           { title: 'Publicação ofensiva' },
           { title: 'Publicação duplicada' },
           { title: 'Não é uma publicação' },
-          { title: 'Publicação ofensiva' },
           { title: 'Cancelar' },
       ],
 

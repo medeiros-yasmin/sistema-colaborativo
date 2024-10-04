@@ -72,9 +72,9 @@
                                                     size="30px" class="material-symbols-rounded" color="#D2A8E7">
                                                     handshake
                                                 </v-icon>
-                                                <span style="margin-left: 6px;" class="subheading mr-2">{{ podcast.agradecimentos }}</span>
+                                                <span style="margin-left: 6px;" class="mr-2" color="#FFFFFF">{{ podcast.agradecimentos }}</span>
                                             </v-btn>
-                                            <span class="mr-1">·</span>
+                                            <span class="mr-2; ml-5">·</span>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
                                                 share
                                             </v-icon>
@@ -213,7 +213,7 @@ export default {
                 const agradecer =  httpsCallable(functions, 'agradecerPubli');
                 agradecer({ id: id })
                 .catch( error => {
-                    console.log("Erro: ", error)
+                    console.log("Erro: ", error.message)
                 })
             }
         },

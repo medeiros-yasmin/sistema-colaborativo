@@ -35,16 +35,16 @@
           <v-list-item v-if="usuarioAutenticado">
             <v-list-item class="px-2">
               <v-list-item-avatar>
-                <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+                <v-img :src="`${currentUser.photoURL}`" alt="Sem imagem"></v-img>
               </v-list-item-avatar>
             </v-list-item>
 
             <v-list-item link>
               <v-list-item-content>
                 <v-list-item-title dark class="text-h6 white--text">
-                  {{ usuarioAutenticado.currentUserName }}
+                  {{ currentUser.displayName }}
                 </v-list-item-title>
-                <v-list-item-subtitle class="white--text">{{ usuarioAutenticado.currentUserEmail }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="white--text">{{ currentUser.email }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-item>
@@ -157,6 +157,7 @@ export default {
     },
     //Serve também para verificar se existe um usuário autenticado ou não, usando como variável usuarioAutenticado
     usuarioAutenticado() {
+      console.log("Usuário autenticado APPPP.VUE: ", this.$store.getters.dadosUsuarioAutenticado)
       return this.$store.getters.dadosUsuarioAutenticado;
     }
   },
@@ -167,8 +168,11 @@ export default {
 
   created() {
     onAuthStateChanged(this.$store.state.auth, (user) => {
-      this.currentUser = { id: user.uid, email: user.email};
+      this.currentUser = { id: user.uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL};
       console.log("Usuário autenticado APP: ", this.currentUser.id)
+      console.log("e-MAIL DO USUÁRIO: ", this.currentUser.email)
+      console.log("Nome autenticado: ", this.currentUser.displayName)
+      console.log("Imagem: ", this.currentUser.pth)
     });
 
   },
@@ -242,7 +246,7 @@ export default {
     },
 
     entrar() {
-      router.push("/entrar")
+      router.push("/home")
     },
 
      verificarAutenticacao(){
