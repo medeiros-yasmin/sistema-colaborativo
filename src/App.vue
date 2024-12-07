@@ -22,6 +22,7 @@
           <v-tab to="/site">Sites</v-tab>
           <v-tab to="/video">Vídeos</v-tab>
           <v-tab to="/livro">Livros e Revistas</v-tab>
+          <v-tab to="/minhas">Minhas publicações</v-tab>
 
         </v-tabs>
 
@@ -88,7 +89,7 @@
             <v-list-item-title>Minha Conta</v-list-item-title>
           </v-list-item>
         </router-link>
-        <router-link to="/teste"  class="white--text no-underline"> 
+        <router-link to="/minhas"  class="white--text no-underline"> 
           <v-list-item class="white--text">
             <v-list-item-icon>
               <v-icon color="white">mdi-account</v-icon>
@@ -170,7 +171,7 @@ export default {
     onAuthStateChanged(this.$store.state.auth, (user) => {
       this.currentUser = { id: user.uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL};
       console.log("Usuário autenticado APP: ", this.currentUser.id)
-      console.log("e-MAIL DO USUÁRIO: ", this.currentUser.email)
+      console.log("E-MAIL DO USUÁRIO: ", this.currentUser.email)
       console.log("Nome autenticado: ", this.currentUser.displayName)
       console.log("Imagem: ", this.currentUser.pth)
     });

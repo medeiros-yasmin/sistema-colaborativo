@@ -13,6 +13,7 @@ import EditarPublicacaoView from '../views/EditarPublicacaoView.vue'
 import CadastroView from '../views/CadastroView.vue'
 import EntrarView from '../views/EntrarView.vue'
 import AvisoAutenticacaoView from '../views/AvisoAutenticacaoView'
+import MinhasPublisView from '../views/MinhasPublisView'
 import Teste from '../views/Teste'
 import { auth } from '../firebase/firebase-config'
 
@@ -92,6 +93,13 @@ const routes = [
     path: '/site',
     name: 'site',
     component: SiteView,
+    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+  },
+
+  {
+    path: '/minhas',
+    name: 'minhas',
+    component: MinhasPublisView,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
   },
 

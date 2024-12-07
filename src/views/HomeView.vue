@@ -26,6 +26,8 @@
                             <v-chip>Vídeos</v-chip>
 
                             <v-chip>Livros e Revistass</v-chip>
+
+                            
                         </v-chip-group>
                         
                     </v-card-text>

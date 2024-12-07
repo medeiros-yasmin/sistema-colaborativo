@@ -7,7 +7,7 @@
                         Bem vindo(a), {{ nomeUsuario }}.
                </v-alert>
                <v-flex xs12 sm8 md4>
-                  <v-card shaped color="#E6E7E9" class="elevation-12">
+                  <v-card shaped color="#E6E7E9" class="elevation-18">
                      <v-toolbar dark color="#7B447B">
                         <v-toolbar-title>Autenticação</v-toolbar-title>
                      </v-toolbar>
@@ -28,12 +28,12 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-                        <v-spacer></v-spacer>
+                        
                         <v-btn class="white--text" color="#91A366" @click="entrar()">Entrar</v-btn>
                      </v-card-actions>
                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn class="white--text" color="#91A366" @click="entrarGoogle()">Entrar com google</v-btn>
+                        
+                        <v-btn elevation="5" class="white--text" color="#91A366" @click="entrarGoogle()">Entrar com google</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
