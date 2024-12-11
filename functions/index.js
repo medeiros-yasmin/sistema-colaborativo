@@ -7,13 +7,15 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-const { onRequest } = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
+// Inicializa o Firebase Admin
 admin.initializeApp();
+
+const db = admin.firestore();
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
     return admin.auth().getUserByEmail(data.email).then(user => {
@@ -61,7 +63,7 @@ exports.agradecerPubli = functions.https.onCall((data, context) => {
     })
 })
 
-exports.exibirDadosUsuario = functions.https.onCall((data, context)=>{
+exports.exibirDadosUsuario = functions.https.onCall((data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError(
             'unauthenticated',
@@ -70,11 +72,11 @@ exports.exibirDadosUsuario = functions.https.onCall((data, context)=>{
     }
     const usuario = admin.firestore().collection('usuarios').doc(context.auth.uid)
 
-    return usuario.get().then((documentSnapShot) =>{
-        if(documentSnapShot.exists){
+    return usuario.get().then((documentSnapShot) => {
+        if (documentSnapShot.exists) {
             const dadosUsuario = documentSnapShot.data();
             return dadosUsuario;
-        } else{
+        } else {
             throw new functions.https.HttpsError(
                 'not-found',
                 'Usuário não encontrado!'
@@ -87,6 +89,38 @@ exports.exibirDadosUsuario = functions.https.onCall((data, context)=>{
         )
     })
 });
+
+// Função para criar o usuário no Firestore
+exports.createUserInFirestore = functions.auth.user().onCreate((user) => {
+    // Verificar se os dados do usuário estão presentes
+    console.log('Trigger disparada.');
+  console.log('Dados do usuário:', user);
+
+  if (!user || !user.uid) {
+    console.error('Nenhum dado do usuário encontrado.');
+    return;
+  }
+
+  console.log('Usuário recebido:', user);
+  
+    // Dados padrão do usuário
+    const userData = {
+        displayName: user.displayName || 'Usuário Anônimo',
+        email: user.email || '',
+        photoURL: user.photoURL || '',
+        agradeceuEm: [], // Inicializa como array vazio
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      };
+  
+    // Cria o documento no Firestore
+    return db.collection('usuarios').doc(user.uid).set(userData)
+    .then(() => {
+      console.log(`Usuário criado no Firestore: ${user.uid}`);
+    })
+    .catch((error) => {
+      console.error(`Erro ao criar usuário no Firestore: ${error.message}`);
+    });
+  });
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started

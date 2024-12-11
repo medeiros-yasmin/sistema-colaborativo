@@ -75,7 +75,7 @@
                                                     handshake
                                                 </v-icon>
                                                 <span style="margin-left: 6px; color:#E6E7E9; font-size: 16px;"
-                                                    :class="mr - 2">{{
+                                                    :class="'mr-2'">{{
                                                         podcast.agradecimentos }}</span>
                                             </v-btn>
                                             <span class="mr-2; ml-5">·</span>
@@ -123,10 +123,10 @@
 
 <script>
 
+//import { getAuth } from 'firebase/auth';
 import { db, auth } from '../firebase/firebase-config'
-import { collection, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from "firebase/functions";
-//import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
 //import { functions } from '../../functions/index'
 //updateDoc
@@ -211,20 +211,19 @@ export default {
 
         async adicionarAgradecimento(publicacaoId) {
 
-            const user = auth().currentUser;
+            const user = auth.currentUser;
 
             if (!user)
                 throw new Error('Somente usuários autenticados podem agradecer!');
 
             try {
-                const usuarioRef = db.collection('usuarios').doc(user.uid);
-
-                const publicacaoRef = db.collection('sites').doc(publicacaoId);
+                const usuarioRef = doc(db, 'usuarios', user.uid);
+                const publicacaoRef = doc(db, 'sites', publicacaoId);
 
                 // Recupera os dados do usuário
-                const usuarioDoc = await usuarioRef.get();
+                const usuarioDoc = await getDoc(usuarioRef);
 
-                if (!usuarioDoc.exists) {
+                if (!usuarioDoc.exists()) {
                     throw new Error('Usuário não encontrado!');
                 }
 

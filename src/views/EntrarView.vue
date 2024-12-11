@@ -139,27 +139,16 @@ entrarGoogle(){
 signInWithPopup(auth, provider)
   .then((result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = provider.credentialFromResult(result);
-      console.log("Credenciais do usuário", credential)
-      
-    //const token = credential.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    console.log("Usuário: ", user.displayName)
-    // IdP data available using getAdditionalUserInfo(result)
-    // ...
-    router.push("/home");
+      const usuario = result.user;
+      console.log("Usuário autenticado:", usuario.displayName);
+      router.push("/home");
+    
+    
   }).catch((error) => {
     // Handle Errors here.
     
-    console.log("Código de erro: ", error.code);
+    console.error("Erro ao autenticar com Google:", error.code, error.message);
     
-    console.log("Mensagem de erro: ", error.message);
-    // The email of the user's account used.
-    
-    // The AuthCredential type that was used.
-    //console.log("Tipo de autenticação usada: ", provider.credentialFromError(error));
-    // ...
   })
 },
 
