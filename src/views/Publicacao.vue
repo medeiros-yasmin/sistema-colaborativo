@@ -80,6 +80,7 @@ export default {
     this.publicacaoId = this.$route.params.id
     console.log("Do router: ", this.publicacaoId)
     this.docRef = doc(db, String(this.$route.params.tipoPublicacao), this.publicacaoId)
+    console.log("Ref ", this.docRef)
     this.recuperarPublicacaoSelecionada()
 
   },

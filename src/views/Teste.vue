@@ -23,28 +23,22 @@ import { container } from 'webpack';
                 </v-list-item>
               </template>
 
-              <!-- <v-list>
+               <v-list>
                 <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item> -->
-              <!-- </v-list> -->
+                </v-list-item> 
+               </v-list> 
             </v-menu>
             <div class="d-flex flex-no-wrap justify-space-between">
               <div style="margin-top:18px; margin-left: 18px; margin-right: 70px;">
-                <v-card-title class="text-justify text-h5" v-text="Titulo"></v-card-title>
-                <v-card-subtitle v-text="Sub"></v-card-subtitle>
-                <v-card-text class="text-justify text-h7 font-weight-bold" v-text="'publicacaoSelecionada.descricao'"></v-card-text>
+                <v-card-title class="text-justify text-h5" v-text="publicacaoSelecionada.titulo"></v-card-title>
+                <v-card-subtitle v-text="publicacaoSelecionada.autor"></v-card-subtitle>
+                <v-card-text class="text-justify text-h7 font-weight-bold" v-text="publicacaoSelecionada.descricao"></v-card-text>
                 
-                <v-row class="bottom-left" style="padding-left:18px; padding-top:8px" text-align="bottom">
-                    
+                <v-row style="padding-left:18px; padding-top:8px" text-align="bottom">
                   <v-card-actions>
-                    <v-btn :href="'publicacaoSelecionada.link'" target="_blank" rel="noreferrer" class="white--text" rounded color="#C198C4">
-                      Cancelar
-                    </v-btn>
-                </v-card-actions>
-                    <v-card-actions>
-                    <v-btn :href="'publicacaoSelecionada.link'" target="_blank" rel="noreferrer" class="white--text" rounded color="#C198C4">
-                      Salvar
+                    <v-btn :href="publicacaoSelecionada.link" target="_blank" rel="noreferrer" class="bottomleft white--text" rounded color="#C198C4">
+                      Acessar fonte
                     </v-btn>
                   </v-card-actions>
                 </v-row>
@@ -72,10 +66,7 @@ export default {
       Number: String,
       required: true,
     },
-    tipoPublicacao: {
-      type: String,
-      required: true,
-    }
+   
   },
 
   created(){
@@ -83,16 +74,18 @@ export default {
   },
 
   mounted() {
+    //const q = query(collection(db, "publicacoes"), where("autorPubli", "==", "ebcwRnUHmWRRGklKUAhsBZhlU7f2"));
     this.publicacaoId = this.$route.params.id
     console.log("Do router: ", this.publicacaoId)
-    this.docRef = doc(db, String(this.$route.params.tipoPublicacao), this.publicacaoId)
+    this.docRef = doc(db, "publicacoes", this.publicacaoId)
     this.recuperarPublicacaoSelecionada()
+    console.log("Chegou22")
 
   },
   methods: {
     recuperarPublicacaoSelecionada() {
       getDoc(this.docRef).then((doc) => {
-        console.log("Chegou")
+        console.log("Chegou2")
         console.log(doc.data(), doc.id)
         this.publicacaoSelecionada = (doc.data())
         console.log("publicacaoSelecionada: ", this.publicacaoSelecionada)

@@ -36,7 +36,7 @@
                                             Visualizar
                                         </v-btn> -->
                                         <v-btn class="white--text" rounded color="#C198C4"
-                                                :to="{ name: 'publicacao', params: { id: livro.id, tipoPublicacao: 'artigos' } }">
+                                                :to="{ name: 'teste', params: { id: livro.id } }">
                                                 Visualizar
                                             </v-btn>
                                         </v-card-actions>

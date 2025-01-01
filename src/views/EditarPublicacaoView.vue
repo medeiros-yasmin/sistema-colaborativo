@@ -1,5 +1,5 @@
 <template>
-    <v-main style="background-color:#44075e;">
+    <v-main style="background-color:#391D41;">
 
         <v-container>
             <v-row>
@@ -11,7 +11,7 @@
                     </v-btn>
 
 
-                    <v-card style="margin-top:18px" color="purple" :elevation="publicacaoSelecionada - 1"
+                    <v-card style="margin-top:18px" color="#5C3C6C" :elevation="publicacaoSelecionada - 1"
                         class="mx-auto white--text" height="850" width="1200">
 
 
@@ -19,19 +19,19 @@
                         <v-form ref="form" lazy-validation>
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field type="text" v-model="publicacaoSelecionada.titulo" class="custom-label-color"
-                                    background-color="#44075e" color="white" light shaped filled :counter="100"
+                                    background-color="#44075e" color="white" dark shaped filled :counter="100"
                                     label="Título" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field type="text" v-model="publicacaoSelecionada.autor" class="custom-label-color"
-                                    background-color="#44075e" color="white" light shaped filled :counter="100"
+                                    background-color="#44075e" color="white" dark shaped filled :counter="100"
                                     label="Autor(a)" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field v-model="publicacaoSelecionada.link" class="custom-label-color"
-                                    background-color="#44075e" color="white" light shaped filled :counter="500"
+                                    background-color="#44075e" color="white" dark shaped filled :counter="500"
                                     label="Link da Publicação" required></v-text-field>
                             </v-col>
 
@@ -58,10 +58,10 @@
                                         text-align="bottom">
 
                                     
-                                <v-btn rounded color="error" class="white--text" @click="atualizarPublicacao()">
+                                <v-btn rounded color="#8a718c" class="white--text" @click="atualizarPublicacao()">
                                     Cancelar
                                 </v-btn>
-                                <v-btn style="margin-left:25px" rounded color="#14C1D7" class="white--text" @click="atualizarPublicacao()">
+                                <v-btn style="margin-left:25px" rounded color="#C6A0C9" class="white--text" @click="atualizarPublicacao()">
                                     Salvar
                                 </v-btn>
                             

@@ -41,9 +41,13 @@ const routes = [
   },
 
   {
-    path: '/teste',
+    path: '/teste/:id',
     name: 'teste',
     component: Teste,
+    props: route => ({id: route.params.id, }),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/about',
