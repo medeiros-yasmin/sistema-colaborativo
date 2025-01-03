@@ -109,7 +109,7 @@ exports.createUserInFirestore = functions.auth.user().onCreate((user) => {
         email: user.email || '',
         photoURL: user.photoURL || '',
         agradeceuEm: [], // Inicializa como array vazio
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        createdAt: admin.firestore.FieldValue.serverTimestamp(), //Talvez trocar o nome depois
       };
   
     // Cria o documento no Firestore

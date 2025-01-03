@@ -22,6 +22,11 @@
                     transition="scroll-y-transition">
                     Apenas usuários autenticados podem criar publicações.
                 </v-alert>
+                <v-alert class="center-align" :value="exibirAvisoAgradecimento" style="margin-top:18px; align-items: center"
+                    dismissible @input="dismissAlert" theme="dark" color="#C51162" dark border="top" icon="mdi-alert-circle"
+                    transition="scroll-y-transition">
+                    Você pode agradecer somente uma vez.
+                </v-alert>
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
@@ -148,6 +153,7 @@ export default {
         valid: true,
         ultimoDocumento: null,
         exibirAviso: false,
+        exibirAvisoAgradecimento: false,
         criarClicado: false,
         dialog: false,
         isLiked: false,
@@ -231,6 +237,8 @@ export default {
 
                 // Verifica se o usuário já agradeceu esta publicação
                 if (usuarioData.agradeceuEm && usuarioData.agradeceuEm.includes(publicacaoId)) {
+                    this.exibirAvisoAgradecimento = true;
+                    this.fecharAvisoAgradecimento()
                     throw new Error('O agradecimento é permitido somente uma vez!');
                 }
 
@@ -260,6 +268,15 @@ export default {
                 }, 5000);
             });
             this.exibirAviso = false;
+        },
+
+        async fecharAvisoAgradecimento(){
+            await new Promise((resolve)=> {
+                setTimeout(()=>{
+                    resolve();
+                }, 5000);
+            })
+            this.exibirAvisoAgradecimento = false;
         },
 
         /* async recuperarNovosDocumentos(doc) {
@@ -344,7 +361,7 @@ export default {
     /* Adicione estilos visuais para indicar o estado de seleção */
 
     outline-style: solid;
-    outline-color: #D2A8E7;
+    outline-color: #D2A8E7 !important;
     background-color: #D2A8E7 !important;
 }
 
