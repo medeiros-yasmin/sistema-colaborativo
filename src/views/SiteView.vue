@@ -22,9 +22,9 @@
                     transition="scroll-y-transition">
                     Apenas usuários autenticados podem criar publicações.
                 </v-alert>
-                <v-alert class="center-align" :value="exibirAvisoAgradecimento" style="margin-top:18px; align-items: center"
-                    dismissible @input="dismissAlert" theme="dark" color="#C51162" dark border="top" icon="mdi-alert-circle"
-                    transition="scroll-y-transition">
+                <v-alert class="center-align" :value="exibirAvisoAgradecimento"
+                    style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" theme="dark"
+                    color="#C51162" dark border="top" icon="mdi-alert-circle" transition="scroll-y-transition">
                     Você pode agradecer somente uma vez.
                 </v-alert>
                 <v-row>
@@ -71,18 +71,10 @@
                                             </v-btn>
                                         </v-card-actions>
                                         <v-card-actions>
-                                            <v-btn class="botao-agradecer"
-                                                :class="{ 'btnselec-agradecer': publicacaoSelecionada === podcast.id }"
-                                                rounded @click="adicionarAgradecimento(podcast.id)">
-                                                <v-icon
-                                                    :class="{ 'selected-icon': publicacaoSelecionada === podcast.id }"
-                                                    size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                                    handshake
-                                                </v-icon>
-                                                <span style="margin-left: 6px; color:#E6E7E9; font-size: 16px;"
-                                                    :class="'mr-2'">{{
-                                                        podcast.agradecimentos }}</span>
-                                            </v-btn>
+                                            <BotaoAgradecer :publicacao-id="podcast.id"
+                                                :ja-agradeceu="agradecimentosUsuario.includes(podcast.id)"
+                                                :total-agradecimentos="podcast.agradecimentos"
+                                                @atualizar-agradecimento="atualizarAgradecimento" />
                                             <span class="mr-2; ml-5">·</span>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
                                                 share
@@ -129,8 +121,9 @@
 <script>
 
 //import { getAuth } from 'firebase/auth';
+import BotaoAgradecer from '@/components/BotaoAgradecer.vue';
 import { db, auth } from '../firebase/firebase-config'
-import { collection, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc } from 'firebase/firestore'
+import { collection, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
 //import { functions } from '../../functions/index'
@@ -143,8 +136,8 @@ export default {
         this.podcasts = this.recuperarDocumentos(this.colRef)
 
     },
-
     components: {
+        BotaoAgradecer,
         //BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
         //BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
     },
@@ -176,19 +169,61 @@ export default {
             v => !!v || 'E-mail obrigatório',
             v => /.+@.+\..+/.test(v) || 'Insira um e-mail válido',
         ],
+        publicacoes: [],
+        agradecimentosUsuario: [],
 
     }),
 
     created() {
         this.$store.commit('toggleAppBar', true);
+        this.carregarAgradecimentos();
 
 
     },
     computed: {
-        ...mapGetters(['getCurrentUser']),
+        ...mapGetters(['getCurrentUser', 'getCurrentUserFullData']),
     },
 
     methods: {
+        async carregarAgradecimentos() {
+            try {
+
+                this.verificarSeAutenticado();
+                const q = query(
+                    collection(db, 'agradecimentos'),
+                    where('usuarios', 'array-contains', this.getCurrentUserFullData.userId)
+                );
+
+                const querySnapshot = await getDocs(q);
+                this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
+                
+            } catch (error) {
+                console.error("Erro nos agradecimentosssssss: ", error);
+            }
+        },
+
+        async atualizarAgradecimento(publicacaoId){
+            try{
+                const idUsuario = auth.currentUser.uid;
+                const jaAgradeceu = this.agradecimentosUsuario.includes(publicacaoId);
+
+                if(jaAgradeceu){
+                    await updateDoc(doc(db, 'agradecimentos', publicacaoId),{
+                        usuarios: arrayRemove(idUsuario)
+                    });
+                    this.agradecimentosUsuario = this.agradecimentosUsuario.filter(
+                        (id) => id !== publicacaoId
+                    );
+                } else {
+                    await updateDoc(doc(db, 'agradecimentos', publicacaoId),{
+                        usuarios: arrayUnion(idUsuario),
+                    });
+                    this.agradecimentosUsuario.push(publicacaoId);
+                }
+            }catch(error){
+                console.error('Erro ao atualizar agradecimento: ', error);
+            }
+        },
         incluirComoAdministrador(address) {
             const functions = getFunctions();
             this.loadingAdmin = true
@@ -203,11 +238,11 @@ export default {
         },
         //Verifica se o usuário está autenticado ao selecionar o botão de criar publicação
         verificarSeAutenticado() {
-            this.criarClicado = !this.criarClicado
-            if (this.getCurrentUser && this.criarClicado)
-                this.exibirAviso = false;
-            else
+            if (!this.getCurrentUser && this.criarClicado)
                 this.exibirAviso = true;
+            else
+                this.exibirAviso = false;
+
             this.fecharAvisoAutomaticamente();
         },
 
@@ -270,9 +305,9 @@ export default {
             this.exibirAviso = false;
         },
 
-        async fecharAvisoAgradecimento(){
-            await new Promise((resolve)=> {
-                setTimeout(()=>{
+        async fecharAvisoAgradecimento() {
+            await new Promise((resolve) => {
+                setTimeout(() => {
                     resolve();
                 }, 5000);
             })
@@ -349,11 +384,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .botao-agradecer {
-    outline-width: 1px;
-    outline-style: solid;
-    outline-color: white;
+    outline-width: 1px !important;
+    outline-style: solid !important;
+    outline-color: white !important;
     background-color: transparent !important;
 }
 
@@ -365,11 +400,10 @@ export default {
     background-color: #D2A8E7 !important;
 }
 
-.span-padrao {}
 
 .span-selecionado {
-    color: #391D41;
-    font-weight: bold;
+    color: #391D41 !important;
+    font-weight: bold !important;
 }
 
 .selected-icon {

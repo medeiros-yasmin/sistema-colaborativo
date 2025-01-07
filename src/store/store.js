@@ -10,7 +10,9 @@ const store = new Vuex.Store({
         auth: auth,
         currentUser: false,
         currentUserName: "Convidado",
-        currentUserEMail: "Sem cadastro"
+        currentUserEMail: "Sem cadastro",
+        currentUserId: "Sem identificador",
+        currentUserFullData: "Sem dados"
       },
       mutations: {
         toggleAppBar(state, value) {
@@ -31,11 +33,18 @@ const store = new Vuex.Store({
         showAppBar(state) {
           return state.showAppBar;
         },
-        getCurrentUser: (state) => {state.currentUser},
+        getCurrentUser: (state) => state.currentUser,
+
+        getCurrentUserFullData: (auth) => {
+          return {
+            id: auth.user.uid
+          } 
+        },
         dadosUsuarioAutenticado(state){
           return { 
             currentUserName: state.currentUserName,
-            currentUserEmail: state.currentUserEMail
+            currentUserEmail: state.currentUserEMail,
+            currentUserId: state.currentUserId
           }
         }
       },

@@ -85,7 +85,6 @@ export default {
          const usuario = httpsCallable(functions, 'exibirDadosUsuario');
          usuario({ id: id })
             .then((result) => {
-               console.log("Dá pra imprimir (ENTRAR)?", result.data);
                console.log('Resposta da Cloud Function para buscar dados:', result.data.message)
 
                return result.data.nome, result.data.sobrenome ;
@@ -140,7 +139,10 @@ signInWithPopup(auth, provider)
   .then((result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
       const usuario = result.user;
-      console.log("Usuário autenticado:", usuario.displayName);
+      const nomeSobrenome = result.user.displayName;
+      
+      console.log("Usuário autenticado:", usuario.displayName, usuario.uid);
+      this.$store.commit('updateUserInfo', nomeSobrenome);
       router.push("/home");
     
     
