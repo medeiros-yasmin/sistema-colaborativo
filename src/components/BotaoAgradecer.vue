@@ -6,7 +6,7 @@
         <v-icon :class="{ 'selected-icon': jaAgradeceu }" size="30px" class="material-symbols-rounded" color="#E6E7E9">
             handshake
         </v-icon>
-        <span style="margin-left: 6px; color:#E6E7E9; font-size: 16px;">
+        <span style="margin-left: 6px; color:#E6E7E9; font-size: 125%; font-weight: 500;">
             {{ totalAgradecimentos }}
         </span>
     </v-btn>
@@ -46,8 +46,8 @@ export default {
 
 .btnselec-agradecer {
     outline-style: solid;
-    outline-color: #D2A8E7 !important;
-    background-color: #D2A8E7 !important;
+    outline-color: #C6A0C9 !important;
+    background-color: #C6A0C9 !important;
 }
 
 .selected-icon {

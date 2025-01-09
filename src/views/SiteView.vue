@@ -1,15 +1,15 @@
 <template>
     <v-app style="background-color:#391D41;">
         <v-main>
-            <v-container>
-                <v-row align="center" justify="space-around">
-                    <v-col cols="5">
+            <v-container fluid class="d-flex justify-center align-center central-container">
+                <v-row align="center" justify="center">
+                    <v-col cols="auto">
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-text-field v-model="email" :rules="emailRules" label="E-mail"
                                 placeholder="fulanodetal@preencha-aqui.com" counter="35" required dark></v-text-field>
-                            <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" class="center-align"
-                                justify="center" color="#889B59" @click="incluirComoAdministrador(email)"
-                                style="margin-top:18px; align-items: center" dark right depressed>
+                            <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" color="#889B59"
+                                @click="incluirComoAdministrador(email)" placeholder="fulanodetal@preencha-aqui.com"
+                                dark right depressed>
                                 <v-icon size="23px" class="material-symbols-rounded" left>
                                     handshake
                                 </v-icon>TORNAR ADMINISTRADOR
@@ -17,6 +17,10 @@
                         </v-form>
                     </v-col>
                 </v-row>
+                </v-container>
+
+
+                <v-container>
                 <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center"
                     dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home"
                     transition="scroll-y-transition">
@@ -27,6 +31,18 @@
                     color="#C51162" dark border="top" icon="mdi-alert-circle" transition="scroll-y-transition">
                     Você pode agradecer somente uma vez.
                 </v-alert>
+                <div class="text-center">
+                    <v-snackbar v-model="snackbarAgradecimento" color="primary" variant="tonal" timeout="5000">
+                        Agradecimento atualizado!
+
+                        <template v-slot:actions>
+                            <v-btn color="orange" variant="text" @click="snackbarAgradecimento = false">
+                                Fechar
+                            </v-btn>
+                        </template>
+                    </v-snackbar>
+                </div>
+
                 <v-row>
                     <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
 
@@ -101,7 +117,7 @@
 
 
 
-            </v-container>
+            
 
             <v-card-text style="height: 100px;">
                 <v-fab-transition>
@@ -112,7 +128,7 @@
                 </v-fab-transition>
             </v-card-text>
 
-
+        </v-container>
         </v-main>
 
     </v-app>
@@ -153,6 +169,7 @@ export default {
         drawer: false,
         group: null,
         podcasts: null,
+        snackbarAgradecimento: false,
         loadingAdmin: false,
         publicacaoSelecionada: null,
         colRef: collection(db, 'sites'),
@@ -191,36 +208,38 @@ export default {
                 this.verificarSeAutenticado();
                 const q = query(
                     collection(db, 'agradecimentos'),
-                    where('usuarios', 'array-contains', this.getCurrentUserFullData.userId)
+                    where('usuarios', 'array-contains', auth.currentUser.uid)
                 );
 
                 const querySnapshot = await getDocs(q);
                 this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
-                
+
             } catch (error) {
-                console.error("Erro nos agradecimentosssssss: ", error);
+                console.error("Erro nos agradecimentos: ", error);
             }
         },
 
-        async atualizarAgradecimento(publicacaoId){
-            try{
+        async atualizarAgradecimento(publicacaoId) {
+            try {
                 const idUsuario = auth.currentUser.uid;
                 const jaAgradeceu = this.agradecimentosUsuario.includes(publicacaoId);
 
-                if(jaAgradeceu){
-                    await updateDoc(doc(db, 'agradecimentos', publicacaoId),{
+                if (jaAgradeceu) {
+                    await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
                         usuarios: arrayRemove(idUsuario)
                     });
                     this.agradecimentosUsuario = this.agradecimentosUsuario.filter(
                         (id) => id !== publicacaoId
                     );
                 } else {
-                    await updateDoc(doc(db, 'agradecimentos', publicacaoId),{
+                    await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
                         usuarios: arrayUnion(idUsuario),
                     });
                     this.agradecimentosUsuario.push(publicacaoId);
+
                 }
-            }catch(error){
+                this.snackbarAgradecimento = !this.snackbarAgradecimento;
+            } catch (error) {
                 console.error('Erro ao atualizar agradecimento: ', error);
             }
         },
@@ -313,30 +332,6 @@ export default {
             })
             this.exibirAvisoAgradecimento = false;
         },
-
-        /* async recuperarNovosDocumentos(doc) {
-            loading.classList.add('active');
-
-            const ref = db.collection('reviews')
-                .orderBy('createdAt')
-                .startAfter(doc || 0)
-                .limit(6);
-
-            const data = await ref.get();
-
-            // output docs
-            let template = '';
-            data.docs.forEach(doc => {
-                const review = doc.data();
-                template += `
-    <div class="card">
-      <h2>${review.name}</h2>
-      <p>Written by ${review.author}</p>
-      <p>Rating - ${review.rating} / 5</p>
-    </div>
-  `
-            })
-        }, */
         recuperarDocumentos(colRef) {
             getDocs(colRef)
                 .then(snapshot => {
@@ -384,7 +379,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .botao-agradecer {
     outline-width: 1px !important;
     outline-style: solid !important;
@@ -392,13 +387,7 @@ export default {
     background-color: transparent !important;
 }
 
-.btnselec-agradecer {
-    /* Adicione estilos visuais para indicar o estado de seleção */
 
-    outline-style: solid;
-    outline-color: #D2A8E7 !important;
-    background-color: #D2A8E7 !important;
-}
 
 
 .span-selecionado {
