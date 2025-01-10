@@ -3,15 +3,15 @@
         <v-main>
             <v-container fluid class="d-flex justify-center align-center central-container">
                 <v-row align="center" justify="center">
-                    <v-col cols="auto">
+                    <v-col  cols="8" sm="6" md="4">
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-text-field v-model="email" :rules="emailRules" label="E-mail"
                                 placeholder="fulanodetal@preencha-aqui.com" counter="35" required dark></v-text-field>
                             <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" color="#889B59"
                                 @click="incluirComoAdministrador(email)" placeholder="fulanodetal@preencha-aqui.com"
-                                dark right depressed>
+                                dark right depressed block>
                                 <v-icon size="23px" class="material-symbols-rounded" left>
-                                    handshake
+                                    admin_panel_settings
                                 </v-icon>TORNAR ADMINISTRADOR
                             </v-btn>
                         </v-form>
@@ -154,8 +154,6 @@ export default {
     },
     components: {
         BotaoAgradecer,
-        //BotaoVisualizar: () => import('../components/BotaoVisualizar.vue'),
-        //BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')
     },
 
     data: () => ({
@@ -380,15 +378,17 @@ export default {
 </script>
 
 <style>
+
+.central-container {
+    height: 15vh;
+}
+
 .botao-agradecer {
     outline-width: 1px !important;
     outline-style: solid !important;
     outline-color: white !important;
     background-color: transparent !important;
 }
-
-
-
 
 .span-selecionado {
     color: #391D41 !important;
