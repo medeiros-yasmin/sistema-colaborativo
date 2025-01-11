@@ -16,6 +16,7 @@ import AvisoAutenticacaoView from '../views/AvisoAutenticacaoView'
 import MinhasPublisView from '../views/MinhasPublisView'
 import Teste from '../views/Teste'
 import { auth } from '../firebase/firebase-config'
+import DadosUsuario from '@/views/DadosUsuario.vue'
 
 
 Vue.use(VueRouter)
@@ -25,6 +26,13 @@ const routes = [
     path: '/home',
     name: 'home',
     component: HomeView,
+    props: true,
+  },
+
+  {
+    path: '/usuario',
+    name: 'usuario',
+    component: DadosUsuario,
     props: true,
   },
   {

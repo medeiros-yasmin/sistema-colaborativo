@@ -12,7 +12,9 @@ const store = new Vuex.Store({
         currentUserName: "Convidado",
         currentUserEMail: "Sem cadastro",
         currentUserId: "Sem identificador",
-        currentUserFullData: "Sem dados"
+        currentUserFullData: "Sem dados",
+        //Dados de agradecimento
+        agradecimentos: {},
       },
       mutations: {
         toggleAppBar(state, value) {
@@ -27,7 +29,25 @@ const store = new Vuex.Store({
         UpdateUserInfo(state, value){
           state.currentUserEMail = value.currentUserEMail || state.currentUserEMail;
           state.currentUserName = value.currentUserName || state.currentUserName;
-        }
+        },
+
+        //Botão de agradecimento
+        toggleAgradecimento(state, publicacaoId) {
+          if (state.agradecimentos[publicacaoId]) {
+              delete state.agradecimentos[publicacaoId]; // Remove o agradecimento
+          } else {
+              state.agradecimentos[publicacaoId] = true; // Marca como agradecido
+          }
+        },
+
+        //Botão de agradecimento
+        setAgradecimentos(state, { publicacaoId, jaAgradeceu }) {
+          if (jaAgradeceu) {
+              state.agradecimentos[publicacaoId] = true;
+          } else {
+              delete state.agradecimentos[publicacaoId];
+          }
+        },
       },
       getters: {
         showAppBar(state) {
@@ -49,6 +69,11 @@ const store = new Vuex.Store({
         }
       },
       actions: {
+        //Botão de agradecimento
+        atualizarAgradecimento({ commit }, publicacaoId) {
+          // Aqui você pode integrar com o Firebase ou outra API
+          commit('toggleAgradecimento', publicacaoId);
+      },
         
       }
       

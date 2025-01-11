@@ -3,7 +3,7 @@
         <v-main>
             <v-container fluid class="d-flex justify-center align-center central-container">
                 <v-row align="center" justify="center">
-                    <v-col  cols="8" sm="6" md="4">
+                    <v-col cols="8" sm="6" md="4">
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-text-field v-model="email" :rules="emailRules" label="E-mail"
                                 placeholder="fulanodetal@preencha-aqui.com" counter="35" required dark></v-text-field>
@@ -17,10 +17,10 @@
                         </v-form>
                     </v-col>
                 </v-row>
-                </v-container>
+            </v-container>
 
 
-                <v-container>
+            <v-container>
                 <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center"
                     dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home"
                     transition="scroll-y-transition">
@@ -117,18 +117,18 @@
 
 
 
-            
 
-            <v-card-text style="height: 100px;">
-                <v-fab-transition>
-                    <v-btn @click="verificarSeAutenticado()" color="#889B59" dark bottom right fab fixed
-                        :to="{ name: 'criarPublicacao' }">
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                </v-fab-transition>
-            </v-card-text>
 
-        </v-container>
+                <v-card-text style="height: 100px;">
+                    <v-fab-transition>
+                        <v-btn @click="verificarSeAutenticado()" color="#889B59" dark bottom right fab fixed
+                            :to="{ name: 'criarPublicacao' }">
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                    </v-fab-transition>
+                </v-card-text>
+
+            </v-container>
         </v-main>
 
     </v-app>
@@ -139,7 +139,7 @@
 //import { getAuth } from 'firebase/auth';
 import BotaoAgradecer from '@/components/BotaoAgradecer.vue';
 import { db, auth } from '../firebase/firebase-config'
-import { collection, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove } from 'firebase/firestore'
+import { collection, onSnapshot, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
 //import { functions } from '../../functions/index'
@@ -148,9 +148,20 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'SiteView',
+    
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
 
+        const publicacaoRef = doc(db, "sites", this.publicacaoRef);
+        this.realizarLimpeza = onSnapshot(publicacaoRef, (doc) => {
+            const data = doc.data();
+            this.totalAgradecimentos = data.agradecimentos;
+        })
+
+    },
+    beforeUnmount() {
+        // Remove o listener para evitar vazamento de memória
+        this.realizarLimpeza();
     },
     components: {
         BotaoAgradecer,
@@ -171,6 +182,7 @@ export default {
         loadingAdmin: false,
         publicacaoSelecionada: null,
         colRef: collection(db, 'sites'),
+        totalAgradecimentos: 0,
         items: [
             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
@@ -224,16 +236,26 @@ export default {
 
                 if (jaAgradeceu) {
                     await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
-                        usuarios: arrayRemove(idUsuario)
+                        usuarios: arrayRemove(idUsuario),
+                        agradecimentos: increment(-1)
                     });
                     this.agradecimentosUsuario = this.agradecimentosUsuario.filter(
                         (id) => id !== publicacaoId
                     );
+                    await updateDoc(doc(db, 'sites', publicacaoId), {
+                        agradecimentos: increment(-1)
+                    })
+
                 } else {
                     await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
                         usuarios: arrayUnion(idUsuario),
+                        agradecimentos: increment(1)
                     });
                     this.agradecimentosUsuario.push(publicacaoId);
+                    await updateDoc(doc(db, 'sites', publicacaoId), {
+                        agradecimentos: increment(1)
+                    })
+
 
                 }
                 this.snackbarAgradecimento = !this.snackbarAgradecimento;
@@ -339,6 +361,7 @@ export default {
                         podcasts.push({ ...doc.data(), id: doc.id })
                     })
                     this.podcasts = podcasts
+                    console.log("Publicações: ", this.podcasts)
 
 
                 })
@@ -378,7 +401,6 @@ export default {
 </script>
 
 <style>
-
 .central-container {
     height: 15vh;
 }
