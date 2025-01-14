@@ -42,10 +42,10 @@
 
             <v-list-item link>
               <v-list-item-content>
-                <v-list-item-title dark class="text-h6 white--text">
+                <v-list-item-title dark class="unica-linha text-h6 white--text">
                   {{ currentUser.displayName }}
                 </v-list-item-title>
-                <v-list-item-subtitle class="white--text">{{ currentUser.email }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="unica-linha white--text">{{ currentUser.email }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-item>
@@ -71,6 +71,7 @@
         </v-list>
 
         <v-divider></v-divider>
+
         <v-list-item-group v-model="group" active-class="cyan--text text--accent-4">
           <router-link to="/home" class="white--text no-underline">
           <v-list-item class="white--text">
@@ -97,21 +98,23 @@
             <v-list-item-title>Minhas Publicações</v-list-item-title>
           </v-list-item>
         </router-link>
-          <v-list-item>
-            <div v-if="usuarioAutenticado" class="pa-1">
-              <v-list-item @click="sair()">
-                <v-btn block>
+        
+          
+            <div v-if="usuarioAutenticado" class="pt-4" >
+              
+              <v-list-item  class="mt-auto">
+                <v-btn class="botao-sair" @click="sair()">
                   <v-list-item-icon>
 
                     <v-icon>mdi-logout</v-icon>
 
                   </v-list-item-icon>
 
-                  <v-list-item-title>Sair</v-list-item-title>
+                  <v-list-item-title class="font-weight-bold">Sair</v-list-item-title>
                 </v-btn>
               </v-list-item>
             </div>
-          </v-list-item>
+          
 
           <v-list-item>
             <div v-if="!usuarioAutenticado" class="pa-1">
@@ -189,7 +192,8 @@ export default {
     colRef: collection(db, 'podcasts'),
     currentUser: {
       nome: '',
-      id: ''
+      id: '',
+      photoURL: ''
     },
     id: null
   }),
@@ -288,5 +292,20 @@ export default {
 
 .no-underline{
   text-decoration: none !important; /* Para retirar o sublinhado do componente de router*/
+}
+
+.botao-sair{
+  font-weight:bold;
+  margin-top: auto; 
+  position: relative;
+  width: 100%; 
+}
+
+
+.unica-linha {
+    overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    width: 150px;
 }
 </style>
