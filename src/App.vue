@@ -93,7 +93,7 @@
         <router-link to="/minhas"  class="white--text no-underline"> 
           <v-list-item class="white--text">
             <v-list-item-icon>
-              <v-icon color="white">mdi-account</v-icon>
+              <v-icon class="material-symbols-rounded" color="white">potted_plant</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Minhas Publicações</v-list-item-title>
           </v-list-item>
