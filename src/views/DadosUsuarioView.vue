@@ -12,33 +12,32 @@
       </v-container>
 
       <v-container>
-        <v-row></v-row>
-        <v-col cols="8" sm="6" md="4">
-        <v-text block>
+       
+        <h3 class=" descricao-pagina" size="150" >
             Dados do Usuário
-          </v-text>
-        </v-col>
+        </h3>
+        
         <div class="user-card-container">
           
 
           <v-card class="mx-auto user-card" max-width="800">
             <v-card-title>
-              <v-avatar class="mr-4" size="150">
-                <v-img alt="Avatar" src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"></v-img>
+              <v-avatar class="mr-4" size="120">
+                <v-img alt="Avatar" :src="usuarioInfo.photoURL"></v-img>
 
 
               </v-avatar>
               <div>
-                <h3 class="mb-1">{{ nome }}</h3>
-                <p class="mb-0">{{ email }}</p>
+                <h3 class="texto-ambar mb-1"> Nome: {{  usuarioInfo.displayName }}</h3>
+                <p class="mb-0"> E-mail: {{ usuarioInfo.email }}</p>
                 <small>Conta criada em: {{ formattedCreationDate }}</small>
               </div>
             </v-card-title>
             <v-divider class="mb-7" :thickness="5"></v-divider>
-            <!-- <v-card-actions> -->
-            <!--  <v-btn color="primary" text @click="editUser">Editar</v-btn>
-          <v-btn color="red" text @click="deleteUser">Deletar</v-btn> -->
-            <!-- </v-card-actions> -->
+            <v-card-actions>
+              <v-btn color="primary" text @click="imprimir">Ver dados</v-btn>
+          
+             </v-card-actions> 
           </v-card>
         </div>
       </v-container>
@@ -54,12 +53,22 @@ import { auth } from '../firebase/firebase-config'
 export default {
   name: "UserCard",
 
-  mounted: {
-    usuarioInfo: auth.currentUser
+  mounted() {
+    this.usuarioInfo = auth.currentUser
   },
 
+  created() {
+        this.$store.commit('toggleAppBar', false);
+        
+    },
+
   data: () => ({
-    usuarioInfo: [],
+    usuarioInfo: {
+      /* nome: '',
+      email: '',
+      dataCriacao: new Date(),
+      imagemPerfil: '' */
+    },
     nome: "Nome do Usuário",
     email: "usuario@exemplo.com",
     creationDate: new Date(),
@@ -72,17 +81,29 @@ export default {
     },
   },
   methods: {
+    imprimir(){
+      console.log("USER: ", auth.currentUser.displayName)
+    }
 
   },
 };
 </script>
 
 <style scoped>
+
+.descricao-pagina{
+  justify-content: center;
+  color: white;
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  
+}
 .user-card-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 50vh;
   /* Ocupa a altura total da tela */
   background-color: #391D41;
   /* Cor de fundo clara para destaque */
@@ -91,11 +112,24 @@ export default {
 
 .user-card {
   width: 100%;
-  background-color: #5C3C6C;
+ /* background-color: #5C3C6C; */
+ background: linear-gradient(
+  45deg,
+    /* Roxo bem escuro */
+    #30003b 0%,  
+    /* Tom intermediário */
+    #490f65 50%, 
+    /* Roxo mais claro, porém ainda escuro */
+    #6b1e8c 100%
+  );
   color: white;
   max-width: 800px;
   /* Largura máxima maior */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   /* Sombra para destacar o cartão */
+}
+
+.texto-ambar {
+  color: #ffffff;
 }
 </style>

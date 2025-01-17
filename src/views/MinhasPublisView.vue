@@ -123,7 +123,7 @@ import { collection, getDocs, deleteDoc, doc, where, query } from 'firebase/fire
 
 export default {
     name: 'MinhasPublis',
-    //setup(){
+    
     mounted() {
         this.livros = this.recuperarDocumentos(this.colRef)
     },
@@ -131,9 +131,6 @@ export default {
     created() {
         this.$store.commit('toggleAppBar', false);
     },
-
-
-    //},
 
     components: {
         BotaoAdicionarPubli: () => import('../components/BotaoAdicionar.vue')

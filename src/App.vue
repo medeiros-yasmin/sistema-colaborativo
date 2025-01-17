@@ -29,7 +29,7 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary color="#7B447B">
+    <v-navigation-drawer image='../assets/plano-fundo.jpg' v-model="drawer" absolute temporary color="#7B447B">
       <v-list nav dense>
 
         <v-list>
@@ -82,7 +82,7 @@
             <v-list-item-title>Início</v-list-item-title>
           </v-list-item>
         </router-link>
-        <router-link to="/teste" class="white--text no-underline"> 
+        <router-link to="/usuario" class="white--text no-underline"> 
           <v-list-item class="white--text">
             <v-list-item-icon>
               <v-icon color="white">mdi-account</v-icon>
@@ -279,7 +279,7 @@ export default {
 }
 
 .v-application {
-  color: blueviolet !important;
+  color: #2E1F32 !important;
   caret-color: coral !important;
 }
 
