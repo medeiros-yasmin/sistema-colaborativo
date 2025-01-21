@@ -5,7 +5,7 @@
                 <v-row>
                     <v-col v-for="livro in livros" :key="livro.id" cols="112">
 
-                        <v-card style="margin-top:80px;" color="#5C3C6C" :elevation="livro - 1"
+                        <v-card shaped style="margin-top:80px;" color="#5C3C6C" :elevation="livro - 1"
                          class="overflow-hidden mx-auto white--text" height="330" width="1000">
                             <v-menu bottom left>
                                 <template v-slot:activator="{ on, attrs }">
