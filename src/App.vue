@@ -22,7 +22,7 @@
           <v-tab to="/site">Sites</v-tab>
           <v-tab to="/video">Vídeos</v-tab>
           <v-tab to="/livro">Livros e Revistas</v-tab>
-          <v-tab to="/minhas">Minhas publicações</v-tab>
+          <v-tab to="/sobre">Sobre Nós</v-tab>
 
         </v-tabs>
 

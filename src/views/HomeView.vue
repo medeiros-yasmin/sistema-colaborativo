@@ -139,7 +139,7 @@ export default {
 }
 
 .custom-card-link:hover v-card {
-    background-color: #794A81;
+    background-color: #794A81 !important;
     /* Cor mais clara ao passar o mouse */
 }
 
