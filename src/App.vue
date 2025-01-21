@@ -29,14 +29,15 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer image='../assets/plano-fundo.jpg' v-model="drawer" absolute temporary color="#7B447B">
+    <v-navigation-drawer  class="drawer-fundo" v-model="drawer" absolute temporary width="300" color="#7B447B">
+      
       <v-list nav dense>
 
         <v-list>
           <v-list-item v-if="usuarioAutenticado">
             <v-list-item class="px-2">
-              <v-list-item-avatar>
-                <v-img :src="`${currentUser.photoURL}`" alt="Sem imagem"></v-img>
+              <v-list-item-avatar height="50px" width="50">
+                <v-img :src="`${currentUser.photoURL}`" alt="Sem imagem" ></v-img>
               </v-list-item-avatar>
             </v-list-item>
 
@@ -271,6 +272,12 @@ export default {
 </script>
 
 <style>
+.drawer-fundo {
+  
+  background: url('./assets/plano-fundo.jpg') no-repeat center center;
+  background-size: cover;
+}
+
 .topright {
   position: absolute;
   top: 12px;
@@ -306,6 +313,6 @@ export default {
     overflow: hidden;
     white-space: nowrap; 
     text-overflow: ellipsis;
-    width: 150px;
+    width: 190px;
 }
 </style>

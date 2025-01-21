@@ -29,7 +29,13 @@
                      </v-card-text>
                      <v-card-actions>
                         
-                        <v-btn class="white--text" color="#91A366" @click="entrar()">Entrar</v-btn>
+                        <v-btn class="white--text" color="#91A366" @click="entrar()"> <v-img
+    src="../assets/google.png"
+    alt="Ícone"
+    width="24"
+    height="24"
+    cover
+  ></v-img>Entrar</v-btn>
                      </v-card-actions>
                      <v-card-actions>
                         
