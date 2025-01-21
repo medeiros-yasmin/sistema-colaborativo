@@ -3,8 +3,9 @@
       <v-main>
          <v-container fluid fill-height>
             <v-layout align-center justify-center>
-               <v-alert class="center-align" :value="exibirAvisoLogin" style="margin-top:18px; align-items: center" color="blue"  dark border="top" icon="mdi-home" transition="scroll-y-transition">
-                        Bem vindo(a), {{ nomeUsuario }}.
+               <v-alert class="center-align" :value="exibirAvisoLogin" style="margin-top:18px; align-items: center"
+                  color="blue" dark border="top" icon="mdi-home" transition="scroll-y-transition">
+                  Bem vindo(a), {{ nomeUsuario }}.
                </v-alert>
                <v-flex xs12 sm8 md4>
                   <v-card shaped color="#E6E7E9" class="elevation-18">
@@ -28,18 +29,18 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-                        
-                        <v-btn class="white--text" color="#91A366" @click="entrar()"> <v-img
-    src="../assets/google.png"
-    alt="Ícone"
-    width="24"
-    height="24"
-    cover
-  ></v-img>Entrar</v-btn>
+
+                        <v-btn class="white--text" color="#91A366" @click="entrar()"> 
+                           <v-img src="../assets/google.png"
+                              alt="Ícone" width="24" height="24" cover>
+                           </v-img>
+                              Entrar
+                           </v-btn>
                      </v-card-actions>
                      <v-card-actions>
-                        
-                        <v-btn elevation="5" class="white--text" color="#91A366" @click="entrarGoogle()">Entrar com google</v-btn>
+
+                        <v-btn elevation="5" class="white--text" color="#91A366" @click="entrarGoogle()">Entrar com
+                           google</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -66,7 +67,7 @@ export default {
       senha: "",
       exibirAvisoLogin: false,
       nomeUsuario: '',
-      
+
    }),
 
    created() {
@@ -93,7 +94,7 @@ export default {
             .then((result) => {
                console.log('Resposta da Cloud Function para buscar dados:', result.data.message)
 
-               return result.data.nome, result.data.sobrenome ;
+               return result.data.nome, result.data.sobrenome;
 
             })
             .catch(error => {
@@ -106,7 +107,7 @@ export default {
 
             console.log("Usuario: ", userCredential.user);
             console.log("Id: ", (await userCredential).user.uid);
-            
+
 
             const idUsuario = (await userCredential).user.uid;
 
@@ -140,25 +141,25 @@ export default {
 
       //Entrar via Google
 
-entrarGoogle(){
-signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-      const usuario = result.user;
-      const nomeSobrenome = result.user.displayName;
-      
-      console.log("Usuário autenticado:", usuario.displayName, usuario.uid);
-      this.$store.commit('updateUserInfo', nomeSobrenome);
-      router.push("/home");
-    
-    
-  }).catch((error) => {
-    // Handle Errors here.
-    
-    console.error("Erro ao autenticar com Google:", error.code, error.message);
-    
-  })
-},
+      entrarGoogle() {
+         signInWithPopup(auth, provider)
+            .then((result) => {
+               // This gives you a Google Access Token. You can use it to access the Google API.
+               const usuario = result.user;
+               const nomeSobrenome = result.user.displayName;
+
+               console.log("Usuário autenticado:", usuario.displayName, usuario.uid);
+               this.$store.commit('updateUserInfo', nomeSobrenome);
+               router.push("/home");
+
+
+            }).catch((error) => {
+               // Handle Errors here.
+
+               console.error("Erro ao autenticar com Google:", error.code, error.message);
+
+            })
+      },
 
       verificarAutenticacao() {
          onAuthStateChanged(auth, (user) => {
