@@ -30,17 +30,23 @@
                      </v-card-text>
                      <v-card-actions>
 
-                        <v-btn class="white--text" color="#91A366" @click="entrar()"> 
-                           <v-img src="../assets/google.png"
-                              alt="Ícone" width="24" height="24" cover>
-                           </v-img>
+                        <v-btn class="white--text" color="#91A366" block @click="entrar()"> 
+                          
                               Entrar
                            </v-btn>
                      </v-card-actions>
                      <v-card-actions>
 
-                        <v-btn elevation="5" class="white--text" color="#91A366" @click="entrarGoogle()">Entrar com
-                           google</v-btn>
+                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366" @click="entrarGoogle()">  
+                           <img 
+                           class="mr-2 " 
+                           src="../assets/google.png"
+                           alt="Google" 
+                           width="24" 
+                           height="24" >
+                        <img/>
+                           Entrar com google
+                        </v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -176,4 +182,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.inline-img {
+   display: inline-flex !important;
+  /* ou inline-flex, se precisar que o conteúdo interno (ex. slot) seja flex */
+}
+</style>
