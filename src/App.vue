@@ -53,7 +53,7 @@
         </v-list>
 
         <v-list>
-          <v-list-item v-if="!usuarioAutenticado">
+          <v-list-item v-if="usuarioAutenticado=='Convidado'">
             <v-list-item class="px-2">
               <v-list-item-avatar>
                 <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
@@ -105,20 +105,21 @@
               
               <v-list-item  class="mt-auto">
                 <v-btn class="botao-sair" @click="sair()">
+                  <v-list-item-title class="font-weight-bold"> Sair</v-list-item-title>
                   <v-list-item-icon>
 
-                    <v-icon>mdi-logout</v-icon>
+                    <v-icon>mdi-logout</v-icon> 
 
                   </v-list-item-icon>
 
-                  <v-list-item-title class="font-weight-bold">Sair</v-list-item-title>
+                  
                 </v-btn>
               </v-list-item>
             </div>
           
 
           <v-list-item>
-            <div v-if="!usuarioAutenticado" class="pa-1">
+            <div v-if="usuarioAutenticado=='Convidado'" class="pa-1">
               <v-list-item @click="entrar()">
                 <v-btn block>
                   <v-list-item-icon>
@@ -163,7 +164,7 @@ export default {
     //Serve também para verificar se existe um usuário autenticado ou não, usando como variável usuarioAutenticado
     usuarioAutenticado() {
       console.log("Usuário autenticado APPPP.VUE: ", this.$store.getters.dadosUsuarioAutenticado)
-      return this.$store.getters.dadosUsuarioAutenticado;
+      return this.$store.getters.getCurrentUserName;
     }
   },
   //setup(){
@@ -241,13 +242,13 @@ export default {
       signOut(auth)
         .then(() => {
           // Signed in
-          router.push("/entrar");
           this.$store.commit('toggleAppBar', false);
-          console.log("Você saiu! :)");
+          this.$store.commit('setMensagemLogout', 'Você saiu com sucesso! :) ')
+          router.push("/entrar");
 
 
         }).catch((error) => {
-          console.log("Código de erro: ", error.code);
+          console.log("Erro de logout: ", error.code);
         });
     },
 

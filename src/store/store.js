@@ -15,6 +15,7 @@ const store = new Vuex.Store({
         currentUserFullData: "Sem dados",
         //Dados de agradecimento
         agradecimentos: {},
+        mensagemLogout: null,
       },
       mutations: {
         toggleAppBar(state, value) {
@@ -48,6 +49,9 @@ const store = new Vuex.Store({
               delete state.agradecimentos[publicacaoId];
           }
         },
+        setMensagemLogout(state, mensagem){
+          state.mensagemLogout = mensagem
+        }
       },
       getters: {
         showAppBar(state) {
@@ -66,6 +70,9 @@ const store = new Vuex.Store({
             currentUserEmail: state.currentUserEMail,
             currentUserId: state.currentUserId
           }
+        },
+        getCurrentUserName (state) {
+          return {currentUserName: state.currentUserName}
         }
       },
       actions: {

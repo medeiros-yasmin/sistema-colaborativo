@@ -1,12 +1,23 @@
 <template>
    <v-app id="inspire" style="background-color:#391D41;">
       <v-main>
-         <v-container fluid fill-height>
-            <v-layout align-center justify-center>
-               <v-alert class="center-align" :value="exibirAvisoLogin" style="margin-top:18px; align-items: center"
-                  color="blue" dark border="top" icon="mdi-home" transition="scroll-y-transition">
+
+
+         <v-layout row justify-center>
+            <v-flex xs12 sm8 md6>
+               <v-alert class="mb-3" :value="exibirAvisoLogin" color="blue" dark border="top" icon="mdi-home"
+                  transition="scroll-y-transition">
                   Bem vindo(a), {{ nomeUsuario }}.
                </v-alert>
+
+               <v-alert class="mb-3" v-if="mensagemLogout" type="sucess" dismissible @input="fecharAlertaLogout">
+                  {{ mensagemLogout }}
+               </v-alert>
+            </v-flex>
+         </v-layout>
+
+         <v-container fluid fill-height>
+            <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
                   <v-card shaped color="#E6E7E9" class="elevation-18">
                      <v-toolbar dark color="#7B447B">
@@ -30,21 +41,17 @@
                      </v-card-text>
                      <v-card-actions>
 
-                        <v-btn class="white--text" color="#91A366" block @click="entrar()"> 
-                          
-                              Entrar
-                           </v-btn>
+                        <v-btn class="white--text" color="#91A366" block @click="entrar()">
+
+                           Entrar
+                        </v-btn>
                      </v-card-actions>
                      <v-card-actions>
 
-                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366" @click="entrarGoogle()">  
-                           <img 
-                           class="mr-2 " 
-                           src="../assets/google.png"
-                           alt="Google" 
-                           width="24" 
-                           height="24" >
-                        <img/>
+                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366"
+                           @click="entrarGoogle()">
+                           <img class="mr-2 " src="../assets/google.png" alt="Google" width="24" height="24">
+                           <img />
                            Entrar com google
                         </v-btn>
                      </v-card-actions>
@@ -78,6 +85,17 @@ export default {
 
    created() {
       this.$store.commit('toggleAppBar', false);
+   },
+   computed: {
+      mensagemLogout() {
+         return this.$store.state.mensagemLogout
+      }
+   },
+
+   mounted() {
+      setTimeout(() => {
+         this.$store.commit('setMensagemLogout', null)
+      }, 5000)
    },
 
    watch: {
@@ -145,6 +163,10 @@ export default {
             });
       },
 
+      fecharAlertaLogout() {
+         this.$store.commit('setMensagemLogout', null)
+      },
+
       //Entrar via Google
 
       entrarGoogle() {
@@ -185,6 +207,6 @@ export default {
 <style>
 .inline-img {
    display: inline-flex !important;
-  /* ou inline-flex, se precisar que o conteúdo interno (ex. slot) seja flex */
+   /* ou inline-flex, se precisar que o conteúdo interno (ex. slot) seja flex */
 }
 </style>
