@@ -95,6 +95,22 @@
                                           > 
                                           <v-icon class="material-symbols-rounded">mdi-check</v-icon>  Imagem </v-btn>  
                                         </p>
+
+                                        
+
+                                        <p> Imagem do drawer: 
+                                          <v-btn
+                                          class="text-center" 
+                                          href="https://webaim.org/resources/contrastchecker/"
+                                          target="_blank"
+                                          rel="noopener"
+                                          prepend-icon="mdi-check"
+                                          variant="text"
+                                          dark
+                                          outlined
+                                          > 
+                                          <v-icon class="material-symbols-rounded">mdi-check</v-icon>  Imagem </v-btn>  
+                                        </p>
                                     </v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
