@@ -89,7 +89,7 @@
                                         <v-card-actions>
                                             <BotaoAgradecer :publicacao-id="podcast.id"
                                                 :ja-agradeceu="agradecimentosUsuario.includes(podcast.id)"
-                                                :total-agradecimentos="podcast.agradecimentos"
+                                                :total-agradecimentos="totaisAgradecimentos[podcast.id] || 0"
                                                 @atualizar-agradecimento="atualizarAgradecimento" />
                                             <span class="mr-2; ml-5">·</span>
                                             <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
@@ -148,20 +148,30 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'SiteView',
-    
+
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
 
-        const publicacaoRef = doc(db, "sites", this.publicacaoRef);
-        this.realizarLimpeza = onSnapshot(publicacaoRef, (doc) => {
-            const data = doc.data();
-            this.totalAgradecimentos = data.agradecimentos;
+        
+
+
+        //Carrega os agradecimentos
+        const ref = collection(db, 'agradecimentos')
+        this.unsubscribeAgradecimentos = onSnapshot(ref, snapshot => {
+            const temp = {}
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data()
+                // docSnap.id é o mesmo ID da publicação?
+                temp[docSnap.id] = data.totalAgradecimentos
+            })
+            // Atualiza local: reatividade do Vue
+            this.totaisAgradecimentos = temp
         })
 
     },
     beforeUnmount() {
         // Remove o listener para evitar vazamento de memória
-        this.realizarLimpeza();
+        if (this.unsubscribeAgradecimentos) this.unsubscribeAgradecimentos()
     },
     components: {
         BotaoAgradecer,
@@ -182,7 +192,8 @@ export default {
         loadingAdmin: false,
         publicacaoSelecionada: null,
         colRef: collection(db, 'sites'),
-        totalAgradecimentos: 0,
+        totalAgradecimentos: [],
+        totaisAgradecimentos: [],
         items: [
             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
@@ -223,6 +234,11 @@ export default {
 
                 const querySnapshot = await getDocs(q);
                 this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
+                this.agradecimentosf = querySnapshot.docs.map((doc) => {
+                    const data = doc.data();
+                    this.totalAgradecimentos = data.totalAgradecimentos;
+                    console.log("agradecimentosf :::::: ", data);
+                });
 
             } catch (error) {
                 console.error("Erro nos agradecimentos: ", error);
@@ -237,24 +253,20 @@ export default {
                 if (jaAgradeceu) {
                     await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
                         usuarios: arrayRemove(idUsuario),
-                        agradecimentos: increment(-1)
+                        totalAgradecimentos: increment(-1)
                     });
                     this.agradecimentosUsuario = this.agradecimentosUsuario.filter(
                         (id) => id !== publicacaoId
                     );
-                    await updateDoc(doc(db, 'sites', publicacaoId), {
-                        agradecimentos: increment(-1)
-                    })
+
 
                 } else {
                     await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
                         usuarios: arrayUnion(idUsuario),
-                        agradecimentos: increment(1)
+                        totalAgradecimentos: increment(1)
                     });
                     this.agradecimentosUsuario.push(publicacaoId);
-                    await updateDoc(doc(db, 'sites', publicacaoId), {
-                        agradecimentos: increment(1)
-                    })
+
 
 
                 }
