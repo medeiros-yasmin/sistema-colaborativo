@@ -17,7 +17,7 @@
         <v-tabs class="text-center" align-with-title>
           <v-tab to="/home">Início</v-tab>
           <v-tab to="/artigo">Artigos</v-tab>
-          <v-tab to="/auxilio">Auxílios</v-tab>
+          <v-tab to="/auxilio">Apoio</v-tab>
           <v-tab to="/podcast">Podcasts</v-tab>
           <v-tab to="/site">Sites</v-tab>
           <v-tab to="/video">Vídeos</v-tab>
@@ -137,7 +137,7 @@
       </v-list>
     </v-navigation-drawer>
 
-
+    <RodapeComponent/>
 
 
   </v-app>
@@ -153,6 +153,7 @@ import { signOut, onAuthStateChanged } from 'firebase/auth'
 import { getFunctions } from "firebase/functions";
 import router from './router';
 import { httpsCallable } from 'firebase/functions';
+import RodapeComponent from '@/components/RodapeComponent.vue';
 
 export default {
   name: 'App',
@@ -184,7 +185,7 @@ export default {
   },
 
   components: {
-
+        RodapeComponent,
   },
 
   data: () => ({
