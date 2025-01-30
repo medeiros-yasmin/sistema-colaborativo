@@ -34,26 +34,26 @@
       <v-list nav dense>
 
         <v-list>
-          <v-list-item v-if="usuarioAutenticado">
-            <v-list-item class="px-2">
+          <v-list-item v-if="usuarioAutenticado !=='Convidado'">
+            <v-list-item class="px-1">
               <v-list-item-avatar height="50px" width="50">
-                <v-img :src="`${currentUser.photoURL}`" alt="Sem imagem" ></v-img>
+                <v-img :src="currentUser.photoURL ? currentUser.photoURL : `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || 'Convidado')}&background=random&color=fff&size=128`" ></v-img>
               </v-list-item-avatar>
             </v-list-item>
 
             <v-list-item link>
               <v-list-item-content>
                 <v-list-item-title dark class="unica-linha text-h6 white--text">
-                  {{ currentUser.displayName }}
+                  {{ currentUser && currentUser.displayName ? currentUser.displayName : 'Convidado'}}
                 </v-list-item-title>
-                <v-list-item-subtitle class="unica-linha white--text">{{ currentUser.email }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="unica-linha white--text">{{ currentUser.email ? currentUser.email : 'Sem e-mail cadastrado' }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-item>
-        </v-list>
+        
 
-        <v-list>
-          <v-list-item v-if="usuarioAutenticado=='Convidado'">
+        
+          <v-list-item v-else>
             <v-list-item class="px-2">
               <v-list-item-avatar>
                 <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
@@ -63,7 +63,7 @@
             <v-list-item link>
               <v-list-item-content>
                 <v-list-item-title dark class="text-h6 white--text">
-                  Visitante
+                  Convidado
                 </v-list-item-title>
                 <v-list-item-subtitle class="white--text">Sem dados</v-list-item-subtitle>
               </v-list-item-content>
@@ -174,12 +174,13 @@ export default {
   },
 
   created() {
+    console.log("Usuário autenticado:", this.currentUser)
     onAuthStateChanged(this.$store.state.auth, (user) => {
       this.currentUser = { id: user.uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL};
-      console.log("Usuário autenticado APP: ", this.currentUser.id)
+      /* console.log("Usuário autenticado APP: ", this.currentUser.id)
       console.log("E-MAIL DO USUÁRIO: ", this.currentUser.email)
       console.log("Nome autenticado: ", this.currentUser.displayName)
-      console.log("Imagem: ", this.currentUser.pth)
+      console.log("Imagem: ", this.currentUser.photoURL) */
     });
 
   },

@@ -9,7 +9,7 @@
                         transition="scroll-y-transition">
                         Publicação criada com sucesso.
                     </v-alert>
-                    <v-alert :value="alertaErro" dismissible @input="dismissAlert" type="error">
+                    <v-alert :value="alertaErro" dismissible @input="dismissAlert" >
                         Preencha os campos adequadamente para criar uma publicação
                     </v-alert>
                     <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text" class="white--text"

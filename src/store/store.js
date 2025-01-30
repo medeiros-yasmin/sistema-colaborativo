@@ -13,6 +13,7 @@ const store = new Vuex.Store({
         currentUserEMail: "Sem cadastro",
         currentUserId: "Sem identificador",
         currentUserFullData: "Sem dados",
+        currentPhotoUrl: null,
         //Dados de agradecimento
         agradecimentos: {},
         mensagemLogout: null,
@@ -68,7 +69,8 @@ const store = new Vuex.Store({
           return { 
             currentUserName: state.currentUserName,
             currentUserEmail: state.currentUserEMail,
-            currentUserId: state.currentUserId
+            currentUserId: state.currentUserId,
+            currentPhotoUrl: state.currentPhotoUrl
           }
         },
         getCurrentUserName (state) {

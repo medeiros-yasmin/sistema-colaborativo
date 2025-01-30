@@ -49,6 +49,7 @@
 
                 </v-card>
                 <h1 class="white--text text-center text-uppercase mt-10 mb-5"> Selecione a categoria desejada</h1>
+                <v-divider dark class="mx-4 my-4"></v-divider>
                 <v-row>
                     
                     <v-col v-for="item in items" :key="item.id" cols="4">
@@ -73,17 +74,9 @@
                                     </v-avatar>
                                 </div>
                             </v-card>
-
                         </router-link>
-
                     </v-col>
-
-
                 </v-row>
-
-            
-
-
             </v-container>
         </v-main>
 
