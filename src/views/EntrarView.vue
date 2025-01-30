@@ -10,7 +10,7 @@
                   Bem vindo(a), {{ nomeUsuario }}.
                </v-alert>
 
-               <v-alert class="mb-3" v-if="mensagemLogout" type="sucess" dismissible @input="fecharAlertaLogout">
+               <v-alert class="mb-3" v-if="mensagemLogout"  dismissible @input="fecharAlertaLogout">
                   {{ mensagemLogout }}
                </v-alert>
             </v-flex>
