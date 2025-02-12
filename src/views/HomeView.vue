@@ -68,9 +68,9 @@
                                             v-text="item.title"></v-card-text>
                                     </div>
                                     <v-avatar rounded align="center" class="mt-16 mr-5 " size="170">
-                                        <v-icon size="150px" class="material-symbols-rounded" color="#E6E7E9">
-                                            {{ item.icone }}
-                                        </v-icon>
+                                        <v-img size="150px" :src="item.icone" color="#E6E7E9">
+                                            
+                                        </v-img>
                                     </v-avatar>
                                 </div>
                             </v-card>
@@ -92,12 +92,12 @@ export default {
     data: () => ({
 
         items: [
-            { id: 0, title: 'Artigos', subtitle: 'Subtítulo de artigo', rota: '/artigo', elevation: 2, icone: 'article' },
-            { id: 1, title: 'Apoio', subtitle: 'Subtítulo de apoio', rota: '/auxilio', elevation: 3, icone: 'diversity_3' },
-            { id: 2, title: 'Podcasts', subtitle: 'Subtítulo de podcasts', rota: '/podcast', elevation: 4, icone: 'podcasts' },
-            { id: 3, title: 'Sites', subtitle: 'Subtítulo de sites', rota: '/site', elevation: 5, icone: 'captive_portal' },
-            { id: 4, title: 'Vídeos', subtitle: 'Subtítulo de vídeos', rota: '/video', elevation: 6, icone: 'movie' },
-            { id: 5, title: 'Livros e Revistas', subtitle: 'Subtítulo de livros e artigos', rota: '/livro', elevation: 7, icone: 'menu_book' },
+            { id: 0, title: 'Artigos', subtitle: 'Subtítulo de artigo', rota: '/artigo', elevation: 2, icone: require("../assets/document.png") },
+            { id: 1, title: 'Apoio', subtitle: 'Subtítulo de apoio', rota: '/auxilio', elevation: 3, icone: require('../assets/like.png') },
+            { id: 2, title: 'Podcasts', subtitle: 'Subtítulo de podcasts', rota: '/podcast', elevation: 4, icone: require('../assets/podcast.png') },
+            { id: 3, title: 'Sites', subtitle: 'Subtítulo de sites', rota: '/site', elevation: 5, icone: require('../assets/vlog.png') },
+            { id: 4, title: 'Vídeos', subtitle: 'Subtítulo de vídeos', rota: '/video', elevation: 6, icone: require('../assets/video-camera.png') },
+            { id: 5, title: 'Livros e Revistas', subtitle: 'Subtítulo de livros e artigos', rota: '/livro', elevation: 7, icone: require('../assets/contact.png') },
         ],
 
     }),
