@@ -7,7 +7,7 @@
     <v-app-bar v-if="showAppBar" transition="slide-x-transition" color="#7B447B" hide-on-scroll accent-4 dark shaped app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="d-flex align-center" style="font-size: 50px;">N <v-img style="margin-left: 8px; margin-right: 8px;" width="60" height="60" src="@/assets/walnut.png"></v-img> Z   </v-toolbar-title>
+      <v-toolbar-title class="d-flex align-center" style="font-size: 50px;">N <v-img style="margin-left: 6px; margin-right: 6px;" width="60" height="60" src="@/assets/walnut.png"></v-img> Z   </v-toolbar-title>
 
       <v-text-field clearable prepend-inner-icon="mdi-magnify" class="topright mx-4" flat hide-details label="Pesquisar"
         solo-inverted></v-text-field>

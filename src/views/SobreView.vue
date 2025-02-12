@@ -46,7 +46,7 @@
                                 </div>
 
                                 <v-avatar rounded align="center" class="mt-10 mr-5" size="250">
-                                    <v-img src="../assets/logo-noz.png"
+                                    <v-img src="../assets/flower.png"
                                         alt="Sem imagem"></v-img>
                                 </v-avatar>
                                 
