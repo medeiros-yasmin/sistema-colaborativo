@@ -21,7 +21,7 @@
 
 
             <v-container>
-                <v-alert class="center-align" :value="exibirAviso" style="margin-top:18px; align-items: center"
+                <v-alert class="center-align" :value="exibirAvisoPCriarPubli" style="margin-top:18px; align-items: center"
                     dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home"
                     transition="scroll-y-transition">
                     Apenas usuários autenticados podem criar publicações.
@@ -121,7 +121,7 @@
 
                 <v-card-text style="height: 100px;">
                     <v-fab-transition>
-                        <v-btn @click="verificarSeAutenticado()" color="#889B59" dark bottom right fab fixed
+                        <v-btn @click="verificarSeAutenticadoPCriar()" color="#889B59" dark bottom right fab fixed
                             :to="{ name: 'criarPublicacao' }">
                             <v-icon>mdi-plus</v-icon>
                         </v-btn>
@@ -142,6 +142,7 @@ import { db, auth } from '../firebase/firebase-config'
 import { collection, onSnapshot, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
+
 //import { functions } from '../../functions/index'
 //updateDoc
 
@@ -151,9 +152,6 @@ export default {
 
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
-
-        
-
 
         //Carrega os agradecimentos
         const ref = collection(db, 'agradecimentos')
@@ -181,6 +179,7 @@ export default {
         valid: true,
         ultimoDocumento: null,
         exibirAviso: false,
+        exibirAvisoPCriarPubli: false,
         exibirAvisoAgradecimento: false,
         criarClicado: false,
         dialog: false,
@@ -214,8 +213,9 @@ export default {
 
     created() {
         this.$store.commit('toggleAppBar', true);
-        this.carregarAgradecimentos();
-
+        if(this.verificarSeAutenticado()){
+            this.carregarAgradecimentos();
+        }
 
     },
     computed: {
@@ -224,9 +224,9 @@ export default {
 
     methods: {
         async carregarAgradecimentos() {
+            
             try {
 
-                this.verificarSeAutenticado();
                 const q = query(
                     collection(db, 'agradecimentos'),
                     where('usuarios', 'array-contains', auth.currentUser.uid)
@@ -237,9 +237,7 @@ export default {
                 this.agradecimentosf = querySnapshot.docs.map((doc) => {
                     const data = doc.data();
                     this.totalAgradecimentos = data.totalAgradecimentos;
-                    console.log("agradecimentosf :::::: ", data);
                 });
-
             } catch (error) {
                 console.error("Erro nos agradecimentos: ", error);
             }
@@ -288,13 +286,25 @@ export default {
                 })
         },
         //Verifica se o usuário está autenticado ao selecionar o botão de criar publicação
-        verificarSeAutenticado() {
-            if (!this.getCurrentUser && this.criarClicado)
-                this.exibirAviso = true;
-            else
-                this.exibirAviso = false;
-
+        verificarSeAutenticadoPCriar() {
+            //Autenticado
+            if (!this.$store.getters.dadosUsuarioAutenticado.currentUserName == "Convidado" && this.criarClicado)
+                this.exibirAvisoPCriarPubli = false;
+            //Não autenticado
+            else{
+                
+                this.exibirAvisoPCriarPubli = true;
+            }
+            this.criarClicado = false
             this.fecharAvisoAutomaticamente();
+        },
+
+        verificarSeAutenticado() {
+            
+            if (this.$store.getters.dadosUsuarioAutenticado.currentUserName == "Convidado")
+                return false;
+            else
+                return true;
         },
 
         dismissAlert() {
@@ -353,7 +363,7 @@ export default {
                     resolve();
                 }, 5000);
             });
-            this.exibirAviso = false;
+            this.exibirAvisoPCriarPubli = false;
         },
 
         async fecharAvisoAgradecimento() {

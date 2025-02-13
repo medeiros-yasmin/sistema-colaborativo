@@ -80,7 +80,6 @@ const store = new Vuex.Store({
       actions: {
         //Botão de agradecimento
         atualizarAgradecimento({ commit }, publicacaoId) {
-          // Aqui você pode integrar com o Firebase ou outra API
           commit('toggleAgradecimento', publicacaoId);
       },
         

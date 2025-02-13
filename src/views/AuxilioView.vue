@@ -53,7 +53,7 @@
 
             <v-card-text style="height: 100px;">
                 <v-fab-transition>
-                    <v-btn color="#f5a751" dark bottom right fab fixed @click="dialog = !dialog">
+                    <v-btn color="#889B59" dark bottom right fab fixed @click="dialog = !dialog">
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
                 </v-fab-transition>

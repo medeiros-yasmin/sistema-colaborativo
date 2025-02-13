@@ -105,7 +105,7 @@ const routes = [
     path: '/site',
     name: 'site',
     component: SiteView,
-    props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+    props: route => ({id: route.params.id}),
   },
 
   {
@@ -141,12 +141,12 @@ const routes = [
   },
 
   {
-    path: '/publicacao/:id',
+    path: '/publicacao/:tipoPublicacao/:id',
     name: 'publicacao',
     component: Publicacao,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
     meta: {
-      requiresAuth: true
+      requiresAuth: false
     }
   }
 ]
