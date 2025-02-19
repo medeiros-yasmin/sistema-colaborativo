@@ -17,8 +17,11 @@
          </v-layout>
 
          <v-container fluid fill-height>
+            
             <v-layout align-center justify-center>
+               
                <v-flex xs12 sm8 md4>
+                  <span class="d-flex align-center" style="font-size: 50px;color: antiquewhite;">N <v-img style="margin-left: 6px; margin-right: 6px;" width="60" height="60" src="@/assets/walnut.png"></v-img> Z   </span>   
                   <v-card shaped color="#E6E7E9" class="elevation-18">
                      <v-toolbar dark color="#7B447B">
                         <v-toolbar-title>Autenticação</v-toolbar-title>

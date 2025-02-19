@@ -27,6 +27,7 @@ const routes = [
     name: 'home',
     component: HomeView,
     props: true,
+    meta: { title: "Página inicial" }
   },
 
   {
@@ -46,6 +47,7 @@ const routes = [
     name: 'entrar',
     component: EntrarView,
     props: true,
+    meta: { title: "Página de Login" }
   },
 
   {
@@ -113,6 +115,7 @@ const routes = [
     name: 'minhas',
     component: MinhasPublisView,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+    meta: { title: "Minhas publicações" }
   },
 
   {
@@ -164,6 +167,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+});
+
+router.afterEach((to) => {
+  document.title = to.meta.title || "NOZ";
 });
 
 export default router

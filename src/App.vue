@@ -54,8 +54,8 @@
 
         
           <v-list-item v-else>
-            <v-list-item class="px-2">
-              <v-list-item-avatar>
+            <v-list-item class="px-1">
+              <v-list-item-avatar height="50px" width="50">
                 <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
               </v-list-item-avatar>
             </v-list-item>
@@ -65,13 +65,13 @@
                 <v-list-item-title dark class="text-h6 white--text">
                   Convidado
                 </v-list-item-title>
-                <v-list-item-subtitle class="white--text">Sem dados</v-list-item-subtitle>
+                <v-list-item-subtitle class="white--text">Sem e-mail cadastrado</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-item>
         </v-list>
 
-        <v-divider></v-divider>
+        <v-divider :thickness="2" class="border-opacity-50"></v-divider>
 
         <v-list-item-group v-model="group" active-class="cyan--text text--accent-4">
           <router-link to="/home" class="white--text no-underline">
@@ -100,9 +100,9 @@
           </v-list-item>
         </router-link>
         
-          
-            <div v-if="usuarioAutenticado" class="pt-4" >
-              
+        
+            <div mt-5 v-if="usuarioAutenticado !='Convidado'" class="pt-4" >
+              <v-divider :thickness="2" class="border-opacity-50"></v-divider>
               <v-list-item  class="mt-auto">
                 <v-btn class="botao-sair" @click="sair()">
                   <v-list-item-title class="font-weight-bold"> Sair</v-list-item-title>
@@ -118,21 +118,19 @@
             </div>
           
 
-          <v-list-item>
-            <div v-if="usuarioAutenticado=='Convidado'" class="pa-1">
+          
+            <div mt-5 v-else class="pa-1">
+              <v-divider :thickness="2" class="border-opacity-50"></v-divider>
               <v-list-item @click="entrar()">
-                <v-btn block>
+                <v-btn class="botao-entrar"  block>
+                  <v-list-item-title class="font-weight-bold">Fazer login</v-list-item-title>
                   <v-list-item-icon>
-
                     <v-icon>mdi-login</v-icon>
-
                   </v-list-item-icon>
-
-                  <v-list-item-title>Fazer login</v-list-item-title>
                 </v-btn>
               </v-list-item>
             </div>
-          </v-list-item>
+          
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -164,8 +162,8 @@ export default {
     },
     //Serve também para verificar se existe um usuário autenticado ou não, usando como variável usuarioAutenticado
     usuarioAutenticado() {
-      console.log("Usuário autenticado APPPP.VUE: ", this.$store.getters.dadosUsuarioAutenticado)
-      return this.$store.getters.getCurrentUserName;
+      //console.log("Usuário autenticado APPPP.VUE: ", this.$store.getters.dadosUsuarioAutenticado.currentUserName)
+      return this.$store.getters.dadosUsuarioAutenticado.currentUserName;
     }
   },
   //setup(){
@@ -174,13 +172,9 @@ export default {
   },
 
   created() {
-    console.log("Usuário autenticado:", this.currentUser)
+    //console.log("Usuário autenticado:", this.currentUser)
     onAuthStateChanged(this.$store.state.auth, (user) => {
       this.currentUser = { id: user.uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL};
-      /* console.log("Usuário autenticado APP: ", this.currentUser.id)
-      console.log("E-MAIL DO USUÁRIO: ", this.currentUser.email)
-      console.log("Nome autenticado: ", this.currentUser.displayName)
-      console.log("Imagem: ", this.currentUser.photoURL) */
     });
 
   },
@@ -306,7 +300,14 @@ export default {
 
 .botao-sair{
   font-weight:bold;
-  margin-top: auto; 
+  margin-top: 20px; 
+  position: relative;
+  width: 100%; 
+}
+
+.botao-entrar{
+  font-weight:bold;
+  margin-top: 20px; 
   position: relative;
   width: 100%; 
 }
