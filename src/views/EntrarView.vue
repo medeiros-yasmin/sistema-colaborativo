@@ -10,18 +10,20 @@
                   Bem vindo(a), {{ nomeUsuario }}.
                </v-alert>
 
-               <v-alert class="mb-3" v-if="mensagemLogout"  dismissible @input="fecharAlertaLogout">
+               <v-alert class="mb-3" v-if="mensagemLogout" dismissible @input="fecharAlertaLogout">
                   {{ mensagemLogout }}
                </v-alert>
             </v-flex>
          </v-layout>
 
          <v-container fluid fill-height>
-            
+
             <v-layout align-center justify-center>
-               
+
                <v-flex xs12 sm8 md4>
-                  <span class="d-flex align-center" style="font-size: 50px;color: antiquewhite;">N <v-img style="margin-left: 6px; margin-right: 6px;" width="60" height="60" src="@/assets/walnut.png"></v-img> Z   </span>   
+                  <span class="d-flex align-center" style="font-size: 50px;color: antiquewhite;">N <v-img
+                        style="margin-left: 6px; margin-right: 6px;" width="60" height="60"
+                        src="@/assets/walnut.png"></v-img> Z </span>
                   <v-card shaped color="#E6E7E9" class="elevation-18">
                      <v-toolbar dark color="#7B447B">
                         <v-toolbar-title>Autenticação</v-toolbar-title>
@@ -43,19 +45,24 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-
                         <v-btn class="white--text" color="#91A366" block @click="entrar()">
-
                            Entrar
                         </v-btn>
                      </v-card-actions>
                      <v-card-actions>
-
                         <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366"
                            @click="entrarGoogle()">
                            <img class="mr-2 " src="../assets/google.png" alt="Google" width="24" height="24">
                            <img />
                            Entrar com google
+                        </v-btn>
+                     </v-card-actions>
+                     <v-card-actions>
+                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366"
+                           @click="entrarConvidado()">
+                           <img class="mr-2 " src="../assets/google.png" alt="Google" width="24" height="24">
+                           <img />
+                           Entrar como convidado
                         </v-btn>
                      </v-card-actions>
                   </v-card>
@@ -140,7 +147,7 @@ export default {
 
             const dadosUsuario = await this.carregarDadosUsuario(idUsuario);
 
-            console.log("DadosUsuario: ", dadosUsuario);
+            console.log("DadosUsuariooooooooooo: ", dadosUsuario);
 
             this.$store.commit('updateUserInfo', dadosUsuario);
             this.nomeUsuario = this.dadosUsuarioAutenticado;
@@ -177,19 +184,23 @@ export default {
             .then((result) => {
                // This gives you a Google Access Token. You can use it to access the Google API.
                const usuario = result.user;
-               const nomeSobrenome = result.user.displayName;
+               //const nomeSobrenome = result.user.displayName;
 
                console.log("Usuário autenticado:", usuario.displayName, usuario.uid);
-               this.$store.commit('updateUserInfo', nomeSobrenome);
+               this.$store.commit('updateUserInfo', usuario);
                router.push("/home");
 
 
             }).catch((error) => {
-               // Handle Errors here.
+               // Gerenciamento de erros
 
                console.error("Erro ao autenticar com Google:", error.code, error.message);
 
             })
+      },
+
+      entrarConvidado(){
+         router.push("/home");
       },
 
       verificarAutenticacao() {

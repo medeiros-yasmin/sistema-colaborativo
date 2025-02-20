@@ -34,7 +34,7 @@
       <v-list nav dense>
 
         <v-list>
-          <v-list-item v-if="usuarioAutenticado !=='Convidado'">
+          <v-list-item v-if="usuarioAutenticado">
             <v-list-item class="px-1">
               <v-list-item-avatar height="50px" width="50">
                 <v-img :src="currentUser.photoURL ? currentUser.photoURL : `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || 'Convidado')}&background=random&color=fff&size=128`" ></v-img>
@@ -101,7 +101,7 @@
         </router-link>
         
         
-            <div mt-5 v-if="usuarioAutenticado !='Convidado'" class="pt-4" >
+            <div v-if="usuarioAutenticado" class="mt-5" >
               <v-divider :thickness="2" class="border-opacity-50"></v-divider>
               <v-list-item  class="mt-auto">
                 <v-btn class="botao-sair" @click="sair()">
@@ -119,7 +119,7 @@
           
 
           
-            <div mt-5 v-else class="pa-1">
+            <div  v-else class="pa-1 mt-5">
               <v-divider :thickness="2" class="border-opacity-50"></v-divider>
               <v-list-item @click="entrar()">
                 <v-btn class="botao-entrar"  block>
@@ -162,8 +162,8 @@ export default {
     },
     //Serve também para verificar se existe um usuário autenticado ou não, usando como variável usuarioAutenticado
     usuarioAutenticado() {
-      //console.log("Usuário autenticado APPPP.VUE: ", this.$store.getters.dadosUsuarioAutenticado.currentUserName)
-      return this.$store.getters.dadosUsuarioAutenticado.currentUserName;
+      console.log("Usuário autenticado APPV.VUE: ", this.$store.getters.dadosUsuarioAutenticado.currentUserName)
+      return auth.currentUser;
     }
   },
   //setup(){
@@ -249,7 +249,7 @@ export default {
     },
 
     entrar() {
-      router.push("/home")
+      router.push("/entrar")
     },
 
      verificarAutenticacao(){

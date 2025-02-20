@@ -28,7 +28,7 @@ const store = new Vuex.Store({
         toggleUserName(state, value){
           state.currentUserName = value;
         },
-        UpdateUserInfo(state, value){
+        updateUserInfo(state, value){
           state.currentUserEMail = value.currentUserEMail || state.currentUserEMail;
           state.currentUserName = value.currentUserName || state.currentUserName;
         },
