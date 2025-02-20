@@ -129,21 +129,6 @@
 
                     </v-col>
                 </v-row>
-
-
-
-
-
-
-                <v-card-text style="height: 100px;">
-                    <v-fab-transition>
-                        <v-btn @click="verificarSeAutenticado()" color="#889B59" dark bottom right fab fixed
-                            :to="{ name: 'criarPublicacao' }">
-                            <v-icon>mdi-plus</v-icon>
-                        </v-btn>
-                    </v-fab-transition>
-                </v-card-text>
-
             </v-container>
 
         </v-main>
@@ -151,8 +136,6 @@
 </template>
 
 <script>
-import { getDoc, doc } from 'firebase/firestore'
-import { db } from '../firebase/firebase-config'
 
 export default {
     name: 'SobreView',
@@ -161,39 +144,10 @@ export default {
         this.$store.commit('toggleAppBar', true);
     },
 
-    mounted() {
-        //const q = query(collection(db, "publicacoes"), where("autorPubli", "==", "ebcwRnUHmWRRGklKUAhsBZhlU7f2"));
-        this.publicacaoId = this.$route.params.id
-        console.log("Do router: ", this.publicacaoId)
-        this.docRef = doc(db, "publicacoes", this.publicacaoId)
-        this.recuperarPublicacaoSelecionada()
-        console.log("Chegou22")
-
-    },
-    methods: {
-        recuperarPublicacaoSelecionada() {
-            getDoc(this.docRef).then((doc) => {
-                console.log("Chegou2")
-                console.log(doc.data(), doc.id)
-                this.publicacaoSelecionada = (doc.data())
-                console.log("publicacaoSelecionada: ", this.publicacaoSelecionada)
-            })
-        }
-
-    },
 
     data: () => ({
-        podcast: null,
-        publicacaoId: null,
-        publicacaoSelecionada: null,
+    
         docRef: null,
-        items: [
-            { title: 'Editar', to: { name: 'editarPublicacao' } },
-            { title: 'Excluir' },
-            { title: 'Publicação duplicada' },
-            { title: 'Não é uma publicação' },
-            { title: 'Cancelar' },
-        ],
 
     }),
 }

@@ -1,7 +1,7 @@
 <template>
     <v-app style="background-color:#391D41;">
         <v-main>
-            <v-container fluid class="d-flex justify-center align-center central-container">
+            <v-container style="margin-top:18px;" fluid class="d-flex justify-center align-center central-container">
                 <v-row align="center" justify="center">
                     <v-col cols="8" sm="6" md="4">
                         <v-form ref="form" v-model="valid" lazy-validation>
@@ -20,16 +20,16 @@
             </v-container>
 
 
-            <v-container>
-                <v-alert class="center-align" :value="exibirAvisoPCriarPubli" style="margin-top:18px; align-items: center"
+            <v-container style="margin-top:80px;">
+                <v-alert class="center-align" :value="exibirAvisoPCriarPubli"  align-items: center
                     dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home"
                     transition="scroll-y-transition">
                     Apenas usuários autenticados podem criar publicações.
                 </v-alert>
-                <v-alert class="center-align" :value="exibirAvisoAgradecimento"
+                <v-alert class="center-align" :value="exibirAvisoAgradNAutenticado"
                     style="margin-top:18px; align-items: center" dismissible @input="dismissAlert" theme="dark"
                     color="#C51162" dark border="top" icon="mdi-alert-circle" transition="scroll-y-transition">
-                    Você pode agradecer somente uma vez.
+                    Apenas usários autenticados podem agradecer.
                 </v-alert>
                 <div class="text-center">
                     <v-snackbar v-model="snackbarAgradecimento" color="primary" variant="tonal" timeout="5000">
@@ -180,7 +180,7 @@ export default {
         ultimoDocumento: null,
         exibirAviso: false,
         exibirAvisoPCriarPubli: false,
-        exibirAvisoAgradecimento: false,
+        exibirAvisoAgradNAutenticado: false,
         criarClicado: false,
         dialog: false,
         isLiked: false,
@@ -244,6 +244,11 @@ export default {
         },
 
         async atualizarAgradecimento(publicacaoId) {
+            const user = auth.currentUser;
+            if (!user){
+                this.exibirAvisoAgradNAutenticado = true;
+                this.fecharAvisoAgradNAutenticado()
+            }
             try {
                 const idUsuario = auth.currentUser.uid;
                 const jaAgradeceu = this.agradecimentosUsuario.includes(publicacaoId);
@@ -316,7 +321,7 @@ export default {
             const user = auth.currentUser;
 
             if (!user)
-                throw new Error('Somente usuários autenticados podem agradecer!');
+            this.exibirAvisoAgradNAutenticado = true;
 
             try {
                 const usuarioRef = doc(db, 'usuarios', user.uid);
@@ -333,8 +338,8 @@ export default {
 
                 // Verifica se o usuário já agradeceu esta publicação
                 if (usuarioData.agradeceuEm && usuarioData.agradeceuEm.includes(publicacaoId)) {
-                    this.exibirAvisoAgradecimento = true;
-                    this.fecharAvisoAgradecimento()
+                    //this.exibirAvisoAgradecimento = true;
+                    //this.fecharAvisoAgradecimento()
                     throw new Error('O agradecimento é permitido somente uma vez!');
                 }
 
@@ -366,13 +371,13 @@ export default {
             this.exibirAvisoPCriarPubli = false;
         },
 
-        async fecharAvisoAgradecimento() {
+        async fecharAvisoAgradNAutenticado() {
             await new Promise((resolve) => {
                 setTimeout(() => {
                     resolve();
                 }, 5000);
             })
-            this.exibirAvisoAgradecimento = false;
+            this.exibirAvisoAgradNAutenticado = false;
         },
         recuperarDocumentos(colRef) {
             getDocs(colRef)

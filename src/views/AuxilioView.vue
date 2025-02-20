@@ -1,11 +1,11 @@
 <template>
     <v-app style="background-color:#391D41;">
         <v-main>
-            <v-container>
+            <v-container style="margin-top:80px;">
                 <v-row>
                     <v-col v-for="auxilio in auxilios" :key="auxilio.id" cols="112">
 
-                        <v-card shaped style="margin-top:80px;" color="#5C3C6C" :elevation="auxilio - 1" class="mx-auto white--text"
+                        <v-card shaped style="margin-top:18px;" color="#5C3C6C" :elevation="auxilio - 1" class="mx-auto white--text"
                             height="330" width="1000">
                             <div class="d-flex flex-no-wrap justify-space-between">
                                 <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
