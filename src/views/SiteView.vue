@@ -21,8 +21,8 @@
 
 
             <v-container style="margin-top:80px;">
-                <v-alert class="center-align" :value="exibirAvisoPCriarPubli"  align-items: center
-                    dismissible @input="dismissAlert" color="pink" dark border="top" icon="mdi-home"
+                <v-alert class="center-align" :value="exibirAvisoPCriarPubli" align-items: center dismissible
+                    @input="dismissAlert" color="pink" dark border="top" icon="mdi-home"
                     transition="scroll-y-transition">
                     Apenas usuários autenticados podem criar publicações.
                 </v-alert>
@@ -81,10 +81,13 @@
                                                 Visualizar
                                             </v-btn>
 
-                                            <v-btn class="white--text" rounded color="cyan"
-                                                @click="deletarPublicacao(podcast.id)">
+                                            <v-btn v-if="ehProprietarioPubli[podcast.id]" class="white--text" rounded
+                                                color="cyan" @click="deletarPublicacao(podcast.id)">
                                                 Deletar
                                             </v-btn>
+
+
+
                                         </v-card-actions>
                                         <v-card-actions>
                                             <BotaoAgradecer :publicacao-id="podcast.id"
@@ -128,7 +131,28 @@
                     </v-fab-transition>
                 </v-card-text>
 
+
+
+
+
+
             </v-container>
+
+
+            <v-dialog v-model="dialogDeletar" width="auto">
+                <v-card dark max-width="400">
+                    <v-card-title class="headline">Confirmar exclusão</v-card-title>
+                    <v-card-text>
+                        Tem certeza que deseja deletar esta publicação?
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn @click="dialogDeletar = false">Cancelar</v-btn>
+                        <v-btn :loading="carregarDelecao" @click="confirmarDelecao">Ok</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+
         </v-main>
 
     </v-app>
@@ -139,7 +163,7 @@
 //import { getAuth } from 'firebase/auth';
 import BotaoAgradecer from '@/components/BotaoAgradecer.vue';
 import { db, auth } from '../firebase/firebase-config'
-import { collection, onSnapshot, getDocs, addDoc, deleteDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove } from 'firebase/firestore'
+import { collection, onSnapshot, getDocs, addDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove, deleteDoc } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
 
@@ -152,6 +176,7 @@ export default {
 
     mounted() {
         this.podcasts = this.recuperarDocumentos(this.colRef)
+
 
         //Carrega os agradecimentos
         const ref = collection(db, 'agradecimentos')
@@ -186,13 +211,13 @@ export default {
         isLiked: false,
         drawer: false,
         group: null,
-        podcasts: null,
+        podcasts: [],
         snackbarAgradecimento: false,
         loadingAdmin: false,
         publicacaoSelecionada: null,
         colRef: collection(db, 'sites'),
         totalAgradecimentos: [],
-        totaisAgradecimentos: [],
+        totaisAgradecimentos: {},
         items: [
             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
@@ -208,12 +233,16 @@ export default {
         ],
         publicacoes: [],
         agradecimentosUsuario: [],
+        dialogDeletar: false,
+        carregarDelecao: false,
+        ehProprietarioPubli: [],
+        unsubscribeAgradecimentos: null
 
     }),
 
     created() {
         this.$store.commit('toggleAppBar', true);
-        if(this.verificarSeAutenticado()){
+        if (this.verificarSeAutenticado()) {
             this.carregarAgradecimentos();
         }
 
@@ -222,39 +251,63 @@ export default {
         ...mapGetters(['getCurrentUser', 'getCurrentUserFullData']),
     },
 
+
     methods: {
         async carregarAgradecimentos() {
-            
-            try {
+        try {
+            // 1. Carrega os agradecimentos do usuário atual
+            const q = query(
+                collection(db, 'agradecimentos'),
+                where('usuarios', 'array-contains', auth.currentUser.uid)
+            );
 
-                const q = query(
-                    collection(db, 'agradecimentos'),
-                    where('usuarios', 'array-contains', auth.currentUser.uid)
-                );
+            const querySnapshot = await getDocs(q);
+            this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
 
-                const querySnapshot = await getDocs(q);
-                this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
-                this.agradecimentosf = querySnapshot.docs.map((doc) => {
-                    const data = doc.data();
-                    this.totalAgradecimentos = data.totalAgradecimentos;
-                });
-            } catch (error) {
-                console.error("Erro nos agradecimentos: ", error);
+            // 2. Configura o listener para atualizações em tempo real
+            const ref = collection(db, 'agradecimentos');
+
+            // Remove o listener anterior, se existir
+            if (this.unsubscribeAgradecimentos) {
+                this.unsubscribeAgradecimentos();
             }
-        },
+
+            // Cria um novo listener
+            this.unsubscribeAgradecimentos = onSnapshot(ref, snapshot => {
+                const temp = {};
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    temp[docSnap.id] = data.totalAgradecimentos; // Atualiza o total de agradecimentos
+                });
+                // Substitui o objeto para garantir reatividade
+                this.totaisAgradecimentos = { ...temp };
+                console.log("Totais de agradecimentos atualizados:", this.totaisAgradecimentos);
+            });
+
+        } catch (error) {
+            console.error("Erro nos agradecimentos: ", error);
+        }
+    },
 
         async atualizarAgradecimento(publicacaoId) {
             const user = auth.currentUser;
-            if (!user){
+            
+            if (!user) {
                 this.exibirAvisoAgradNAutenticado = true;
                 this.fecharAvisoAgradNAutenticado()
+                return; 
             }
             try {
                 const idUsuario = auth.currentUser.uid;
-                const jaAgradeceu = this.agradecimentosUsuario.includes(publicacaoId);
+                const docRef = doc(db, 'agradecimentos', publicacaoId);
+
+                // Verifica se o usuário já agradeceu no sistema
+                const docSnap = await getDoc(docRef);
+                const jaAgradeceu = docSnap.exists() && docSnap.data().usuarios.includes(idUsuario);
 
                 if (jaAgradeceu) {
-                    await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
+                    //Remoção do agradecimento
+                    await updateDoc(docRef, {
                         usuarios: arrayRemove(idUsuario),
                         totalAgradecimentos: increment(-1)
                     });
@@ -264,7 +317,7 @@ export default {
 
 
                 } else {
-                    await updateDoc(doc(db, 'agradecimentos', publicacaoId), {
+                    await updateDoc(docRef, {
                         usuarios: arrayUnion(idUsuario),
                         totalAgradecimentos: increment(1)
                     });
@@ -273,7 +326,7 @@ export default {
 
 
                 }
-                this.snackbarAgradecimento = !this.snackbarAgradecimento;
+                this.snackbarAgradecimento = true;
             } catch (error) {
                 console.error('Erro ao atualizar agradecimento: ', error);
             }
@@ -296,8 +349,8 @@ export default {
             if (!this.$store.getters.dadosUsuarioAutenticado.currentUserName == "Convidado" && this.criarClicado)
                 this.exibirAvisoPCriarPubli = false;
             //Não autenticado
-            else{
-                
+            else {
+
                 this.exibirAvisoPCriarPubli = true;
             }
             this.criarClicado = false
@@ -305,7 +358,7 @@ export default {
         },
 
         verificarSeAutenticado() {
-            
+
             if (this.$store.getters.dadosUsuarioAutenticado.currentUserName == "Convidado")
                 return false;
             else
@@ -321,7 +374,7 @@ export default {
             const user = auth.currentUser;
 
             if (!user)
-            this.exibirAvisoAgradNAutenticado = true;
+                this.exibirAvisoAgradNAutenticado = true;
 
             try {
                 const usuarioRef = doc(db, 'usuarios', user.uid);
@@ -388,12 +441,12 @@ export default {
                         podcasts.push({ ...doc.data(), id: doc.id })
                     })
                     this.podcasts = podcasts
-                    console.log("Publicações: ", this.podcasts)
+                    console.log("Publicações carregadas: ", this.podcasts)
 
 
                 })
                 .catch(err => {
-                    console.log('Retornou erro:', err.message)
+                    console.log('Retornou erro na recuperação:', err.message)
                 })
 
 
@@ -412,15 +465,26 @@ export default {
         },
 
         deletarPublicacao(id) {
-            console.log('Verificando deleção...')
-            const docRef = doc(db, 'sites', id)
-
-            deleteDoc(docRef)
-                .then(() => {
-                    console.log('Documento deletado com sucesso!')
-                    location.reload()
-                })
+            //console.log('Abrindo diálogo para deletar publicação:', id);
+            this.publicacaoSelecionada = id;
+            this.dialogDeletar = true;
         },
+        async confirmarDelecao() {
+            if (this.publicacaoSelecionada) {
+                const docRef = doc(db, 'sites', this.publicacaoSelecionada);
+                this.carregarDelecao = true
+                try {
+                    await deleteDoc(docRef).then(() => {
+                        console.log('Documento deletado com sucesso!')
+                        this.carregarDelecao = true
+                        setTimeout(() => (this.loading = false), 3000)
+                        location.reload()
+                    })
+                } catch (error) {
+                    console.error("Erro ao deletar o documento desejado: ", error)
+                }
+            }
+        }
 
 
     }
@@ -482,5 +546,14 @@ export default {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     white-space: normal;
+}
+
+.v-dialog {
+    z-index: 1000 !important;
+    /* Garante que o diálogo fique acima de outros elementos */
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
 }
 </style>
