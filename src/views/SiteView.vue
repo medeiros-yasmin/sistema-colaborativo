@@ -44,7 +44,7 @@
                 </div>
 
                 <v-row>
-                    <v-col v-for="podcast in podcasts" :key="podcast.id" cols="112">
+                    <v-col v-for="(podcast, index) in podcasts" :key="podcast.id" cols="112">
 
                         <v-card shaped style="margin-top:18px; " color="#5C3C6C" :elevation="podcast - 1"
                             class="overflow-hidden mx-auto white--text" height="300" width="1000">
@@ -81,7 +81,7 @@
                                                 Visualizar
                                             </v-btn>
 
-                                            <v-btn v-if="ehProprietarioPubli[podcast.id]" class="white--text" rounded
+                                            <v-btn v-if="ehProprietarioPubli[index]" class="white--text" rounded
                                                 color="cyan" @click="deletarPublicacao(podcast.id)">
                                                 Deletar
                                             </v-btn>
@@ -174,10 +174,18 @@ import { mapGetters } from 'vuex';
 export default {
     name: 'SiteView',
 
-    mounted() {
-        this.podcasts = this.recuperarDocumentos(this.colRef)
+    async mounted() {
+        this.podcasts = await this.recuperarDocumentos(this.colRef)
 
-
+        if (auth.currentUser) {
+            // Mapeia os proprietários
+            this.ehProprietarioPubli = this.podcasts.map(podcast =>
+                podcast.autorPublicacao === auth.currentUser.uid
+            );
+            console.log("Se é o proprietário", JSON.stringify(this.ehProprietarioPubli, null, 2));
+        } else {
+            console.log("Usuário não autenticado.");
+        }
         //Carrega os agradecimentos
         const ref = collection(db, 'agradecimentos')
         this.unsubscribeAgradecimentos = onSnapshot(ref, snapshot => {
@@ -235,7 +243,7 @@ export default {
         agradecimentosUsuario: [],
         dialogDeletar: false,
         carregarDelecao: false,
-        ehProprietarioPubli: [],
+        ehProprietarioPubli: [true],
         unsubscribeAgradecimentos: null
 
     }),
@@ -254,48 +262,48 @@ export default {
 
     methods: {
         async carregarAgradecimentos() {
-        try {
-            // 1. Carrega os agradecimentos do usuário atual
-            const q = query(
-                collection(db, 'agradecimentos'),
-                where('usuarios', 'array-contains', auth.currentUser.uid)
-            );
+            try {
+                // 1. Carrega os agradecimentos do usuário atual
+                const q = query(
+                    collection(db, 'agradecimentos'),
+                    where('usuarios', 'array-contains', auth.currentUser.uid)
+                );
 
-            const querySnapshot = await getDocs(q);
-            this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
+                const querySnapshot = await getDocs(q);
+                this.agradecimentosUsuario = querySnapshot.docs.map((doc) => doc.id);
 
-            // 2. Configura o listener para atualizações em tempo real
-            const ref = collection(db, 'agradecimentos');
+                // 2. Configura o listener para atualizações em tempo real
+                const ref = collection(db, 'agradecimentos');
 
-            // Remove o listener anterior, se existir
-            if (this.unsubscribeAgradecimentos) {
-                this.unsubscribeAgradecimentos();
-            }
+                // Remove o listener anterior, se existir
+                if (this.unsubscribeAgradecimentos) {
+                    this.unsubscribeAgradecimentos();
+                }
 
-            // Cria um novo listener
-            this.unsubscribeAgradecimentos = onSnapshot(ref, snapshot => {
-                const temp = {};
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    temp[docSnap.id] = data.totalAgradecimentos; // Atualiza o total de agradecimentos
+                // Cria um novo listener
+                this.unsubscribeAgradecimentos = onSnapshot(ref, snapshot => {
+                    const temp = {};
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        temp[docSnap.id] = data.totalAgradecimentos; // Atualiza o total de agradecimentos
+                    });
+                    // Substitui o objeto para garantir reatividade
+                    this.totaisAgradecimentos = { ...temp };
+                    console.log("Totais de agradecimentos atualizados:", this.totaisAgradecimentos);
                 });
-                // Substitui o objeto para garantir reatividade
-                this.totaisAgradecimentos = { ...temp };
-                console.log("Totais de agradecimentos atualizados:", this.totaisAgradecimentos);
-            });
 
-        } catch (error) {
-            console.error("Erro nos agradecimentos: ", error);
-        }
-    },
+            } catch (error) {
+                console.error("Erro nos agradecimentos: ", error);
+            }
+        },
 
         async atualizarAgradecimento(publicacaoId) {
             const user = auth.currentUser;
-            
+
             if (!user) {
                 this.exibirAvisoAgradNAutenticado = true;
                 this.fecharAvisoAgradNAutenticado()
-                return; 
+                return;
             }
             try {
                 const idUsuario = auth.currentUser.uid;
@@ -432,25 +440,16 @@ export default {
             })
             this.exibirAvisoAgradNAutenticado = false;
         },
-        recuperarDocumentos(colRef) {
-            getDocs(colRef)
-                .then(snapshot => {
-
-                    let podcasts = []
-                    snapshot.docs.forEach(doc => {
-                        podcasts.push({ ...doc.data(), id: doc.id })
-                    })
-                    this.podcasts = podcasts
-                    console.log("Publicações carregadas: ", this.podcasts)
-
-
-                })
-                .catch(err => {
-                    console.log('Retornou erro na recuperação:', err.message)
-                })
-
-
-            return this.podcasts
+        async recuperarDocumentos(colRef) {
+            try {
+                const snapshot = await getDocs(colRef);
+                const podcasts = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+                console.log("Publicações carregadas:", podcasts);
+                return podcasts; // Retorna os podcasts carregados
+            } catch (err) {
+                console.error('Erro ao recuperar documentos:', err.message);
+                return []; // Retorna um array vazio em caso de erro
+            }
         },
 
         adicionarPublicacao(colRef) {
