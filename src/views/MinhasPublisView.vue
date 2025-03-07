@@ -16,32 +16,18 @@
         </v-container>
         <v-container>
             <v-row>
-                <v-col v-for="livro in livros" :key="livro.id" cols="112">
+                <v-col v-for="pub in minhasPublicacoes" :key="pub.id" cols="112">
 
-                    <v-card shaped style="margin-top:18px" color="#5C3C6C" :elevation="livro - 1"
+                    <v-card shaped style="margin-top:18px" color="#5C3C6C" :elevation="pub - 1"
                         class="overflow-hidden mx-auto white--text" height="330" width="1000">
-                        <v-menu bottom left>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-list-item class="topright">
-                                    <v-btn variant="outlined" icon v-bind="attrs" v-on="on">
-                                        <v-icon color="white">mdi-dots-vertical</v-icon>
-                                    </v-btn>
-                                </v-list-item>
-                            </template>
-
-                            <v-list>
-                                <v-list-item v-for="(item, i) in items" :key="i" @click="() => { }">
-                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-menu>
+                        
                         <div class="d-flex flex-no-wrap justify-space-between">
                             <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
-                                <v-card-title class="text-h5" v-text="livro.titulo">
+                                <v-card-title class="text-h5" v-text="pub.titulo">
                                 </v-card-title>
-                                <v-card-subtitle v-text="livro.autor"></v-card-subtitle>
+                                <v-card-subtitle v-text="pub.autor"></v-card-subtitle>
                                 <v-card-text class="overflow-hidden text-justify text-h7 font-weight-bold"
-                                    v-text="livro.descricao"></v-card-text>
+                                    v-text="pub.descricao"></v-card-text>
 
                                 <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
                                     text-align="bottom">
@@ -50,13 +36,13 @@
                                             Visualizar
                                         </v-btn> -->
                                         <v-btn class="white--text" rounded color="#C198C4"
-                                            :to="{ name: 'teste', params: { id: livro.id } }">
+                                            :to="{ name: 'teste', params: { id: pub.id } }">
                                             Visualizar
                                         </v-btn>
                                     </v-card-actions>
                                     <v-card-actions>
                                         <v-btn class="white--text" rounded color="cyan"
-                                            @click="deletarPublicacao(livro.id)">
+                                            @click="deletarPublicacao(pub.id)">
                                             Deletar
                                         </v-btn>
                                     </v-card-actions>
@@ -116,20 +102,24 @@
 
 <script>
 
-import { db } from '../firebase/firebase-config'
+import { auth, db } from '../firebase/firebase-config'
 import { collection, getDocs, deleteDoc, doc, where, query } from 'firebase/firestore'
 //updateDoc
 
 
 export default {
     name: 'MinhasPublis',
-    
-    mounted() {
-        this.livros = this.recuperarDocumentos(this.colRef)
-    },
 
-    created() {
+    async created() {
         this.$store.commit('toggleAppBar', false);
+        this.usuario = auth.currentUser
+        if(this.usuario){
+            console.warn('AUTENTICADO!!!!!!!!')
+            console.log('UID do usuário:', this.usuario.uid)
+            await this.recuperarMinhasPublis();
+        }
+        else
+            console.warn('Usuário não autenticado!!!!!!!!')
     },
 
     components: {
@@ -140,42 +130,44 @@ export default {
         dialog: false,
         drawer: false,
         group: null,
-        livros: null,
-        novaPublicacao: {
-            titulo: "Teste",
-            descricao: "Dinossauro descrição",
-            autor: "Coiso"
-        },
-
-
-        items: [
-            { title: 'Spam' },
-            { title: 'Publicação ofensiva' },
-            { title: 'Publicação duplicada' },
-            { title: 'Não é uma publicação' },
-            { title: 'Publicação ofensiva' },
-            { title: 'Cancelar' },
-        ],
+        minhasPublicacoes: [],
+        usuario: null
+        
 
     }),
 
     methods: {
-        async recuperarDocumentos() {
-            const q = query(collection(db, "publicacoes"), where("autorPubli", "==", "ebcwRnUHmWRRGklKUAhsBZhlU7f2"));
-            const querySnapshot = await getDocs(q);
+        async recuperarMinhasPublis() {
 
+            try{
+            const userId = auth.currentUser.uid
+            const colecoes = ['auxilio', 'artigos', 'livros', 'podcasts', 'sites', 'videos']
 
-            let livros = []
+            //Reinicializa os valores das publicações carregadas
+            this.minhasPublicacoes = []
 
-            querySnapshot.docs.forEach(doc => {
-                livros.push({ ...doc.data(), id: doc.id })
-            })
-            this.livros = livros
+            for(const colecao of colecoes){
+                const q = query(collection(db, colecao), where('autorPublicacao', '==', userId))
+                const querySnapshot = await getDocs(q)
 
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    console.log('Documento encontrado:', doc.id, data);
+                    console.log('Timestamp:', data.dataCriacao);
+                    console.log('Data convertida:', data.dataCriacao.toDate());
 
+                    this.minhasPublicacoes.push({
+                        id: doc.id,
+                        colecao: colecao,
+                        ...data,
+                    })
+                });
+            }
+            this.minhasPublicacoes.sort((a, b) => b.dataCriacao.toMillis() - a.dataCriacao.toMillis());
+            }catch(error){
+                console.error("Erro ao recuperar publis: ", error)
 
-            console.log('Chamou a função, que retornou: ', this.livros)
-            return this.livros
+            }
         },
 
 
