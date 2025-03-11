@@ -108,8 +108,7 @@
 
                                 </div>
                                 <v-avatar rounded align="center" class="mt-16 mr-5" size="170">
-                                    <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-                                        alt="Sem imagem"></v-img>
+                                    <v-img :src="imageURL || defaultImageURL" alt="Sem imagem"></v-img>
                                 </v-avatar>
                             </div>
                         </v-card>
@@ -166,6 +165,9 @@ import { db, auth } from '../firebase/firebase-config'
 import { collection, onSnapshot, getDocs, addDoc, doc, arrayUnion, increment, updateDoc, getDoc, query, where, arrayRemove, deleteDoc } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { mapGetters } from 'vuex';
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase/firebase-config";
+
 
 //import { functions } from '../../functions/index'
 //updateDoc
@@ -209,6 +211,7 @@ export default {
     },
 
     data: () => ({
+        imageURL: "",
         valid: true,
         ultimoDocumento: null,
         exibirAviso: false,
@@ -248,7 +251,8 @@ export default {
 
     }),
 
-    created() {
+    async created() {
+        this.imageURL = await this.getImageURL("Imagens/walnut.png")
         this.$store.commit('toggleAppBar', true);
         if (this.verificarSeAutenticado()) {
             this.carregarAgradecimentos();
@@ -257,10 +261,18 @@ export default {
     },
     computed: {
         ...mapGetters(['getCurrentUser', 'getCurrentUserFullData']),
+      defaultImageURL() {
+        return "https://firebasestorage.googleapis.com/v0/b/app-colaborativo.appspot.com/o/Imagens%2Fwalnut.png?alt=media&token=76e21f15-f48d-47c3-9e6b-477adac92c93";
+      },
     },
+    
 
 
     methods: {
+        async getImageURL(imagePath) {
+            const storageRef = ref(storage, imagePath);
+            return await getDownloadURL(storageRef);
+        },
         async carregarAgradecimentos() {
             try {
                 // 1. Carrega os agradecimentos do usuário atual

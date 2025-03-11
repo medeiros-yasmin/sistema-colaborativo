@@ -67,7 +67,7 @@
                                         <v-card-text class="overflow-hidden text-justify text-h7 font-weight-bold"
                                             v-text="item.title"></v-card-text>
                                     </div>
-                                    <v-avatar rounded align="center" class="mt-16 mr-5 " size="170">
+                                    <v-avatar rounded align="center" class="mt-16 mr-5 avatar-estilo" size="170">
                                         <v-img size="150px" :src="item.icone" color="#E6E7E9">
                                             
                                         </v-img>
@@ -158,5 +158,10 @@ export default {
     font-size: 22px;
     letter-spacing: 2px;
     font-family: 'Roboto', sans-serif;
+}
+
+.avatar-estilo{
+  border: 4px solid white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 </style>
