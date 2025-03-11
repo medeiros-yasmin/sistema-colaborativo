@@ -21,22 +21,27 @@
             <v-layout align-center justify-center>
 
                <v-flex xs12 sm8 md4>
-                  <span class="d-flex align-center" style="font-size: 50px;color: antiquewhite;">N <v-img
-                        style="margin-left: 6px; margin-right: 6px;" width="60" height="60"
-                        src="@/assets/walnut.png"></v-img> Z </span>
+                  <div class="titulo-card">
+                  <span class="d-flex nome-logo mb-1" style="color: antiquewhite; display: inline-block; vertical-align: middle;">N 
+                     <v-img
+                        style="margin-left: 6px; margin-right: 6px; display: inline-block; vertical-align: middle; flex-shrink:0;" width="90px" height="90px"
+                        src="@/assets/walnut.png">
+                     </v-img> 
+                     Z </span>
+                  </div>
                   <v-card shaped color="#E6E7E9" class="elevation-18">
                      <v-toolbar dark color="#7B447B">
                         <v-toolbar-title>Autenticação</v-toolbar-title>
                      </v-toolbar>
                      <v-card-text>
-                        <v-form>
-                           <v-text-field filled name="login" v-model="email" label="E-mail" type="text" color="#7B447B">
+                        <v-form v-model="form" @submit.prevent="onSubmit">
+                           <v-text-field filled name="login" v-model="email" :rules="[required]" label="E-mail" type="text" color="#7B447B" clearable>
                               <template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
                                     person
                                  </v-icon>
                               </template></v-text-field>
-                           <v-text-field filled id="password" v-model="senha" prepend-icon="lock" color="#7B447B"
+                           <v-text-field filled id="password" v-model="senha" prepend-icon="lock" color="#7B447B" clearable
                               name="password" label="Senha" type="password"><template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
                                     lock
@@ -45,24 +50,33 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-                        <v-btn class="white--text" color="#91A366" block @click="entrar()">
+                        <v-btn :disabled="!form" :loading="carregamentoAtivado" class="white--text" color="#7B447B" block @click="entrar()">
                            Entrar
                         </v-btn>
                      </v-card-actions>
                      <v-card-actions>
-                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366"
+                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#7B447B"
                            @click="entrarGoogle()">
-                           <img class="mr-2 " src="../assets/google.png" alt="Google" width="24" height="24">
+                           
+                           <img class="mr-2 fundo-branco" src="../assets/google.png" alt="Google" width="24" height="24">
                            <img />
+                        
                            Entrar com google
                         </v-btn>
                      </v-card-actions>
                      <v-card-actions>
+                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#7B447B"
+                           @click="entrarConvidado()">
+                           
+                           Entrar como convidado
+                        </v-btn>
+                     </v-card-actions>
+                     <v-divider :thickness="8"></v-divider>
+                     <v-card-actions>
                         <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366"
                            @click="entrarConvidado()">
-                           <img class="mr-2 " src="../assets/google.png" alt="Google" width="24" height="24">
-                           <img />
-                           Entrar como convidado
+                           
+                           Criar nova conta
                         </v-btn>
                      </v-card-actions>
                   </v-card>
@@ -86,10 +100,12 @@ export default {
    },
 
    data: () => ({
-      email: "",
-      senha: "",
+      email: null,
+      senha: null,
+      carregamentoAtivado: false,
       exibirAvisoLogin: false,
       nomeUsuario: '',
+      form: false,
 
    }),
 
@@ -121,6 +137,18 @@ export default {
 
 
    methods: {
+
+      onSubmit () {
+        if (!this.form) return
+
+        this.loading = true
+
+        setTimeout(() => (this.loading = false), 2000)
+      },
+
+      required (v) {
+        return !!v || 'Campo obrigatório para o primeiro tipo de login'
+      },
       async carregarDadosUsuario(id) {
          const functions = getFunctions();
          const usuario = httpsCallable(functions, 'exibirDadosUsuario');
@@ -222,5 +250,24 @@ export default {
 .inline-img {
    display: inline-flex !important;
    /* ou inline-flex, se precisar que o conteúdo interno (ex. slot) seja flex */
+}
+
+.titulo-card{
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  display: flex;
+}
+
+.nome-logo{
+   font-size: 70px;
+}
+
+
+
+.fundo-branco{
+   width: 24px; /* Tamanho do ícone */
+   height: 24px; /* Tamanho do ícone */
+   border-radius: 50%; /* Torna o ícone circular */
 }
 </style>
