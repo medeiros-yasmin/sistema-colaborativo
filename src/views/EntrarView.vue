@@ -52,7 +52,7 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-                        <v-tooltip>
+                        <v-tooltip top>
                            <template v-slot:activator="{ on, attrs }">
                               <!-- Elemento pai que ativa o tooltip -->
                               <div v-bind="attrs" v-on="on" style="display: flex; justify-content: center; width: 100%;">
@@ -65,9 +65,14 @@
                            </template>
                            <span>Com e-mail e senha cadastrados</span>
                         </v-tooltip>
+                        
                      </v-card-actions>
                      <v-card-actions>
-                        <v-btn elevation="5" class="white--text d-flex align-center " color="#7B447B"  style="width: 92%; margin: auto;"
+                           <v-btn class="d-flex align-center" style="width: 92%; margin: auto;" color="primary" text @click="goToCadastrarConta()">Não tem uma conta? Crie uma.</v-btn>
+                        </v-card-actions>
+                        <v-divider :thickness="8"></v-divider>
+                     <v-card-actions>
+                        <v-btn elevation="5" class="white--text d-flex align-center mt-4" color="#7B447B"  style="width: 92%; margin: auto;"
                            @click="entrarGoogle()">
                            <v-tooltip activator="parent">Com e-mail e senha cadastrados</v-tooltip>
                            <img class="mr-2 fundo-branco" src="../assets/google.png" alt="Google" width="24"
@@ -84,14 +89,8 @@
                            Entrar como convidado
                         </v-btn>
                      </v-card-actions>
-                     <v-divider :thickness="8"></v-divider>
-                     <v-card-actions>
-                        <v-btn elevation="5" class="white--text d-flex align-center " color="#91A366" style="width: 92%; margin: auto;"
-                           @click="entrarConvidado()">
-
-                           Criar nova conta
-                        </v-btn>
-                     </v-card-actions>
+                     
+                     
                   </v-card>
                </v-flex>
             </v-layout>
@@ -242,6 +241,10 @@ export default {
 
       entrarConvidado() {
          router.push("/home");
+      },
+
+      goToCadastrarConta(){
+         router.push("/cadastro")
       },
 
       verificarAutenticacao() {

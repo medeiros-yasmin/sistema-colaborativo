@@ -48,12 +48,12 @@
                                  </v-icon>
                               </template>Cadastrar</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn class="white--text mb-4 mr-8" color="#91A366" @click="sair()">
+                        <v-btn outlined class=" mb-4 mr-8" color="#91A366" @click="sair()">
                            <template>
                                  <v-icon class="material-symbols-rounded">
                                     close
                                  </v-icon>
-                              </template>Sair</v-btn>
+                              </template>Cancelar</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -64,8 +64,9 @@
 </template>
 
 <script>
+import router from '@/router';
 import { auth, db } from '../firebase/firebase-config'
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from 'firebase/firestore';
 export default {
    name: 'CadastroView',
@@ -122,15 +123,7 @@ export default {
       },
 
       sair() {
-         signOut(auth)
-            .then(() => {
-               // Signed in
-               console.log("Você saiu! :)");
-               
-               
-            }).catch((error) => {
-               console.log("Código de erro: ", error.code);
-});
+         router.push("/entrar")
       }
 
    }
