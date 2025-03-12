@@ -22,12 +22,13 @@
 
                <v-flex xs12 sm8 md4>
                   <div class="titulo-card">
-                  <span class="d-flex nome-logo mb-1" style="color: antiquewhite; display: inline-block; vertical-align: middle;">N 
-                     <v-img
-                        style="margin-left: 6px; margin-right: 6px; display: inline-block; vertical-align: middle; flex-shrink:0;" width="90px" height="90px"
-                        src="@/assets/walnut.png">
-                     </v-img> 
-                     Z </span>
+                     <span class="d-flex nome-logo mb-1"
+                        style="color: antiquewhite; display: inline-block; vertical-align: middle;">N
+                        <v-img
+                           style="margin-left: 6px; margin-right: 6px; display: inline-block; vertical-align: middle; flex-shrink:0;"
+                           width="90px" height="90px" src="@/assets/walnut.png">
+                        </v-img>
+                        Z </span>
                   </div>
                   <v-card shaped color="#E6E7E9" class="elevation-18">
                      <v-toolbar dark color="#7B447B">
@@ -35,14 +36,15 @@
                      </v-toolbar>
                      <v-card-text>
                         <v-form v-model="form" @submit.prevent="onSubmit">
-                           <v-text-field filled name="login" v-model="email" :rules="[required]" label="E-mail" type="text" color="#7B447B" clearable>
+                           <v-text-field filled name="login" v-model="email" :rules="[required]" label="E-mail"
+                              type="text" color="#7B447B" clearable>
                               <template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
                                     person
                                  </v-icon>
                               </template></v-text-field>
-                           <v-text-field filled id="password" v-model="senha" prepend-icon="lock" color="#7B447B" clearable
-                              name="password" label="Senha" type="password"><template v-slot:prepend>
+                           <v-text-field filled id="password" v-model="senha" prepend-icon="lock" color="#7B447B"
+                              clearable name="password" label="Senha" type="password"><template v-slot:prepend>
                                  <v-icon class="material-symbols-rounded">
                                     lock
                                  </v-icon>
@@ -50,32 +52,43 @@
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
-                        <v-btn :disabled="!form" :loading="carregamentoAtivado" class="white--text" color="#7B447B" block @click="entrar()">
-                           Entrar
-                        </v-btn>
+                        <v-tooltip>
+                           <template v-slot:activator="{ on, attrs }">
+                              <!-- Elemento pai que ativa o tooltip -->
+                              <div v-bind="attrs" v-on="on" style="display: flex; justify-content: center; width: 100%;">
+                                 <!-- Botão desativado -->
+                                 <v-btn :disabled="!form" :loading="carregamentoAtivado" class="white--text"
+                                    color="#7B447B" style="width: 92%;" @click="entrar()">
+                                    Entrar
+                                 </v-btn>
+                              </div>
+                           </template>
+                           <span>Com e-mail e senha cadastrados</span>
+                        </v-tooltip>
                      </v-card-actions>
                      <v-card-actions>
-                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#7B447B"
+                        <v-btn elevation="5" class="white--text d-flex align-center " color="#7B447B"  style="width: 92%; margin: auto;"
                            @click="entrarGoogle()">
-                           
-                           <img class="mr-2 fundo-branco" src="../assets/google.png" alt="Google" width="24" height="24">
+                           <v-tooltip activator="parent">Com e-mail e senha cadastrados</v-tooltip>
+                           <img class="mr-2 fundo-branco" src="../assets/google.png" alt="Google" width="24"
+                              height="24">
                            <img />
-                        
+
                            Entrar com google
                         </v-btn>
                      </v-card-actions>
                      <v-card-actions>
-                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#7B447B"
+                        <v-btn elevation="5" class="white--text d-flex align-center " color="#7B447B" style="width: 92%; margin: auto;"
                            @click="entrarConvidado()">
-                           
+
                            Entrar como convidado
                         </v-btn>
                      </v-card-actions>
                      <v-divider :thickness="8"></v-divider>
                      <v-card-actions>
-                        <v-btn block elevation="5" class="white--text d-flex align-center " color="#91A366"
+                        <v-btn elevation="5" class="white--text d-flex align-center " color="#91A366" style="width: 92%; margin: auto;"
                            @click="entrarConvidado()">
-                           
+
                            Criar nova conta
                         </v-btn>
                      </v-card-actions>
@@ -138,16 +151,16 @@ export default {
 
    methods: {
 
-      onSubmit () {
-        if (!this.form) return
+      onSubmit() {
+         if (!this.form) return
 
-        this.loading = true
+         this.loading = true
 
-        setTimeout(() => (this.loading = false), 2000)
+         setTimeout(() => (this.loading = false), 2000)
       },
 
-      required (v) {
-        return !!v || 'Campo obrigatório para o primeiro tipo de login'
+      required(v) {
+         return !!v || 'Campo obrigatório para o primeiro tipo de login'
       },
       async carregarDadosUsuario(id) {
          const functions = getFunctions();
@@ -227,7 +240,7 @@ export default {
             })
       },
 
-      entrarConvidado(){
+      entrarConvidado() {
          router.push("/home");
       },
 
@@ -252,22 +265,25 @@ export default {
    /* ou inline-flex, se precisar que o conteúdo interno (ex. slot) seja flex */
 }
 
-.titulo-card{
-  align-items: center;
-  gap: 20px;
-  justify-content: center;
-  display: flex;
+.titulo-card {
+   align-items: center;
+   gap: 20px;
+   justify-content: center;
+   display: flex;
 }
 
-.nome-logo{
+.nome-logo {
    font-size: 70px;
 }
 
 
 
-.fundo-branco{
-   width: 24px; /* Tamanho do ícone */
-   height: 24px; /* Tamanho do ícone */
-   border-radius: 50%; /* Torna o ícone circular */
+.fundo-branco {
+   width: 24px;
+   /* Tamanho do ícone */
+   height: 24px;
+   /* Tamanho do ícone */
+   border-radius: 50%;
+   /* Torna o ícone circular */
 }
 </style>
