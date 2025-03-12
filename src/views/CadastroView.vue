@@ -79,8 +79,10 @@ export default {
         senha: "",
         primeiroNome: "",
         segundoNome: "",
+        nomeCompleto: null,
         alertaErro: false,
         exibirAviso: false,
+        imagemPerfil: "https://firebasestorage.googleapis.com/v0/b/app-colaborativo.appspot.com/o/Avatares%2Fflower.png?alt=media&token=b0e0edff-9ed7-4ea0-b3fe-d1ec69015fb7"
 
     }),
 
@@ -105,13 +107,15 @@ export default {
          createUserWithEmailAndPassword(auth, this.email, this.senha)
             .then((userCredential) => {
                // Signed in
-               console.log("Usuario: ", userCredential.user);
+               /* console.log("Usuario: ", userCredential.user);
                console.log("Id criado: ", userCredential.user.uid);
-               console.log("Nome do Usuário: ", userCredential.user.displayName);
+               console.log("Nome do Usuário: ", userCredential.user.displayName); */
+               this.nomeCompleto = this.primeiroNome+" "+ this.segundoNome  
                return setDoc(doc(db, 'usuarios', userCredential.user.uid),  {
-                  nome: this.primeiroNome,
-                  sobrenome: this.segundoNome,
-                  agradeceuEm: []
+                  displayName: this.nomeCompleto,
+                  agradeceuEm: [],
+                  email: this.email,
+                  photoURL: this.imagemPerfil
                });
             })
             .then(() => {
