@@ -65,9 +65,8 @@
 
 <script>
 import router from '@/router';
-import { auth, db } from '../firebase/firebase-config'
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from 'firebase/firestore';
+import { auth } from '../firebase/firebase-config'
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 export default {
    name: 'CadastroView',
    props: {
@@ -99,6 +98,7 @@ export default {
                 }, 5000);
             });
             this.alertaErro = false;
+            
         },
       dismissAlert() {
             this.alertaErro = false;
@@ -107,22 +107,22 @@ export default {
          createUserWithEmailAndPassword(auth, this.email, this.senha)
             .then((userCredential) => {
                // Signed in
-               /* console.log("Usuario: ", userCredential.user);
-               console.log("Id criado: ", userCredential.user.uid);
-               console.log("Nome do Usuário: ", userCredential.user.displayName); */
-               this.nomeCompleto = this.primeiroNome+" "+ this.segundoNome  
-               return setDoc(doc(db, 'usuarios', userCredential.user.uid),  {
+               const user = userCredential.user;
+               this.nomeCompleto = this.primeiroNome + " " + this.segundoNome;
+
+
+               return updateProfile(user,  {
                   displayName: this.nomeCompleto,
-                  agradeceuEm: [],
-                  email: this.email,
                   photoURL: this.imagemPerfil
                });
             })
             .then(() => {
                this.exibirAviso = true;
                this.fecharAvisoAutomaticamente();
+               router.push("/entrar")
             }).catch((error)=>{
-               console.log("Erro: ", error)
+               console.log("Erro ao criar ou atualizar perfil: ", error)
+               this.alertaErro = true
             })
       },
 

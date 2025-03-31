@@ -105,15 +105,14 @@ exports.createUserInFirestore = functions.auth.user().onCreate((user) => {
   
     // Dados padrão do usuário
     const userData = {
-        displayName: user.displayName || 'Usuário Anônimo',
-        email: user.email || '',
+        displayName: user.displayName || '',
+        email: user.email|| '',
         photoURL: user.photoURL || '',
-        agradeceuEm: [], // Inicializa como array vazio
         createdAt: admin.firestore.FieldValue.serverTimestamp(), //Talvez trocar o nome depois
       };
   
     // Cria o documento no Firestore
-    return db.collection('usuarios').doc(user.uid).set(userData)
+    return admin.firestore().collection('usuarios').doc(user.uid).set(userData)
     .then(() => {
       console.log(`Usuário criado no Firestore: ${user.uid}`);
     })
