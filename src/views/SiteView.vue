@@ -94,12 +94,7 @@
                                                 :ja-agradeceu="agradecimentosUsuario.includes(podcast.id)"
                                                 :total-agradecimentos="totaisAgradecimentos[podcast.id] || 0"
                                                 @atualizar-agradecimento="atualizarAgradecimento" />
-                                            <span class="mr-2; ml-5">·</span>
-                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                                share
-                                            </v-icon>
-                                            <span style="margin-left: 6px; font-size: 16px;"
-                                                class="subheading">45</span>
+                                            
                                         </v-card-actions>
 
 
@@ -108,7 +103,7 @@
 
                                 </div>
                                 <v-avatar rounded align="center" class="mt-16 mr-5" size="170">
-                                    <v-img :src="imageURL || defaultImageURL" alt="Sem imagem"></v-img>
+                                    <v-img :src="podcast.imageURL || defaultImageURL" alt="Sem imagem"></v-img>
                                 </v-avatar>
                             </div>
                         </v-card>
@@ -251,8 +246,7 @@ export default {
 
     }),
 
-    async created() {
-        this.imageURL = await this.getImageURL("Imagens/walnut.png")
+     created() {
         this.$store.commit('toggleAppBar', true);
         if (this.verificarSeAutenticado()) {
             this.carregarAgradecimentos();

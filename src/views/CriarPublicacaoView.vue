@@ -9,43 +9,55 @@
                         transition="scroll-y-transition">
                         Publicação criada com sucesso.
                     </v-alert>
-                    <v-alert :value="alertaErro" dismissible @input="dismissAlert" >
+                    <v-alert type="warning" :value="alertaErro" dismissible @input="dismissAlert">
                         Preencha os campos adequadamente para criar uma publicação
                     </v-alert>
-                    <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text" class="white--text"
-                        text>
+                    <v-alert density="compact" type="error" :value="alertaErroCriar" dismissible
+                        @input="dismissAlertErroCriar">
+                        Erro ao criar publicação
+                    </v-alert>
+                    <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text"
+                        class="white--text" text>
 
                         <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
                     </v-btn>
 
 
 
-                    <v-card style="margin-top:18px" color="#5C3C6C" class="mx-auto white--text" height="850" width="1200">
-                        <v-card-text class="text-h5 white--text" style="word-spacing: 50px;"> NOVA PUBLICAÇÃO </v-card-text>
+                    <v-card style="margin-top:18px; margin-bottom: 18px;" color="#5C3C6C" class="mx-auto white--text"
+                        height="890" width="1200">
+                        <v-card-text class="text-h5 white--text" style="word-spacing: 10px"> NOVA PUBLICAÇÃO
+                        </v-card-text>
 
 
                         <v-form ref="form" v-model="validacao" lazy-validation>
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field :rules="regraNome" type="text" v-model="titulo" class="custom-label-color"
-                                    background-color="#391D41" color="white" dark shaped filled :counter="40" label="Título"
-                                    required></v-text-field>
+                                    background-color="#391D41" color="white" dark shaped filled :counter="120"
+                                    label="Título" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field :rules="regraNome" type="text" v-model="autor" class="custom-label-color"
-                                    background-color="#391D41" color="white" dark shaped filled :counter="40"
+                                    background-color="#391D41" color="white" dark shaped filled :counter="120"
                                     label="Autor(a)" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field :rules="regraLink" v-model="link" class="custom-label-color"
-                                    background-color="#391D41" color="white" light shaped dark filled :counter="40"
+                                    background-color="#391D41" color="white" light shaped dark filled
                                     label="Link da Publicação" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
+                                <v-text-field :rules="regraLink" v-model="imageURL" class="custom-label-color"
+                                    background-color="#391D41" color="white" light shaped dark filled
+                                    label="Link da imagem"></v-text-field>
+                            </v-col>
+
+                            <v-col cols="28" sm="14" md="7">
                                 <v-textarea :rules="regraDescricao" v-model="descricao" class="custom-textarea-color"
-                                    background-color="#391D41" shaped dark :counter="200" color="white" input-color
+                                    background-color="#391D41" shaped dark :counter="500" color="white" input-color
                                     clearable filled>
                                     <template v-slot:label>
                                         <div>
@@ -55,9 +67,9 @@
                                 </v-textarea>
                             </v-col>
                             <v-col cols="28" sm="14" md="7">
-                                <v-select v-model="categoriaEscolhida" :rules="[v => !!v || 'A categoria é obrigatória']"
-                                    class="custom-textarea-color" label="Categoria" dark theme="dark" :items="categorias"
-                                    required>
+                                <v-select v-model="categoriaEscolhida"
+                                    :rules="[v => !!v || 'A categoria é obrigatória']" class="custom-textarea-color"
+                                    label="Categoria" dark theme="dark" :items="categorias" required>
                                 </v-select>
                             </v-col>
 
@@ -99,11 +111,16 @@
 </template>
 
 <script>
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, setDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
 import router from '@/router';
 //import { onAuthStateChanged }from 'firebase/auth'
 
+const regraNome = [
+    v => !!v || 'O campo é obrigatório',
+    v => (v && v.length <= 120) || 'Preencha o campo com menos de 20 caracteres',
+    v => /^[a-zA-ZÀ-ÿ\s]+$/.test(v) || 'Apenas letras e acentos são permitidos'
+];
 export default {
     name: 'PublicacaoNova',
     mounted() {
@@ -120,7 +137,7 @@ export default {
     methods: {
         adicionarPublicacao() {
             this.indiceCategoria = this.categorias.indexOf(this.categoriaEscolhida)
-            console.log("TELA: ", this.categoriasBanco[this.indiceCategoria]);
+             
             //No momento da criação, seus agradecimentos se iniciam com 0
             if (this.$refs.form.validate()) {
                 addDoc(collection(db, this.categoriasBanco[this.indiceCategoria]), {
@@ -128,17 +145,33 @@ export default {
                     autor: this.autor,
                     descricao: this.descricao,
                     link: this.link,
+                    imageURL: this.imageURL,
                     agradecimentos: 0
                 })
-                    .then(() => {
-                        console.log('Inserção de novos dados finalizada')
-                        this.publiCriada = true;
-                        this.fecharAvisoPubliCriadaERedirecionar();
+                    .then((docRef) => {
+                        const agradecimentosRef = doc(db, 'agradecimentos', docRef.id);
+
+                        setDoc(agradecimentosRef, {
+                            totalAgradecimentos: 0,
+                            usuarios: []
+                        }).then(() => {
+                            this.publiCriada = true;
+                            this.fecharAvisoPubliCriadaERedirecionar();
+                        })
+
                     })
+                    .catch((error) => {
+                        console.error("Erro ao criar publicação ou agradecimentos:", error);
+                        this.alertaErroCriar = true; // Mostra aviso de ERRO
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        this.fecharAvisoErroCriarAutomaticamente(); 
+                        
+                    });
             }
             else {
                 this.alertaErro = true;
                 this.fecharAvisoAutomaticamente();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
         },
@@ -151,6 +184,10 @@ export default {
             this.publiCriada = false;
         },
 
+        dismissAlertErroCriar() {
+            this.alertaErroCriar = false;
+        },
+
         async fecharAvisoAutomaticamente() {
             await new Promise((resolve) => {
                 setTimeout(() => {
@@ -158,6 +195,15 @@ export default {
                 }, 5000);
             });
             this.alertaErro = false;
+        },
+
+        async fecharAvisoErroCriarAutomaticamente() {
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 5000);
+            });
+            this.alertaErroCriar = true;
         },
 
         async fecharAvisoPubliCriadaERedirecionar() {
@@ -173,6 +219,7 @@ export default {
     },
 
     data: () => ({
+        alertaErroCriar: false,
         alertaErro: false,
         publiCriada: false,
         podcast: null,
@@ -184,6 +231,7 @@ export default {
         titulo: "",
         descricao: "",
         link: "",
+        imageURL: "",
         autor: "",
         categoria: "",
         currentUser: null,
@@ -191,10 +239,8 @@ export default {
         categoriaEscolhida: '',
         indiceCategoria: 0,
         categoriasBanco: ['artigos', 'auxilios', 'podcasts', 'sites', 'videos', 'livros'],
-        regraNome: [
-            v => !!v || 'O campo autora/ autor é obrigatório',
-            v => (v && v.length <= 20) || 'O nome deve ter menos de 20 caracteres',
-        ],
+
+
 
         regraLink: [
             v => !!v || 'O link da publicação é obrigatório',
@@ -204,16 +250,14 @@ export default {
             }
         ],
 
-        regraEmail: [
-            v => !!v || 'E-mail is required',
-            v => /.+@.+\..+/.test(v) || 'Insira um e-mail válido.',
-        ],
-
         regraDescricao: [
             v => !!v || 'A descrição é obrigatória',
             v => (v && v.length >= 10) || 'A descrição deve conter ao menos 10 caracteres.',
         ],
     }),
+    computed: {
+        regraNome: () => regraNome
+    }
 }
 
 

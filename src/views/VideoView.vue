@@ -108,8 +108,7 @@
 
                                 </div>
                                 <v-avatar rounded align="center" class="mt-16 mr-5" size="170">
-                                    <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-                                        alt="Sem imagem"></v-img>
+                                    <v-img :src="podcast.imageURL || defaultImageURL" alt="Sem imagem"></v-img>
                                 </v-avatar>
                             </div>
                         </v-card>
@@ -257,6 +256,9 @@ export default {
     },
     computed: {
         ...mapGetters(['getCurrentUser', 'getCurrentUserFullData']),
+        defaultImageURL() {
+        return "https://firebasestorage.googleapis.com/v0/b/app-colaborativo.appspot.com/o/Imagens%2Fwalnut.png?alt=media&token=76e21f15-f48d-47c3-9e6b-477adac92c93";
+      },
     },
 
 
