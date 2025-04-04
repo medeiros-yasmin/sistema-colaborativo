@@ -156,6 +156,7 @@ export default {
                             usuarios: []
                         }).then(() => {
                             this.publiCriada = true;
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
                             this.fecharAvisoPubliCriadaERedirecionar();
                         })
 
