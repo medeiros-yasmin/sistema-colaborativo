@@ -31,6 +31,11 @@
                     color="#C51162" dark border="top" icon="mdi-alert-circle" transition="scroll-y-transition">
                     Apenas usários autenticados podem agradecer.
                 </v-alert>
+                <v-alert class="center-align" :value="exibirAvisoErroAgradecer"
+                    style="margin-top:18px; align-items: center" dismissible @input="dismissAlertErroAgradecimento" theme="dark"
+                    color="#C51162" dark border="top" type="error" transition="scroll-y-transition">
+                    Erro ao agradecer pela publicação.
+                </v-alert>
                 <div class="text-center">
                     <v-snackbar v-model="snackbarAgradecimento" color="primary" variant="tonal" timeout="5000">
                         Agradecimento atualizado!
@@ -242,7 +247,8 @@ export default {
         dialogDeletar: false,
         carregarDelecao: false,
         ehProprietarioPubli: [true],
-        unsubscribeAgradecimentos: null
+        unsubscribeAgradecimentos: null,
+        exibirAvisoErroAgradecer: false
 
     }),
 
@@ -337,6 +343,8 @@ export default {
                 }
                 this.snackbarAgradecimento = true;
             } catch (error) {
+                this.exibirAvisoErroAgradecer = true;
+                this.fecharAvisoErroAgradecer()
                 console.error('Erro ao atualizar agradecimento: ', error);
             }
         },
@@ -377,52 +385,10 @@ export default {
         dismissAlert() {
             this.exibirAviso = false;
         },
-
-        async adicionarAgradecimento(publicacaoId) {
-
-            const user = auth.currentUser;
-
-            if (!user)
-                this.exibirAvisoAgradNAutenticado = true;
-
-            try {
-                const usuarioRef = doc(db, 'usuarios', user.uid);
-                const publicacaoRef = doc(db, 'videos', publicacaoId);
-
-                // Recupera os dados do usuário
-                const usuarioDoc = await getDoc(usuarioRef);
-
-                if (!usuarioDoc.exists()) {
-                    throw new Error('Usuário não encontrado!');
-                }
-
-                const usuarioData = usuarioDoc.data();
-
-                // Verifica se o usuário já agradeceu esta publicação
-                if (usuarioData.agradeceuEm && usuarioData.agradeceuEm.includes(publicacaoId)) {
-                    //this.exibirAvisoAgradecimento = true;
-                    //this.fecharAvisoAgradecimento()
-                    throw new Error('O agradecimento é permitido somente uma vez!');
-                }
-
-                // Atualiza os dados do usuário
-                await updateDoc(usuarioRef, {
-                    agradeceuEm: arrayUnion(publicacaoId),
-                });
-
-                // Incrementa o contador de agradecimentos na publicação
-                await updateDoc(publicacaoRef, {
-                    agradecimentos: increment(1),
-                });
-
-                console.log('Agradecimento realizado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao agradecer:', error.message);
-
-                throw error;
-
-            }
+        dismissAlertErroAgradecimento(){
+            this.exibirAvisoErroAgradecer = false;
         },
+
 
         async fecharAvisoAutomaticamente() {
             await new Promise((resolve) => {
@@ -440,6 +406,15 @@ export default {
                 }, 5000);
             })
             this.exibirAvisoAgradNAutenticado = false;
+        },
+
+        async fecharAvisoErroAgradecer(){
+            await new Promise((resolve)=>{
+                setTimeout(()=>{
+                    resolve();
+                }, 5000);
+            })
+            this.exibirAvisoErroAgradecer = false;
         },
         async recuperarDocumentos(colRef) {
             try {
