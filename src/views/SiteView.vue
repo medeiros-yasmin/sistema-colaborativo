@@ -225,11 +225,10 @@ export default {
         totalAgradecimentos: [],
         totaisAgradecimentos: {},
         items: [
-            { title: 'Spam' },
+             { title: 'Spam' },
             { title: 'Publicação ofensiva' },
             { title: 'Publicação duplicada' },
-            { title: 'Não é uma publicação' },
-            { title: 'Publicação ofensiva' },
+            { title: 'Denunciar publicação' },
             { title: 'Cancelar' },
         ],
         email: '',
