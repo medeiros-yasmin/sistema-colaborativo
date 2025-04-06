@@ -345,7 +345,7 @@ export default {
             } catch (error) {
                 this.exibirAvisoErroAgradecer = true;
                 this.fecharAvisoErroAgradecer()
-                console.error('Erro ao atualizar agradecimento: ', error);
+                throw("Erro ao agradecer pela publicação. ", error)
             }
         },
         incluirComoAdministrador(address) {
