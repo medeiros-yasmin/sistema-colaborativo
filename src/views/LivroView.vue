@@ -94,12 +94,7 @@
                                                 :ja-agradeceu="agradecimentosUsuario.includes(podcast.id)"
                                                 :total-agradecimentos="totaisAgradecimentos[podcast.id] || 0"
                                                 @atualizar-agradecimento="atualizarAgradecimento" />
-                                            <span class="mr-2; ml-5">·</span>
-                                            <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                                share
-                                            </v-icon>
-                                            <span style="margin-left: 6px; font-size: 16px;"
-                                                class="subheading">45</span>
+                                            
                                         </v-card-actions>
 
 
