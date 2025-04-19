@@ -87,8 +87,6 @@ export default {
   methods: {
     recuperarPublicacaoSelecionada() {
       getDoc(this.docRef).then((doc) => {
-        console.log("Chegou")
-        console.log(doc.data(), doc.id)
         this.publicacaoSelecionada = (doc.data())
         console.log("publicacaoSelecionada: ", this.publicacaoSelecionada)
       })

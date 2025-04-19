@@ -134,7 +134,7 @@ const routes = [
   },
 
   {
-    path: '/editar/:id',
+    path: '/editar/:tipoPublicacao/:id',
     name: 'editarPublicacao',
     component: EditarPublicacaoView,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao }),

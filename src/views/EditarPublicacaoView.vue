@@ -4,11 +4,18 @@
         <v-container>
             <v-row>
                 <v-col cols="12">
+
+                    <v-alert class="center-align" :value="publiAtualizada" style="margin-top:18px; align-items: center"
+                        dismissible @input="dismissAlertPubliAtualizada" color="blue" dark border="top" icon="mdi-home"
+                        transition="scroll-y-transition">
+                        Publicação criada com sucesso.
+                    </v-alert>
                     <v-btn @click="$router.go(-1)" style="margin-top:18px" color="white" variant="text" class="white--text"
                         text>
 
                         <v-icon style="margin-right:5px" start>mdi-arrow-left</v-icon> Voltar
                     </v-btn>
+                    
 
 
                     <v-card style="margin-top:18px" color="#5C3C6C" :elevation="publicacaoSelecionada - 1"
@@ -19,25 +26,31 @@
                         <v-form ref="form" lazy-validation>
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field type="text" v-model="publicacaoSelecionada.titulo" class="custom-label-color"
-                                    background-color="#44075e" color="white" dark shaped filled :counter="100"
+                                    background-color="#391D41" color="white" dark shaped filled :counter="120"
                                     label="Título" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
                                 <v-text-field type="text" v-model="publicacaoSelecionada.autor" class="custom-label-color"
-                                    background-color="#44075e" color="white" dark shaped filled :counter="100"
+                                    background-color="#391D41" color="white" dark shaped filled :counter="120"
                                     label="Autor(a)" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
-                                <v-text-field v-model="publicacaoSelecionada.link" class="custom-label-color"
-                                    background-color="#44075e" color="white" dark shaped filled :counter="500"
+                                <v-text-field :rules="regraLink" v-model="publicacaoSelecionada.link" class="custom-label-color"
+                                    background-color="#391D41" color="white" dark shaped filled 
                                     label="Link da Publicação" required></v-text-field>
                             </v-col>
 
                             <v-col cols="28" sm="14" md="7">
-                                <v-textarea v-model="publicacaoSelecionada.descricao" class="custom-textarea-color"
-                                    background-color="#44075e" shaped dark :counter="1000" color="white" input-color
+                                <v-text-field :rules="regraLink" v-model="publicacaoSelecionada.imageURL" class="custom-label-color"
+                                    background-color="#391D41" color="white" light shaped dark filled
+                                    label="Link da imagem"></v-text-field>
+                            </v-col>
+
+                            <v-col cols="28" sm="14" md="7">
+                                <v-textarea :rules="regraDescricao" v-model="publicacaoSelecionada.descricao" class="custom-textarea-color"
+                                    background-color="#391D41" shaped dark :counter="1000" color="white" input-color
                                     clearable filled>
                                     <template v-slot:label>
                                         <div>
@@ -47,11 +60,6 @@
                                 </v-textarea>
                             </v-col>
                            
-                            <v-col cols="28" sm="14" md="7">
-                                <v-select class="custom-textarea-color" label="Categoria" theme="dark"
-                                    :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']">
-                                </v-select>
-                            </v-col>
                             
                                 
                             <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
@@ -83,6 +91,13 @@
 <script>
 import { doc, getDoc, collection, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
+import router from '@/router';
+
+const regraNome = [
+    v => !!v || 'O campo é obrigatório',
+    v => (v && v.length <= 120) || 'Preencha o campo com menos de 20 caracteres',
+    v => /^[a-zA-ZÀ-ÿ\s]+$/.test(v) || 'Apenas letras e acentos são permitidos'
+];
 
 export default {
     name: 'EdicaoPublicacao',
@@ -91,6 +106,10 @@ export default {
             Number: String,
             required: true,
         },
+        tipoPublicacao: {
+        type: String,
+        required: true,
+    }
     },
 
     created(){
@@ -101,7 +120,7 @@ export default {
     mounted() {
         this.publicacaoId = this.$route.params.id
         console.log("Do router: ", this.publicacaoId)
-        this.docRef = doc(db, 'sites', this.publicacaoId)
+        this.docRef = doc(db, String(this.$route.params.tipoPublicacao), this.publicacaoId)
         this.recuperarPublicacaoSelecionada()
 
     },
@@ -117,16 +136,30 @@ export default {
                 link: this.publicacaoSelecionada.link,
                 titulo: this.publicacaoSelecionada.titulo
             }).then(()=>{
-                console.log('Atualização concluída!')
+                this.publiAtualizada = true;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.fecharAvisoPubliCriadaERedirecionar();
             })
         },
         recuperarPublicacaoSelecionada() {
             getDoc(this.docRef).then((doc) => {
                 this.publicacaoSelecionada = (doc.data())
-                console.log("PUBLI: ", doc.data())
-                console.log("PUBLI: ", this.publicacaoSelecionada)
+               
             })
-        }
+        },
+
+        dismissAlertPubliAtualizada() {
+            this.publiAtualizada = false;
+        },
+        async fecharAvisoPubliCriadaERedirecionar() {
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 3000);
+            });
+            this.publiAtualizada = false;
+            router.go(-1);
+        },
 
 
 
@@ -135,10 +168,12 @@ export default {
     data: () => ({
         podcast: null,
         publicacaoId: null,
+        publiAtualizada: false,
         publicacaoSelecionada: {
             titulo: "null",
             descricao: null,
             link: null,
+            imageURL: null,
             autor: null,
             categoria: "",
         },
@@ -150,9 +185,26 @@ export default {
         autor: "",
         categoria: "",
 
+        regraLink: [
+            v => !!v || 'O link da publicação é obrigatório',
+            v => {
+                const pattern = /^(|http|https):\/\/[^ "]+$/;
+                return pattern.test(v) || 'Link inválido.';
+            }
+        ],
+
+        regraDescricao: [
+            v => !!v || 'A descrição é obrigatória',
+            v => (v && v.length >= 10) || 'A descrição deve conter ao menos 10 caracteres.',
+        ],
+        
+
 
 
     }),
+    computed: {
+        regraNome: () => regraNome
+    }
 }
 
 
