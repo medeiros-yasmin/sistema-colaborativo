@@ -32,63 +32,9 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
 });
 
 
-exports.agradecerPubli = functions.https.onCall((data, context) => {
 
-    if (!context.auth) {
-        throw new functions.https.HttpsError(
-            'unauthenticated',
-            'Somente usuários autenticados podem agradecer!'
-        );
-    }
-    //Recuperar o usuario autenticado no momento do agradecimento
-    const usuario = admin.firestore().collection('usuarios').doc(context.auth.uid)
-    const requisicao = admin.firestore().collection('sites').doc(data.id)
 
-    return usuario.get().then(doc => {
-        if (doc.data().agradeceuEm.includes(data.id)) {
-            throw new functions.https.HttpsError(
-                'failed-precondition',
-                'O agradecimento é permitido somente uma vez!'
-            );
-        }
 
-        return usuario.update({
-            agradeceuEm: [...doc.data().agradeceuEm, data.id]
-        })
-            .then(() => {
-                return requisicao.update({
-                    agradecimentos: admin.firestore.FieldValue.increment(1)
-                })
-            })
-    })
-})
-
-exports.exibirDadosUsuario = functions.https.onCall((data, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError(
-            'unauthenticated',
-            'Sem dados para carregar!'
-        );
-    }
-    const usuario = admin.firestore().collection('usuarios').doc(context.auth.uid)
-
-    return usuario.get().then((documentSnapShot) => {
-        if (documentSnapShot.exists) {
-            const dadosUsuario = documentSnapShot.data();
-            return dadosUsuario;
-        } else {
-            throw new functions.https.HttpsError(
-                'not-found',
-                'Usuário não encontrado!'
-            );
-        }
-    }).catch(error => {
-        throw new functions.https.HttpsError(
-            'internal',
-            'Erro ao tentar buscar os dados do usuário fornecido: ' + error.message
-        )
-    })
-});
 
 // Função para criar o usuário no Firestore
 exports.createUserInFirestore = functions.auth.user().onCreate((user) => {

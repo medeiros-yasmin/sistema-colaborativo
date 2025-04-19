@@ -61,11 +61,10 @@
 
                                 <div class="d-flex flex-no-wrap justify-space-between">
                                     <div style="margin-top:18px; margin-left: 18px; margin-right: 18px">
-                                        <v-card-title class="text-h5" v-text="item.title">
+                                        <v-card-title class="text-h5 text-justify font-weight-bold" v-text="item.title">
                                         </v-card-title>
-                                        <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
-                                        <v-card-text class="overflow-hidden text-justify text-h7 font-weight-bold"
-                                            v-text="item.title"></v-card-text>
+                                        <v-card-subtitle class="text-justify" v-text="item.subtitle"></v-card-subtitle>
+                                        
                                     </div>
                                     <v-avatar rounded align="center" class="mt-16 mr-5" size="170">
                                         <v-img size="150px" :src="item.icone" color="#E6E7E9">
@@ -92,12 +91,12 @@ export default {
     data: () => ({
 
         items: [
-            { id: 0, title: 'Artigos', subtitle: 'Subtítulo de artigo', rota: '/artigo', elevation: 2, icone: require("../assets/document.png") },
-            { id: 1, title: 'Apoio', subtitle: 'Subtítulo de apoio', rota: '/auxilio', elevation: 3, icone: require('../assets/like.png') },
-            { id: 2, title: 'Podcasts', subtitle: 'Subtítulo de podcasts', rota: '/podcast', elevation: 4, icone: require('../assets/podcast.png') },
-            { id: 3, title: 'Sites', subtitle: 'Subtítulo de sites', rota: '/site', elevation: 5, icone: require('../assets/vlog.png') },
-            { id: 4, title: 'Vídeos', subtitle: 'Subtítulo de vídeos', rota: '/video', elevation: 6, icone: require('../assets/video-camera.png') },
-            { id: 5, title: 'Livros e Revistas', subtitle: 'Subtítulo de livros e artigos', rota: '/livro', elevation: 7, icone: require('../assets/contact.png') },
+            { id: 0, title: 'Artigos', subtitle: 'Qualquer artigo de fonte confiável como Google Acadêmico (Scholar Google), PubMed, SciELO (Scientific Electronic Library Online), IEEE Xplore e ScienceDirect (Elsevier)', rota: '/artigo', elevation: 2, icone: require("../assets/document.png") },
+            { id: 1, title: 'Apoio', subtitle: 'Que inclui qualquer grupo ou rede de apoio dedicado à fibromialgia, a discussões sobre o tema e que, no fim, podem criar uma rede de apoio entre os acometidos pela doença', rota: '/auxilio', elevation: 3, icone: require('../assets/like.png') },
+            { id: 2, title: 'Podcasts', subtitle: 'para podcasts as fontes baseadas em evidências pesquisas e análises sérias incluem Spotify, Apple Podcasts, Google Podcasts. Verifique as credenciais do apresentador/host (é um jornalista, pesquisador ou especialista?).Por exemplo: Science Vs, SciCast (Brasil) e Fronteiras da Ciência (UFRGS)', rota: '/podcast', elevation: 4, icone: require('../assets/podcast.png') },
+            { id: 3, title: 'Sites', subtitle: 'Para identificar sites confiáveis, é importante verificar a transparência (fontes citadas e autores devidamente identificados), o domínio institucional (.gov, .edu, .org) e a frequência de atualizações', rota: '/site', elevation: 5, icone: require('../assets/vlog.png') },
+            { id: 4, title: 'Vídeos', subtitle: 'Busque verificar o canal, priorizando hospitais, universidades ou órgãos públicos; cheque o especialista em questão, que podem ser médicos ou pesquisadores', rota: '/video', elevation: 6, icone: require('../assets/video-camera.png') },
+            { id: 5, title: 'Livros e Revistas', subtitle: 'Busque por autores vinculados a universidades ou sociedades médicas. Exemplo: SBED, Revista publicada pela Sociedade Brasileira de Reumatologia (com acesso em SciELO)', rota: '/livro', elevation: 7, icone: require('../assets/contact.png') },
         ],
 
     }),
