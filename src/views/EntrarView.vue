@@ -34,7 +34,7 @@
                      <v-toolbar dark color="#7B447B">
                         <v-toolbar-title>Autenticação</v-toolbar-title>
                      </v-toolbar>
-                     <v-card-text>
+                     <!-- <v-card-text>
                         <v-form v-model="form" @submit.prevent="onSubmit">
                            <v-text-field filled name="login" v-model="email" :rules="[required]" label="E-mail"
                               type="text" color="#7B447B" clearable>
@@ -54,9 +54,9 @@
                      <v-card-actions>
                         <v-tooltip top>
                            <template v-slot:activator="{ on, attrs }">
-                              <!-- Elemento pai que ativa o tooltip -->
+                              
                               <div v-bind="attrs" v-on="on" style="display: flex; justify-content: center; width: 100%;">
-                                 <!-- Botão desativado -->
+                                
                                  <v-btn :disabled="!form" :loading="carregamentoAtivado" class="white--text"
                                     color="#7B447B" style="width: 92%;" @click="entrar()">
                                     Entrar
@@ -70,7 +70,7 @@
                      <v-card-actions>
                            <v-btn class="d-flex align-center" style="width: 92%; margin: auto;" color="primary" text @click="goToCadastrarConta()">Não tem uma conta? Crie uma.</v-btn>
                         </v-card-actions>
-                        <v-divider :thickness="8"></v-divider>
+                        <v-divider :thickness="8"></v-divider> -->
                      <v-card-actions>
                         <v-btn elevation="5" class="white--text d-flex align-center mt-4" color="#7B447B"  style="width: 92%; margin: auto;"
                            @click="entrarGoogle()">
@@ -193,7 +193,7 @@ export default {
             this.nomeUsuario = this.dadosUsuarioAutenticado;
             this.exibirAvisoLogin = true;
 
-            router.push("/home");
+            router.push("/");
 
          } catch (error) {
             console.log("Código de erro: ", error.code);
@@ -228,7 +228,7 @@ export default {
 
                console.log("Usuário autenticado:", usuario.displayName, usuario.uid);
                this.$store.commit('updateUserInfo', usuario);
-               router.push("/home");
+               router.push("/");
 
 
             }).catch((error) => {
@@ -240,7 +240,7 @@ export default {
       },
 
       entrarConvidado() {
-         router.push("/home");
+         router.push("/");
       },
 
       goToCadastrarConta(){

@@ -40,20 +40,7 @@
                                             Visualizar
                                         </v-btn>
                                     </v-card-actions>
-                                    <v-card-actions>
-                                        <v-btn class="white--text" rounded color="cyan"
-                                            @click="deletarPublicacao(pub.id)">
-                                            Deletar
-                                        </v-btn>
-                                    </v-card-actions>
-
-                                    <v-card-actions>
-                                        <v-icon size="30px" class="material-symbols-rounded" color="#E6E7E9">
-                                            handshake
-                                        </v-icon>
-                                        <span style="margin-left: 6px;" class="subheading mr-2">256</span>
-                                        
-                                    </v-card-actions>
+                                    
                                 </v-row>
 
                             </div>

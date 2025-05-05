@@ -9,13 +9,12 @@
 
       <v-toolbar-title class="d-flex align-center" style="font-size: 50px;">N <v-img style="margin-left: 6px; margin-right: 6px;" width="60" height="60" src="@/assets/walnut.png"></v-img> Z   </v-toolbar-title>
 
-      <v-text-field clearable prepend-inner-icon="mdi-magnify" class="topright mx-4" flat hide-details label="Pesquisar"
-        solo-inverted></v-text-field>
+      
 
       <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs class="text-center" align-with-title>
-          <v-tab to="/home">Início</v-tab>
+          <v-tab to="/">Início</v-tab>
           <v-tab to="/artigo">Artigos</v-tab>
           <v-tab to="/auxilio">Apoio</v-tab>
           <v-tab to="/podcast">Podcasts</v-tab>
@@ -74,7 +73,7 @@
         <v-divider :thickness="2" class="border-opacity-50"></v-divider>
 
         <v-list-item-group v-model="group" active-class="cyan--text text--accent-4">
-          <router-link to="/home" class="white--text no-underline">
+          <router-link to="/" class="white--text no-underline">
           <v-list-item class="white--text">
             
             <v-list-item-icon>

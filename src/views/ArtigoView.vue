@@ -1,23 +1,7 @@
 <template>
     <v-app style="background-color:#391D41;">
         <v-main>
-            <v-container style="margin-top:18px;" fluid class="d-flex justify-center align-center central-container">
-                <v-row align="center" justify="center">
-                    <v-col cols="8" sm="6" md="4">
-                        <v-form ref="form" v-model="valid" lazy-validation>
-                            <v-text-field v-model="email" :rules="emailRules" label="E-mail"
-                                placeholder="fulanodetal@preencha-aqui.com" counter="35" required dark></v-text-field>
-                            <v-btn :loading="loadingAdmin" :disabled="loadingAdmin" color="#889B59"
-                                @click="incluirComoAdministrador(email)" placeholder="fulanodetal@preencha-aqui.com"
-                                dark right depressed block>
-                                <v-icon size="23px" class="material-symbols-rounded" left>
-                                    admin_panel_settings
-                                </v-icon>TORNAR ADMINISTRADOR
-                            </v-btn>
-                        </v-form>
-                    </v-col>
-                </v-row>
-            </v-container>
+            
 
 
             <v-container style="margin-top:80px;">
