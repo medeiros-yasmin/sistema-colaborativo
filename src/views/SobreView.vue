@@ -59,7 +59,7 @@
                                     <v-card-title class="text-h5">
                                         Pacotes, ícones e fontes usados
                                     </v-card-title>
-                                    <v-card-subtitle >Por: Yasmin Medeiros</v-card-subtitle>
+                                    
                                     <v-card-text class="limite-linhas text-justify text-h7 font-weight-bold">
                                         <p class=" mt-5 text-justify"> 
                                             Google fonts: 
@@ -89,19 +89,7 @@
 
                                         
 
-                                        <p> Imagem do drawer: 
-                                          <v-btn
-                                          class="text-center" 
-                                          href="https://webaim.org/resources/contrastchecker/"
-                                          target="_blank"
-                                          rel="noopener"
-                                          prepend-icon="mdi-check"
-                                          variant="text"
-                                          dark
-                                          outlined
-                                          > 
-                                          <v-icon class="material-symbols-rounded">mdi-check</v-icon>  Imagem </v-btn>  
-                                        </p>
+                                        
                                     </v-card-text>
 
                                     <v-row class="bottom-left" style="padding-left:18px; padding-top:8px"
