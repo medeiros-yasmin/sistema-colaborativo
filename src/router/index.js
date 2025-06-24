@@ -19,6 +19,7 @@ import { auth } from '../firebase/firebase-config'
 import DadosUsuarioView from '@/views/DadosUsuarioView.vue'
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -148,9 +149,15 @@ const routes = [
     name: 'publicacao',
     component: Publicacao,
     props: route => ({id: route.params.id, tipoPublicacao: route.params.tipoPublicacao}),
+<<<<<<< HEAD
     meta: {
       requiresAuth: false
     }
+=======
+
+    component: AuxilioView
+
+>>>>>>> origin/desenvolvimento
   }
 ]
 

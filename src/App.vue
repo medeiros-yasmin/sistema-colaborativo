@@ -1,4 +1,5 @@
 <template>
+
   <v-app>
     <v-slide-x-transition mode="out-in" origin="left right">
       <router-view />
@@ -138,8 +139,10 @@
 
 
   </v-app>
+
 </template>
 
+<<<<<<< HEAD
 <script>
 
 //import router from '@/router';
@@ -181,6 +184,8 @@ export default {
   components: {
         RodapeComponent,
   },
+=======
+>>>>>>> origin/desenvolvimento
 
   data: () => ({
     drawer: false,
@@ -319,3 +324,4 @@ export default {
     width: 190px;
 }
 </style>
+
